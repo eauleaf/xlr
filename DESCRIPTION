@@ -1,0 +1,22 @@
+Package: xlr
+Type: Package
+Title: Tools for working interactively between Excel and R
+Version: 0.0.0.9000
+Author: Eauleaf
+Maintainer: <eauleaf@gmail.com>
+Description: 'xlr' is a group of convenience functions for data scientists who 
+  use both Excel and R. The goal is to make it trivial to interactively move 
+  data back and forth. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    knitr,
+    rmarkdown,
+    spelling,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+VignetteBuilder: knitr
+Language: en-US

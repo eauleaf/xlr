@@ -1,0 +1,79 @@
+---
+title: "xlr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{xlr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(xlr)
+```
+
+## 
+
+# Overview
+
+`xlr` is simple; it's fewer than 10 functions designed to make it easier to 
+process data in R and view that data in spreadsheets. 
+
+Spreadsheets excel at presenting 2-D data in a human-friendly formats, and 
+spreadsheets are the workhorse of the business community. Unfortunately, 
+spreadsheets don't have the flexibility or horsepower of R, so I want to 
+use R for the heavy lifting, and then pump those tables out to spreadsheets 
+to review or share the data. 
+
+If you work in R, and you work in Libreoffice or Excel, then you'll probably find
+`xlr` helpful. 
+
+
+# Getting Started
+
+To install `xlr`, run:
+
+```{r install-xlr, eval = F}
+remotes::install_github('eauleaf/crudr')
+```
+
+`xlr` is brand-new, so please provide feedback. Try to break the functions. If 
+you can, tell me. Once the package is decently stable, I'll submit it to CRAN. 
+
+
+## `view_xl()` 
+The Most Important `xlr` Function
+
+The inspiration for `view_xl()` is dplyr's `view()` function. `view()` is
+awesome since it's kind of a stripped-down spreadsheet view. I can look at the
+data, then change my code, view the data again, change my code again, etc.
+
+Sometimes, however, I need to review a lot of data from a lot of dataframes. So,
+I need dplyr's `view` function, but implemented as a workbook in Libreoffice or
+Excel. This is what `view_xl` is for. **`view_xl()`** is an opinionated way to
+review dataframes via spreadsheet, implemented with a lot of hidden and
+automated conveniences.
+
+
+### Use
+To use `view_xl()`, call a dataframe or a list of dataframes, like so:
+`view_xl(iris)`
+`view_xl(iris, mtcars)`
+`list(flower_data = iris, car_data = mtcars) |> view_xl()`
+`iris |> split(f = iris$Species) |> view_xl()`
+
+Your spreadsheet is temporary. Close it and it's gone. If you want to save 
+it, then just specify an input path, like: 
+
+
+The path argument uses `here::here()`, so you can sspecify ... our default directory with 
+
+
+Install package `clipr` and 
+Check with `clipr::dr_clipr()`

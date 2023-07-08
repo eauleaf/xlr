@@ -1,0 +1,15 @@
+Name: Paste from XL
+Description: Imports into R data copied to the clipboard from a spreadsheet.
+Binding: run_paste_from_xl
+Interactive: true
+
+Name: Copy for XL
+Description: Copies an R table to the clipboard formatted to paste to a spreadsheet.
+Binding: run_copy_for_xl
+Interactive: true
+
+Name: Enscript
+Description: Copies to clipboard memory a script that creates the input dataset.
+Binding: run_enscript
+Interactive: true
+
