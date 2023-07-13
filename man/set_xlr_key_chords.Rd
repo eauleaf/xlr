@@ -9,11 +9,11 @@ Restarts rstudio session.}
 set_xlr_key_chords()
 }
 \description{
-Running this function allows the user to press the key chord "ctrl + alt + shift
+When in Rstudio, running this function allows the user to:
 \itemize{
-\item v" to paste data copied from a spreadsheet into R directly where the cursor sits,
-as well as allows the user to press "ctrl + alt + shift + c" to copy a data objects
-into memory by variable or expression hightlighted in rstudio.
+\item press the key chord "ctrl + alt + shift + v" to paste data copied from a spreadsheet into R directly where the cursor sits
+\item press the key chord "ctrl + alt + shift + c" to copy a data object into memory by highlighted variable or expression
+\item press the key chord "ctrl + alt + shift + n" to create a script to reproduce a highlighted data object or expression
 }
 }
 \details{

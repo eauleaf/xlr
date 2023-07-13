@@ -103,6 +103,8 @@ entibble(enlist((1:10),(11:20)))
 
 # test
 as.matrix(warpbreaks[1:10, ]) |> asplit(2) |> entibble()
+lattice::Rows()
+entibble |> entibble()
 
 }
 \seealso{

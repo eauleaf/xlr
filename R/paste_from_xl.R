@@ -64,7 +64,7 @@ paste_from_xl <- function( has_fieldnames = NULL ){
     cli::cli_abort('[.fn paste_from_xl] must be run interactively.')
   }
 
-  xl_data <- clipr::read_clip()
+  xl_data <- suppressWarnings(clipr::read_clip())
   if ( base::is.null(xl_data) ) {
     cli::cli_alert_danger('The clipboard is empty. Nothing to paste.')
     return(invisible())
@@ -77,7 +77,9 @@ paste_from_xl <- function( has_fieldnames = NULL ){
 
     # clip to vector
     from_xl <- base::I(xl_data) |>
-      readr::read_delim(delim = '\t', col_names = FALSE, show_col_types = FALSE, trim_ws = TRUE) |>
+      readr::read_delim(
+        delim = '\t', col_names = FALSE,
+        show_col_types = FALSE, trim_ws = TRUE) |>
       base::unlist(use.names = FALSE)
 
   } else {
@@ -85,7 +87,9 @@ paste_from_xl <- function( has_fieldnames = NULL ){
     # guess headers
     if( base::is.null(has_fieldnames) ){
       headers <- base::I(xl_data[1]) |>
-        readr::read_delim( delim = '\t', col_names = FALSE, show_col_types = FALSE, name_repair = "universal_quiet") |>
+        readr::read_delim( delim = '\t', col_names = FALSE,
+                           show_col_types = FALSE,
+                           name_repair = "universal_quiet") |>
         purrr::map_lgl(~ (base::is.character(.) | base::is.na(.)) & !grepl('[\\/]',.) ) |>
         base::all()
     } else if ( has_fieldnames ) {
@@ -100,14 +104,24 @@ paste_from_xl <- function( has_fieldnames = NULL ){
       readr::read_delim(delim = '\t', col_names = headers, show_col_types = FALSE,
                         name_repair = "universal_quiet",trim_ws = TRUE) |>
       base::as.data.frame() |>
-      entibble()
+      xlr::entibble()
 
   }
 
-  return(from_xl)
+
+  # check if windows path
+  # Sys.info()['sysname']=='Windows'
+  # chartr("\\", "/", from_xl)
+  if( length(from_xl)==1 && base::all(stringr::str_detect(from_xl[[1]], '^([A-Z]:\\\\|//)'), na.rm = TRUE) ){
+    from_xl <- from_xl |> rlang::set_names('path')
+  }
+
+
+return(from_xl)
 
 
 }
+
 
 
 
@@ -121,10 +135,20 @@ paste_from_xl <- function( has_fieldnames = NULL ){
 run_paste_from_xl <- function(){
 
   if( !rstudioapi::isAvailable() ){
-    cli::cli_abort(
+    cli::cli_alert_danger(
       'RStudio is not available.
       {.fn run_paste_from_xl} is for interactive use in RStudio.'
     )
+    return(invisible())
+  }
+
+  paste_locn <- purrr::pluck(rstudioapi::getActiveDocumentContext(), "id")
+
+
+  xl_data <- suppressWarnings(clipr::read_clip())
+  if ( base::is.null(xl_data) ) {
+    cli::cli_alert_danger('The clipboard is empty. Nothing to paste.')
+    return(invisible())
   }
 
 
@@ -133,17 +157,36 @@ run_paste_from_xl <- function(){
     message = "Assign `<-` a variable name to the data?",
     default = 'datr')$res
 
-  input_name <- xlr:::check_assigned_input(input_name)
+  input_name <- xlr:::.check_assigned_input(input_name)
 
   if( input_name != '' ){
     input_name <- paste0(input_name,' <- ')
   }
 
 
-  rstudioapi::sendToConsole(code = base::paste0("(",input_name, 'xlr::paste_from_xl())'))
 
+  # if pasting to script ----------------------------------------------------
+  if( paste_locn != "#console" ){
+
+    out <- xlr::paste_from_xl()
+    if(base::identical(base::names(out)[1],'path') && base::length(out)==1 ){ out <- out[[1]] }
+    out_expr <- glue::glue('\n{input_name}{enscript({out}, to_clipboard = FALSE )}\n')
+    row1 <- purrr::pluck(rstudioapi::getSourceEditorContext(id = paste_locn),'selection', 1, 'range', 'start', 'row')
+    rstudioapi::insertText(text = out_expr, id = paste_locn)
+    row2 <- purrr::pluck(rstudioapi::getSourceEditorContext(id = paste_locn),'selection', 1, 'range', 'start', 'row')
+    rstudioapi::setSelectionRanges(c(row1,0,row2,Inf), id = paste_locn)
+    # https://docs.posit.co/ide/server-pro/1.3.947-1/rstudio-ide-commands.html
+    rstudioapi::executeCommand('reindent')
+    rstudioapi::setCursorPosition(c(row1,0), id = paste_locn)
+
+  }
+
+  rstudioapi::sendToConsole(code = base::paste0("(",input_name, 'xlr::paste_from_xl())'), focus = FALSE)
+  return(invisible(TRUE))
 
 }
+
+
 
 
 
@@ -157,42 +200,20 @@ run_paste_from_xl <- function(){
 #' @return user assigned name as a string
 #'
 #' @examples
-check_assigned_input <- function(input_name){
+.check_assigned_input <- function(input_name){
   # input_name <- svDialogs::dlg_list(choices = preselect)
   if( identical(input_name, as.character()) ){
     return('')
   } else {
     input_name <- stringr::str_trim(input_name)
-    temp_name <- make.names(input_name)
+    temp_name <- base::make.names(input_name)
     if(temp_name != input_name){
       input_name <- svDialogs::dlg_input(
         message = c("The assignment name is syntatically invalid. Use this name instead?"),
         default = temp_name)$res
-      input_name <- check_assigned_input(input_name)
+      input_name <- .check_assigned_input(input_name)
     }
     return(input_name)
   }
 }
 
-
-# determine what to do if in an editor
-
-# # determine where to paste ------------------------------------------------
-# if( rstudioapi::isAvailable() ){
-#   paste_locn <- purrr::pluck(rstudioapi::getActiveDocumentContext(), "id")
-# } else {
-#   paste_locn <- "#console"
-# }
-
-
-# return ------------------------------------------------------------------
-
-# base::assign(x = input_name, value = from_xl, envir = .GlobalEnv)
-# if(paste_locn == '#console'){
-#   cat(paste0('',input_name,' <- xlr::paste_from_xl()\n'))
-#   return(from_xl)
-# } else {
-#   out_expr <- glue::glue_collapse( c(input_name,' <- ', base::deparse(from_xl)) ) |>
-#     base::strwrap(exdent = 3, width = 70)
-#   return(rstudioapi::insertText(text = out_expr, id = paste_locn))
-# }

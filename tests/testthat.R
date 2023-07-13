@@ -7,7 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(checkmate) # for testthat extensions
 library(xlr)
 
 test_check("xlr")

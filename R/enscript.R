@@ -13,7 +13,7 @@
 #' @details
 #' Copying formatted output to the clipboard requires package [clipr].
 #'
-#' To set up the key-chord in RStudio. Run [xlr::set_xlr_key_chords()].
+#' To set up the key-chord `ctrl+alt+shift+v` in RStudio. Run [xlr::set_xlr_key_chords()].
 #'
 #' If using Linux, make sure to install a clipboard tool:
 #'  apt-get install xclip
@@ -24,13 +24,13 @@
 #' All quick-keys in {.pkg xlr} use all 3 control keys `ctrl + alt + shift` plus
 #' a letter as key chord.)
 #'
-#' @param . The data or object to transform into script
-#' @param width how many characters to allow in each line of script
+#' @param . The data object or expression to transform into script
+#' @param to_clipboard default TRUE; whether to copy the resulting script to the clipboard
 #' @param quiet TRUE or FALSE indicating whether to write the scripted
 #'   expression out to the console.
 #'
-#' @return The formatted deparsed expression.
-#' The object's internal expression written to clipboard memory as side-effect
+#' @return The formatted deparsed expression, invisibly if to_clipboard = TRUE.
+#' The object's internal expression written to clipboard memory as side-effect.
 #'
 #' @export
 #'
@@ -64,7 +64,7 @@
 #'
 # dplyr::starwars |> head() |> encodeString() |> deparse() |> clipr::write_clip()
 #'
-enscript <- function(. = NULL, width = cli::console_width()-20, quiet = FALSE ) {
+enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 
 
   # from console --------------------------------------------------------------
@@ -73,9 +73,10 @@ enscript <- function(. = NULL, width = cli::console_width()-20, quiet = FALSE ) 
   script_type <- 'Script'
 
 
+  checkmate::assert_flag(to_clipboard)
   checkmate::assert_flag(quiet)
-  checkmate::assert_integerish(width, lower = 0, len = 1, any.missing = FALSE)
-  width <- base::max(4, width)
+  width <- rstudioapi::readRStudioPreference( 'margin_column' ,base::getOption('deparse.cutoff'))
+  width <- base::max(4, width, na.rm = TRUE)
 
 
   # check if user used a name assignment
@@ -86,11 +87,10 @@ enscript <- function(. = NULL, width = cli::console_width()-20, quiet = FALSE ) 
 
 
 
-
   # deparse & format expression text -----------------------------------------
 
   safe_deparse <- purrr::safely(base::deparse)
-  name_collection <- encodeString(.)
+  # name_collection <- encodeString(.)
   deparsed_expr <- safe_deparse(., backtick = TRUE)
 
 
@@ -113,47 +113,54 @@ enscript <- function(. = NULL, width = cli::console_width()-20, quiet = FALSE ) 
 
     # deparsed_expr <- rlang::quo_squash(.) |>
     #   purrr::map(~deparse(., backtick = TRUE)) |>
-    #   purrr::map(~format_script(., editor_width = width))
+    #   purrr::map(~format_script(., snip_width = width))
     # # return(deparsed_expr)
 
     # deparsed_expr <- glue::glue_collapse(c(assignment, paste(deparsed_expr))) |> stringr::str_squish()
     # to_console <- deparsed_expr
 
-    deparsed_expr <- glue::glue_collapse(c(assignment, deparsed_expr[[1]])) |> stringr::str_squish()
+    deparsed_expr <- glue::glue_collapse(c(assignment, deparsed_expr[[1]])) |>
+      stringr::str_squish()
     to_console <- stringr::str_wrap(deparsed_expr, width = cli::console_width())
-    deparsed_expr <- format_script(deparsed_expr, editor_width = width)
+    deparsed_expr <- format_script(deparsed_expr, snip_width = width)
   }
 
 
   # write to clipboard ------------------------------------------------------
-  if( clipr::clipr_available() ){
-    clipr::write_clip(deparsed_expr)
-    if(!quiet){
-      cli::cat_line()
-      cli::cli_alert_success("{script_type} copied to clipboard:")
+  if( to_clipboard ){
+
+    if( clipr::clipr_available() ){
+      clipr::write_clip(deparsed_expr)
+      if(!quiet){
+        cli::cat_line()
+        cli::cli_alert_success("{script_type} copied to clipboard:")
+      }
+    } else {
+      cli::cli_alert_warning(
+        'Cannot copy expression to clipboard; package {.pkg clipr} is unavailable.'
+      )
     }
-  } else {
-    cli::cli_alert_warning(
-      'Cannot copy expression to clipboard; package {.pkg clipr} is unavailable.'
-    )
+
+
+    # cat to console ------------------------------------------------------
+    if(!quiet){
+
+      cli::cat_rule()
+      cli::cat_line("\n\n")
+      cli::cat_line(to_console)
+      cli::cat_line("\n\n")
+      cli::cat_rule()
+
+    }
+
+    return( invisible( stringr::str_split_1(deparsed_expr, '\\n') ) )
+
   }
 
-
-  # cat to console ------------------------------------------------------
-  if(!quiet){
-
-    cli::cat_rule()
-    cli::cat_line("\n\n")
-    cli::cat_line(to_console)
-    cli::cat_line("\n\n")
-    cli::cat_rule()
-
-  }
-
-  return( invisible( stringr::str_split_1(deparsed_expr, '\\n') ) )
+  # return( stringr::str_split_1(deparsed_expr, '\\n') )
+  return( deparsed_expr )
 
 }
-
 
 
 
@@ -162,71 +169,78 @@ enscript <- function(. = NULL, width = cli::console_width()-20, quiet = FALSE ) 
 #' Adds breaks to the text of a deparsed data structure script
 #'
 #' @param obj_expr text for a data structure
-#' @param editor_width limit for the number of characters desired in data folding
+#' @param snip_width limit for the number of characters desired before data folding at comma-space breaks
 #'
 #' @return a string with embedded '/n' line breaks
 #' @export
 #'
 #' @examples
-format_script <- function(obj_expr, editor_width = 70) {
+#'
+#'
+#'
+#'todo:
+ # head(dplyr::starwars) |> enlist() |> deparse(backtick = TRUE) |> glue::glue_collapse() |> stringr::str_squish() |> format_script() |> cat()
+ # enlist(head(iris), "  `quick_text` = 'hello()'`", tail(dplyr::starwars)) |> deparse(backtick = T) |> glue::glue_collapse() |> stringr::str_squish() |> stringr::str_extract_all('(?<=\\(|, )`.+?` = ')
+#'
+#'
+format_script <- function(obj_expr, snip_width = 70) {
 
-  checkmate::assert_integerish(editor_width, lower = 4, len = 1, any.missing = FALSE)
+
+  snip_width <- checkmate::assert_integerish(snip_width, lower = 4, max.len = 1, any.missing = FALSE)
 
 
-  if( nchar(obj_expr) <= cli::console_width() ) {
+  if( nchar(obj_expr) <= snip_width ) {
     return(obj_expr)
   }
 
 
   # separate everything encased in quotes
+   # ((?<=\\(|, )`(?:[^`]|`.*?`)+?` = ) # text in backticks
+   # "((?:[^"]|\\\\")*(?<!\\\\)",? ?) # text in quotes
   obj_expr <- obj_expr |>
-    stringr::str_replace_all('("(?:[^"]|\\\\")*(?<!\\\\)",? ?)', '\n\\1\n') |>
+    stringr::str_replace_all('((?<=\\(|, )`(?>[^`]|`.*?`)+?` = |"(?:[^"]|\\\\")*(?<!\\\\)",? ?)', '\n\\1\n') |>
     stringr::str_split_1('\\n')
 
-  quoted <- obj_expr |> stringr::str_detect('^"')
+  quoted <- obj_expr |> stringr::str_detect('^[`"]')
 
-  # # remove expressions encased in backticks
-  # obj_expr <- obj_expr |>
-  #   stringr::str_replace_all('("(?:[^"]|\\\\")*(?<!\\\\)",? ?)', '\n\\1\n') |>
-  #   stringr::str_split_1('\\n')
+  # format backticked expressions
+  obj_expr[quoted] <- stringr::str_replace(obj_expr[quoted], '^[`]', '\n`')
 
   # format non-quoted expression text
   regex_breaks <- c(
-     '\\('
-    ,'(\\),? ?)'
+     '(?<=c|list|structure)\\('
+    ,'((?<![(]0)\\),? ?)'
     ,'([{}])'
-    ,'(^[\\w.]++\\()'
     ,'\\n++'
-    ,paste0('(.{1,',editor_width-3,'}(?:\\n++|, ))')
+    ,paste0('(.{1,',snip_width-3,'}(?:\\n++|, ))')
     ,'\\n++'
-    ,'\\(\\n(.?)\\n\\)'
   )
 
   regex_replacements = c(
      '(\n'
     ,'\n\\1\n'
     ,'\n\\1\n'
-    ,'\n\\1'
     ,'\n'
     ,'\\1\n'
     ,'\n'
-    ,'(\\1)'
   ) |> rlang::set_names( regex_breaks )
 
   obj_expr[!quoted] <- obj_expr[!quoted] |> stringr::str_replace_all(regex_replacements)
 
-  # glue everything back together and break within quoted expressions
+  # glue everything back together and set breaks for the quoted expressions
   obj_expr <- obj_expr |> glue::glue_collapse() |>
     stringr::str_replace_all('NA, \\n"', 'NA, "') |>
-    stringr::str_replace_all(paste0('(.{1,',editor_width-2,'}(?:\\n++|(?:(?<!\\\\)"(?:, NA)*?), ))'), '\\1\n') |>
+    stringr::str_replace_all('character\\(0\\), \\n+', 'character\\(0\\), ') |>
+    stringr::str_replace_all(paste0('(.{1,',snip_width-2,'}(?:\\n++|(?:(?<!\\\\)(?:"|\\w\\(0\\))(?:, NA)*?), ))'), '\\1\n') |>
     stringr::str_replace_all('\\n++', '\n')
 
 
-  return(paste('\n',obj_expr,'\n'))
+  return(obj_expr)
 
 }
-# str_split_i()
-# stringr::str_replace_all('(\\b(?:c|list|structure)]\\()','\\1')
+
+
+
 
 
 #' Addin function to call [xlr::enscript()]
@@ -271,33 +285,4 @@ run_enscript <- function(){
 
 }
 
-
-#' Title
-#'
-#'
-#'
-#' @param .expr
-#'
-#'
-#' @return
-#'
-#' @examples
-#' enlist(head(iris), head(mtcars)) |> isolate_names()
-#' enlist(candy, !!candy, !!!candy, rlang::list2(!!!candy), list(list(`<list>` = list('something`something')))) |> encodeString() |> clipr::write_clip()
-#' dplyr::starwars |> head() |> encodeString() |> clipr::write_clip()
-#' enlist(head(iris), head(mtcars), head(dplyr::starwars)) |> encodeString() |> clipr::write_clip()
-#' enlist(head(iris), head(mtcars), head(dplyr::starwars)) |> isolate_names()
-#'
-.isolate_names <- function(.expr){
-  # base::enquote()
-  chopped_expr <- .expr |> encodeString()
-  chopped_expr <- .expr |> rlang::quo_squash()
-  chopped_expr <- .expr |> base::all.names()
-
-  # chopped_expr <- chopped_expr |> purrr::map(parse_te) |> purrr::map(encodeString)
-
-  return(chopped_expr)
-
-
-}
 

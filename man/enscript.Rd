@@ -4,19 +4,19 @@
 \alias{enscript}
 \title{Write your data into an expression for a script.}
 \usage{
-enscript(. = NULL, width = cli::console_width() - 20, quiet = FALSE)
+enscript(. = NULL, to_clipboard = TRUE, quiet = FALSE)
 }
 \arguments{
-\item{.}{The data or object to transform into script}
+\item{.}{The data object or expression to transform into script}
 
-\item{width}{how many characters to allow in each line of script}
+\item{to_clipboard}{default TRUE; whether to copy the resulting script to the clipboard}
 
 \item{quiet}{TRUE or FALSE indicating whether to write the scripted
 expression out to the console.}
 }
 \value{
-The formatted deparsed expression.
-The object's internal expression written to clipboard memory as side-effect
+The formatted deparsed expression, invisibly if to_clipboard = TRUE.
+The object's internal expression written to clipboard memory as side-effect.
 }
 \description{
 A convenience function for interactive use. \code{\link[=enscript]{enscript()}} obtains R's
@@ -30,7 +30,7 @@ to the console.
 
 Copying formatted output to the clipboard requires package \link{clipr}.
 
-To set up the key-chord in RStudio. Run \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
+To set up the key-chord \code{ctrl+alt+shift+v} in RStudio. Run \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
 
 If using Linux, make sure to install a clipboard tool:
 apt-get install xclip
