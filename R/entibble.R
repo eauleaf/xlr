@@ -1,6 +1,16 @@
 #' Convert to tibble with rownames
 #'
-#' Same as [tibble::tibble()], except it automatically includes a rownames
+#' Same as [tibble::tibble()], except that [entibble]:
+#'  * Automatically includes rownames
+#'  * Tries very hard to produce a single flat tibble
+#'  * Is not concerned with duplicate column names (unless specified otherwise by the user)
+#'
+#'  @details
+#'  Entibble is
+#'
+#'
+#'
+#'
 #' column if passed a named dataframe, matrix, or vector.
 #'
 #' @param ... object or expression to convert to a tibble
@@ -14,10 +24,21 @@
 #'
 #' @examples
 #' letters |> entibble()
-#' letters |>  purrr::set_names() |> entibble()
-#' letters |>  purrr::set_names() |> entibble(.rowname = 'something from user')
-#' letters |>  purrr::set_names() |> entibble(.rowname = 'something from user', .name_repair = ~c('hello', 'goodbye'))
+#' letters |>  purrr::set_names(LETTERS) |> entibble()
+#' (example <- letters |>  purrr::set_names(LETTERS))
+#' example |> entibble()
+#' example |> entibble(.rowname = 'user-specified rowname')
+#' example |> entibble(.name_repair = ~c('name_A', 'name_B'))
+#'
+#' Not c
+#' example |> entibble(example)
+#'
+#'
+#'
+#'
 #' 1:5 |> entibble()
+#'
+#'
 #' tibble::tibble(y = 1:3,x = 11:13)
 #' entibble(y = c(1, 2, 3),x = c(11, 12, 13))
 #' tibble::tibble(x = 1:3,x = 11:13)
