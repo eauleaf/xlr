@@ -1,9 +1,10 @@
-#' Flatten an embedded object list to a single flat list
+#' Flattens an embedded list of objects to a single, linear list of objects
 #'
 #' @description
 #' Recursively flattens an embedded object list
-#' Calls [entibble] to coerce internal objects to tibbles
-#' Concatenate embedded-list names with name_spec like '|' or '_'.
+#' Calls [entibble] to coerce internal objects to tibbles by default, but entibble
+#' can be replaced with any function
+#' Concatenates embedded-list names with name_spec like '|' or '_'.
 #'
 #' @param ... A data object, data objects, or a list of data objects.
 #' @inheritParams purrr::list_flatten
@@ -13,7 +14,7 @@
 # @inheritParams purrr::list_flatten return
 # @inheritDotParams purrr::list_flatten foo name_spec name_repair
 #'
-#' @return A flattened list of tibbles.
+#' @return A flattened list of tibbles or other specified function
 #' @export
 #'
 #' @examples
@@ -39,7 +40,7 @@
 #'
 enflatten <- function(...,
                       name_spec = "{outer}|{inner}",
-                      name_repair = c("minimal", "unique", "check_unique","universal"),
+                      name_repair = c("minimal", "unique", "check_unique","universal", "unique_quiet", "universal_quiet"),
                       .f = ~entibble(.)
                       ) {
     xlr::enlist(...) |>

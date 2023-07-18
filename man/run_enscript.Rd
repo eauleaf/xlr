@@ -7,7 +7,7 @@
 run_enscript()
 }
 \value{
-No return
+void
 }
 \description{
 Requires RStudio

@@ -2,10 +2,15 @@
 % Please edit documentation in R/paste_from_xl.R
 \name{run_paste_from_xl}
 \alias{run_paste_from_xl}
-\title{Addin function to call \code{\link[=paste_from_xl]{paste_from_xl()}}}
+\title{Addin function for user to call \code{\link[=paste_from_xl]{paste_from_xl()}}
+Responds to \code{ctrl+alt+shift+v}}
 \usage{
 run_paste_from_xl()
 }
+\value{
+void
+}
 \description{
-Addin function to call \code{\link[=paste_from_xl]{paste_from_xl()}}
+Addin function for user to call \code{\link[=paste_from_xl]{paste_from_xl()}}
+Responds to \code{ctrl+alt+shift+v}
 }

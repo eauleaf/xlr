@@ -1,4 +1,4 @@
-#' Conform tab/sheet names to workbook standards
+#' Conform tab/sheet names to spreadsheet workbook standards
 #'
 #' The general idea with scrub_tabnames is to preserve as much of the original
 #' tabnames as possible while ensuring each tabname is unique and contains
@@ -123,8 +123,10 @@ scrub_tabnames <- function(tabnames,
       message("**********************************************************************\n\n")
     }
 
-    tabnames <- scrub_tabnames(tabnames = tabnames, max_width = width, truncate_side = truncate_side,
-                               paste_side = paste_side, sep = sep, pad = pad, quiet = quiet)
+    tabnames <- scrub_tabnames(tabnames = tabnames, max_width = width,
+                               truncate_side = truncate_side,
+                               paste_side = paste_side, sep = sep,
+                               pad = pad, quiet = quiet)
 
   }
 

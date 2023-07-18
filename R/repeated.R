@@ -25,7 +25,7 @@
 #'
 #' @param x a vector
 #'
-#' @return a logical TRUE or FALSE vector the same length as the input
+#' @return a logical vector the same length as the input
 #' @export
 #'
 #' @examples

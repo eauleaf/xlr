@@ -2,7 +2,7 @@
 % Please edit documentation in R/scrub_tabnames.R
 \name{scrub_tabnames}
 \alias{scrub_tabnames}
-\title{Conform tab/sheet names to workbook standards}
+\title{Conform tab/sheet names to spreadsheet workbook standards}
 \usage{
 scrub_tabnames(
   tabnames,

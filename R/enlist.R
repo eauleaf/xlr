@@ -56,6 +56,9 @@
 #' @export
 #'
 #' @examples
+#'
+#' list(head(mtcars), head(iris)) |> enlist()
+#'
 #' enlist(letters)
 #' enlist(letters,LETTERS)
 #' enlist(head(iris))
@@ -122,6 +125,12 @@
 #' dplyr::bind_cols(enlist(letters,LETTERS))
 #' enlist() # if no args passed, returns an empty named list like list()
 #'
+#' # additional tests ## compare the output of these 2; one's all list(), the other's all enlist()
+#'  candy <- c('lollipops','gum')
+#'  list(candy, list(nums = 3:1, c = list(b1 = 2, list(new = c('red','green'), f = list(head(iris)))), b = list(c2 = 3, c1 = 4:5, letters[1:10])))
+#'  enlist(candy, enlist(nums = 3:1, c = enlist(b1 = 2, enlist(new = c('red','green'), f = enlist(head(iris)))), b = enlist(c2 = 3, c1 = 4:5, letters[1:10])))
+
+
 # enlist <- function( ... , .f = NULL){ out_list <- rlang::quos(...) |> eval_enlist() if (
 
 enlist <- function(..., .f = NULL) {
@@ -149,11 +158,7 @@ enlist <- function(..., .f = NULL) {
 
 
     # remove external-quotes from names
-    double_quoted <- names(out_list) |> stringr::str_detect('^".*"$')
-    if( base::any(double_quoted,na.rm = TRUE)){
-      base::names(out_list)[double_quoted] <- base::names(out_list)[double_quoted] |>
-        stringr::str_extract('(?<=^").*(?="$)')
-    }
+    out_list <- .remove_doublequotes(out_list)
 
 
     # if list elements need to be named by user-function
@@ -168,8 +173,23 @@ enlist <- function(..., .f = NULL) {
 
 
 
-# additional tests ## compare the output of these 2; one's all list(), the other's all enlist()
-# candy <- c('lollipops','gum') list(candy, list(nums = 3:1, c = list(b1 = 2, list(new =
-# c('red','green'), f = list(head(iris)))), b = list(c2 = 3, c1 = 4:5, letters[1:10])))
-# enlist(candy, enlist(nums = 3:1, c = enlist(b1 = 2, enlist(new = c('red','green'), f =
-# enlist(head(iris)))), b = enlist(c2 = 3, c1 = 4:5, letters[1:10])))
+#' Removes external set of quotes for named list where some names have double-quotes
+#'
+#' @param named_list
+#'
+#' @return named list where names have no doublequotes
+#'
+#' @examples
+#' tibble::tibble(!!!letters) |> as.list() |> .remove_doublequotes()
+.remove_doublequotes <- function(named_list = NULL){
+  # remove external-quotes from list with names
+  double_quoted <- names(named_list) |> stringr::str_detect('^".*"$')
+  if( base::any(double_quoted, na.rm = TRUE)){
+    base::names(named_list)[double_quoted] <- base::names(named_list)[double_quoted] |>
+      stringr::str_extract('(?<=^").*(?="$)')
+  }
+
+  return(named_list)
+
+}
+

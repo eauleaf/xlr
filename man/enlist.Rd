@@ -65,6 +65,9 @@ list('green','blue') |> b() # an embedded input list
 }
 
 \examples{
+
+list(head(mtcars), head(iris)) |> enlist()
+
 enlist(letters)
 enlist(letters,LETTERS)
 enlist(head(iris))
@@ -131,4 +134,8 @@ dplyr::bind_cols(enlist(letters,LETTERS))
 dplyr::bind_cols(enlist(letters,LETTERS))
 enlist() # if no args passed, returns an empty named list like list()
 
+# additional tests ## compare the output of these 2; one's all list(), the other's all enlist()
+ candy <- c('lollipops','gum')
+ list(candy, list(nums = 3:1, c = list(b1 = 2, list(new = c('red','green'), f = list(head(iris)))), b = list(c2 = 3, c1 = 4:5, letters[1:10])))
+ enlist(candy, enlist(nums = 3:1, c = enlist(b1 = 2, enlist(new = c('red','green'), f = enlist(head(iris)))), b = enlist(c2 = 3, c1 = 4:5, letters[1:10])))
 }

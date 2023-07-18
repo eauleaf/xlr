@@ -2,10 +2,12 @@
 #' TODO: background-color: #00A500;
 #'
 #' Provides a means of reviewing datasets through the user's default spreasheet
-#' program with opinionated formatting. Produces output similar to
-#' [tibble::view()], but in a spreadsheet, allowing for larger datasets and a
-#' list of dataframes. [xl()] auto-corrects issues like forbidden sheetname
-#' characters to produce an immediately viewable dataset.
+#' program. Produces output similar to [tibble::view()], but in a spreadsheet,
+#' which allows for larger datasets and a list of dataframes.
+#'
+#' Auto-corrects forbidden sheetnames
+#' Flattens embedded lists with preserved name structure
+#'
 #'
 #' @param ... A dataframe, list of dataframes, or inputs coerceable to one
 #'   or more dataframes.
@@ -17,7 +19,7 @@
 #'   construct it.
 #' @param .open If FALSE, workbook will not open after being written.
 #'
-#' @param .field_spec function #titlecase_fields
+#' @param .fieldname_spec function #titlecase_fields
 #' @param .return Type of output in R. Default is the tibbled dataframes. If workbook-object, then
 #' @seealso [openxlsx::buildWorkbook()]
 #'
@@ -50,15 +52,14 @@ xl <- function(...
                ,.path = NULL
                ,.open = TRUE
                ,.quiet = FALSE
-               ,.field_spec = NULL # 'purrr' style function, like "~janitor::clean_names(., case = 'title')" to apply to across field names
-               ,.tabname_spec = list(sep = ".", pad = ".") # arguments passed to scrub tabnames, see [scrub_tabnames] for options
-               ,.flatten_spec = "{outer}|{inner}" # collapse description for list-embedded tabnames grouped, passed to purrr::list_flatten @importParam
+               ,.fieldname_spec = list() # 'purrr' style function, like "~janitor::clean_names(., case = 'title')" to apply to across field names
+               ,.tabname_spec = list(sep = ".", pad = ".", name_spec = "{outer}|{inner}") # arguments passed to scrub tabnames, see [scrub_tabnames] for options; # collapse description for list-embedded tabnames grouped, passed to purrr::list_flatten @importParam
                ,.workbook_spec = list(asTable = TRUE, orientation = 'landscape', zoom = 65, start_row=3) # @seealso [opensxlsx::buildWorkbook] args as a named list
                ,.return = c('tibble-list', 'workbook-object')
 ){
 
 
-  df_list <- enflatten( ... , name_spec = .flatten_spec)
+  df_list <- enflatten( ... , name_spec = .tabname_spec[['name_spec']])
   for_scrub_tabnames <- list(tabnames = names(df_list), quiet = .quiet) |> purrr::list_assign(rlang::splice(.tabname_spec)) |> purrr::map_at(.at = c('sep','pad'), .f = scrub_tabnames)
   names(df_list) <- rlang::call2(xlr::scrub_tabnames, rlang::splice(for_scrub_tabnames)) |> rlang::eval_tidy()
   # return(df_list)
@@ -92,7 +93,7 @@ xl <- function(...
 
 
   df_list <- purrr::map(df_list, ~janitor::remove_empty(., c('rows', 'cols')))
-  if(!is.null(.field_spec)){ df_list <- purrr::map(df_list, ~janitor::clean_names(., case = 'title')) }
+  if(!is.null(.fieldname_spec)){ df_list <- purrr::map(df_list, ~janitor::clean_names(., case = 'title')) }
   for_buildWorkbook <- list(x = df_list, asTable = TRUE, orientation = 'landscape', zoom = 65) |>
     purrr::list_assign(rlang::splice(.workbook_spec))
   wb <- rlang::call2(openxlsx::buildWorkbook, rlang::splice(for_buildWorkbook)) |> rlang::eval_tidy()
@@ -118,8 +119,8 @@ xl <- function(...
   print(.path)
 
   if(.open) {
-    openxlsx::openXL(.path)
-    browseURL()
+    # openxlsx::openXL(.path)
+    browseURL(.path)
     }
   # system2('xdg-open', glue::glue("'{.path}'"))
   if(mk_tempfile){ later::later(~base::unlink(.path), 60) }

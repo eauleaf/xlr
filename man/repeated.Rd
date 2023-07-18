@@ -10,7 +10,7 @@ repeated(x)
 \item{x}{a vector}
 }
 \value{
-a logical TRUE or FALSE vector the same length as the input
+a logical vector the same length as the input
 }
 \description{
 Similar to \code{\link[=duplicated]{duplicated()}}, but marks all repeated values as TRUE.

@@ -51,7 +51,7 @@
 #' (my_data <- paste_from_xl(F))
 #' paste_from_xl()
 #'
-#' to paste the copied spreadsheet data into R.
+#' To paste the copied spreadsheet data into R.
 #' }
 #'
 paste_from_xl <- function( has_fieldnames = NULL ){
@@ -126,12 +126,12 @@ return(from_xl)
 
 
 
-#' Addin function to call [paste_from_xl()]
+#' Addin function for user to call [paste_from_xl()]
+#' Responds to `ctrl+alt+shift+v`
 #'
-#' @return
+#' @return void
 #' @export
 #'
-#' @examples
 run_paste_from_xl <- function(){
 
   if( !rstudioapi::isAvailable() ){
@@ -182,7 +182,6 @@ run_paste_from_xl <- function(){
   }
 
   rstudioapi::sendToConsole(code = base::paste0("(",input_name, 'xlr::paste_from_xl())'), focus = FALSE)
-  return(invisible(TRUE))
 
 }
 
@@ -199,7 +198,7 @@ run_paste_from_xl <- function(){
 #'
 #' @return user assigned name as a string
 #'
-#' @examples
+#' @examples if (interactive()){ .check_assigned_input(' 1 bad name') }
 .check_assigned_input <- function(input_name){
   # input_name <- svDialogs::dlg_list(choices = preselect)
   if( identical(input_name, as.character()) ){

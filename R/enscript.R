@@ -113,7 +113,7 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 
     # deparsed_expr <- rlang::quo_squash(.) |>
     #   purrr::map(~deparse(., backtick = TRUE)) |>
-    #   purrr::map(~format_script(., snip_width = width))
+    #   purrr::map(~.format_script(., snip_width = width))
     # # return(deparsed_expr)
 
     # deparsed_expr <- glue::glue_collapse(c(assignment, paste(deparsed_expr))) |> stringr::str_squish()
@@ -122,7 +122,7 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
     deparsed_expr <- glue::glue_collapse(c(assignment, deparsed_expr[[1]])) |>
       stringr::str_squish()
     to_console <- stringr::str_wrap(deparsed_expr, width = cli::console_width())
-    deparsed_expr <- format_script(deparsed_expr, snip_width = width)
+    deparsed_expr <- .format_script(deparsed_expr, snip_width = width)
   }
 
 
@@ -172,18 +172,15 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 #' @param snip_width limit for the number of characters desired before data folding at comma-space breaks
 #'
 #' @return a string with embedded '/n' line breaks
-#' @export
 #'
 #' @examples
 #'
 #'
-#'
 #'todo:
- # head(dplyr::starwars) |> enlist() |> deparse(backtick = TRUE) |> glue::glue_collapse() |> stringr::str_squish() |> format_script() |> cat()
+ # head(dplyr::starwars) |> enlist() |> deparse(backtick = TRUE) |> glue::glue_collapse() |> stringr::str_squish() |> .format_script() |> cat()
  # enlist(head(iris), "  `quick_text` = 'hello()'`", tail(dplyr::starwars)) |> deparse(backtick = T) |> glue::glue_collapse() |> stringr::str_squish() |> stringr::str_extract_all('(?<=\\(|, )`.+?` = ')
 #'
-#'
-format_script <- function(obj_expr, snip_width = 70) {
+.format_script <- function(obj_expr, snip_width = 70) {
 
 
   snip_width <- checkmate::assert_integerish(snip_width, lower = 4, max.len = 1, any.missing = FALSE)
@@ -247,7 +244,7 @@ format_script <- function(obj_expr, snip_width = 70) {
 #'
 #' Requires RStudio
 #'
-#' @return No return
+#' @return void
 #' @export
 #'
 #'

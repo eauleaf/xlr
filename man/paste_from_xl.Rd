@@ -61,7 +61,7 @@ console:
 (my_data <- paste_from_xl(F))
 paste_from_xl()
 
-to paste the copied spreadsheet data into R.
+To paste the copied spreadsheet data into R.
 }
 
 }

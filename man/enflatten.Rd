@@ -2,12 +2,13 @@
 % Please edit documentation in R/enflatten.R
 \name{enflatten}
 \alias{enflatten}
-\title{Flatten an embedded object list to a single flat list}
+\title{Flattens an embedded list of objects to a single, linear list of objects}
 \usage{
 enflatten(
   ...,
   name_spec = "{outer}|{inner}",
-  name_repair = c("minimal", "unique", "check_unique", "universal"),
+  name_repair = c("minimal", "unique", "check_unique", "universal", "unique_quiet",
+    "universal_quiet"),
   .f = ~entibble(.)
 )
 }
@@ -17,12 +18,13 @@ enflatten(
 \item{.f}{function to apply at every leaf of the dis-embedded list; default is \code{entibble}}
 }
 \value{
-A flattened list of tibbles.
+A flattened list of tibbles or other specified function
 }
 \description{
 Recursively flattens an embedded object list
-Calls \link{entibble} to coerce internal objects to tibbles
-Concatenate embedded-list names with name_spec like '|' or '_'.
+Calls \link{entibble} to coerce internal objects to tibbles by default, but entibble
+can be replaced with any function
+Concatenates embedded-list names with name_spec like '|' or '_'.
 }
 \examples{
 enflatten(iris, mtcars)

@@ -38,7 +38,7 @@ clipboard.
 }
 \note{
 All quick-keys in {.pkg xlr} use all 3 control keys \code{ctrl + alt + shift} plus
-a letter as key chord.)
+a letter.)
 }
 \examples{
 \dontrun{

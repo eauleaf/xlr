@@ -7,14 +7,14 @@
 run_copy_for_xl()
 }
 \value{
-No return
+void
 }
 \description{
 For interactive use in RStudio.
 }
 \examples{
 \dontrun{
-# Highlight each text item below and press key-chord `ctrl + alt + shift + c`.
+# Highlight a text item below and press key-chord `ctrl + alt + shift + c`.
 # To implement the key-chord in RStudio. Run [xlr::set_xlr_key_chords()].
 # Note that setting [xlr::set_xlr_key_chords()] will restart the R session.
 
@@ -24,8 +24,8 @@ letters
 dplyr::bind_cols(letters, LETTERS)
 letters |> rlang::set_names(LETTERS)
 
-# list embedded tibbles should throw an error
-enlist(head(iris),head(mtcars))
+# ragged list embedded tibbles should throw an error
+enlist(head(iris),letters)
 
 }
 }

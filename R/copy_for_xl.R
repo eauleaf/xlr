@@ -27,7 +27,7 @@
 #'
 #' @note
 #' All quick-keys in {.pkg xlr} use all 3 control keys `ctrl + alt + shift` plus
-#' a letter as key chord.)
+#' a letter.)
 #'
 #' @param . a dataframe or object that can be coerced to a dataframe
 #'
@@ -81,7 +81,6 @@ copy_for_xl <- function(. = NULL){
 
 # nested tibble error ------------------------------------------------------
   if( base::any(purrr::map_lgl(.out, is.list)) ) {
-    cli::cat_line()
     cli::cli_alert_danger(
       'Cannot copy data to the clipboard because the table is nested.'
       )
@@ -102,12 +101,12 @@ copy_for_xl <- function(. = NULL){
 #' For interactive use in RStudio.
 #'
 #'
-#' @return No return
+#' @return void
 #' @export
 #'
 #'
 #' @examples \dontrun{
-#' # Highlight each text item below and press key-chord `ctrl + alt + shift + c`.
+#' # Highlight a text item below and press key-chord `ctrl + alt + shift + c`.
 #' # To implement the key-chord in RStudio. Run [xlr::set_xlr_key_chords()].
 #' # Note that setting [xlr::set_xlr_key_chords()] will restart the R session.
 #'
@@ -117,8 +116,8 @@ copy_for_xl <- function(. = NULL){
 #' dplyr::bind_cols(letters, LETTERS)
 #' letters |> rlang::set_names(LETTERS)
 #'
-#' # list embedded tibbles should throw an error
-#' enlist(head(iris),head(mtcars))
+#' # ragged list embedded tibbles should throw an error
+#' enlist(head(iris),letters)
 #'
 #' }
 run_copy_for_xl <- function(){
