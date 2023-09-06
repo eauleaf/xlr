@@ -2,18 +2,18 @@
 #'
 #' Same as [tibble()] with different defaults.
 #' [entibble]:
-#'  * Always includes rownames as a column
+#'  * Always includes rownames, if available, as the first column of the tibble
 #'  * Is not concerned with duplicate column names unless specified by user with .name_repair
 #'  * Does not repeat input elements to obtain common lengths
 #'  * Transforms lists with uniform arrays into columns of a tibble
 #'  * Treats ragged list of input elements similar to [tibble()] but includes names as column if possible
-#'  * Flattens lists of lists to
-#'  flat table if possible
+#'  * Flattens lists of lists to a single table if possible
 #'
 #'  @details
-#'  Entibble is designed to work with the function [xl()] to produce a viewable
-#'  output of presented data. To help ensure [xl()] succeeds, [entibble()] is
-#'  liberal about names and makes an effort to produce a single flat table.
+#'  Entibble is designed to work with the function [xlr()] to produce a viewable
+#'  output of presented data. To help [xlr()] succeed as often as possible, [entibble()] is
+#'  liberal about names, such as duplicate column names, and makes an effort to produce a flat table
+#'  rather than a nested tibble.
 #'
 #'
 #' @param ... object or expression to convert to a tibble

@@ -19,7 +19,7 @@
 #'   construct it.
 #' @param .open If FALSE, workbook will not open after being written.
 #'
-#' @param .fieldname_spec function #titlecase_fields
+#' @param .fieldname_spec # list of purrr-style functions to apply across fieldnames; e.g. "list(~janitor::clean_names(., case = 'title'))" to titlecase fieldnames
 #' @param .return Type of output in R. Default is the tibbled dataframes. If workbook-object, then
 #' @seealso [openxlsx::buildWorkbook()]
 #'
@@ -48,11 +48,11 @@
 #'}
 #'specification args
 #'
-xl <- function(...
+xlr <- function(...
                ,.path = NULL
                ,.open = TRUE
                ,.quiet = FALSE
-               ,.fieldname_spec = list() # 'purrr' style function, like "~janitor::clean_names(., case = 'title')" to apply to across field names
+               ,.fieldname_spec = list(~janitor::clean_names(.))
                ,.tabname_spec = list(sep = ".", pad = ".", name_spec = "{outer}|{inner}") # arguments passed to scrub tabnames, see [scrub_tabnames] for options; # collapse description for list-embedded tabnames grouped, passed to purrr::list_flatten @importParam
                ,.workbook_spec = list(asTable = TRUE, orientation = 'landscape', zoom = 65, start_row=3) # @seealso [opensxlsx::buildWorkbook] args as a named list
                ,.return = c('tibble-list', 'workbook-object')
@@ -60,11 +60,13 @@ xl <- function(...
 
 
   df_list <- enflatten( ... , name_spec = .tabname_spec[['name_spec']])
-  for_scrub_tabnames <- list(tabnames = names(df_list), quiet = .quiet) |> purrr::list_assign(rlang::splice(.tabname_spec)) |> purrr::map_at(.at = c('sep','pad'), .f = scrub_tabnames)
+  for_scrub_tabnames <- list(tabnames = names(df_list), quiet = .quiet) |> purrr::list_assign(rlang::splice(.tabname_spec)) |>
+    purrr::discard_at('name_spec') |> purrr::map_at(.at = c('sep','pad'), .f = scrub_tabnames)
   names(df_list) <- rlang::call2(xlr::scrub_tabnames, rlang::splice(for_scrub_tabnames)) |> rlang::eval_tidy()
   # return(df_list)
 
 
+  # what do you want temp names to look like?
   mk_tempfile <- is.null(.path)
 
 
@@ -92,12 +94,12 @@ xl <- function(...
 
 
 
-  df_list <- purrr::map(df_list, ~janitor::remove_empty(., c('rows', 'cols')))
+  # df_list <- purrr::map(df_list, ~janitor::remove_empty(., c('rows', 'cols')))
   if(!is.null(.fieldname_spec)){ df_list <- purrr::map(df_list, ~janitor::clean_names(., case = 'title')) }
   for_buildWorkbook <- list(x = df_list, asTable = TRUE, orientation = 'landscape', zoom = 65) |>
     purrr::list_assign(rlang::splice(.workbook_spec))
   wb <- rlang::call2(openxlsx::buildWorkbook, rlang::splice(for_buildWorkbook)) |> rlang::eval_tidy()
-  # wb <- rlang::set_names(wb, names(df_list))
+  wb <- rlang::set_names(wb, names(df_list))
   # wb <- openxlsx::buildWorkbook(x = df_list, asTable = T, orientation = 'landscape', zoom = zoom, startRow = start_row)
   start_row <- 1
 
@@ -113,14 +115,14 @@ xl <- function(...
     openxlsx::setColWidths(wb, sheet = sheet_name, widths = 10, cols = dt_cols)
   }
 
-  print(file.exists(.path))
+  # print(file.exists(.path))
   openxlsx::saveWorkbook(wb, file = .path, overwrite = T, returnValue = T)
-  print(file.exists(.path))
-  print(.path)
+  # print(file.exists(.path))
+  # print(.path)
 
   if(.open) {
-    # openxlsx::openXL(.path)
-    browseURL(.path)
+    openxlsx::openXL(.path)
+    # browseURL(.path)
     }
   # system2('xdg-open', glue::glue("'{.path}'"))
   if(mk_tempfile){ later::later(~base::unlink(.path), 60) }

@@ -30,7 +30,8 @@ Same as \code{\link[=tibble]{tibble()}} with different defaults.
 \item Does not repeat input elements to obtain common lengths
 \item Transforms lists with uniform arrays into columns of a tibble
 \item Treats ragged list of input elements similar to \code{\link[=tibble]{tibble()}} but includes names as column if possible
-\item Flattens lists of lists to flat table if possible
+\item Flattens lists of lists to
+flat table if possible
 }
 }
 \details{
