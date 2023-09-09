@@ -118,9 +118,9 @@ scrub_tabnames <- function(tabnames,
   if( base::any(repeated(tabnames), na.rm = TRUE) || base::any(nchar(tabnames) > width, na.rm = TRUE) ){
 
     if( !quiet ){
-      message("\n**********************************************************************")
-      message("***** There are still issues after scrubbing names. ********************")
-      message("**********************************************************************\n\n")
+      message("\n****************************************************************************")
+      message("***** There are still issues after scrubbing names. Rerunning function *****")
+      message("****************************************************************************\n\n")
     }
 
     tabnames <- scrub_tabnames(tabnames = tabnames, max_width = width,
@@ -188,11 +188,16 @@ scrub_tabnames <- function(tabnames,
   # On average, faster to check if any issues exist before calling replacements.
   if( base::any(stringr::str_detect(tabnames, pattern = "(^')|[\\\\/:?*\\[\\]]|(?i)history|('$)"),na.rm = TRUE) ){
 
-    tabnames <- .forbidden_chars_replace(tabnames, pattern = "[\\\\/:]", replacement = "-", pattern_text = "\\, /, or :", quiet = quiet)
+    # tabnames <- .forbidden_chars_replace(tabnames, pattern = "[\\\\/:]", replacement = "-", pattern_text = "\\, /, or :", quiet = quiet)
+    tabnames <- .forbidden_chars_replace(tabnames, pattern = "[\\\\]", replacement = "-", pattern_text = "\\", quiet = quiet)
+    tabnames <- .forbidden_chars_replace(tabnames, pattern = "/", replacement = "-", pattern_text = "/", quiet = quiet)
+    tabnames <- .forbidden_chars_replace(tabnames, pattern = ":", replacement = "-", pattern_text = ":", quiet = quiet)
     tabnames <- .forbidden_chars_replace(tabnames, pattern = "[*]", replacement = "#", pattern_text = "*", quiet = quiet)
     tabnames <- .forbidden_chars_replace(tabnames, pattern = "[?]", replacement = "!", pattern_text = "?", quiet = quiet)
-    tabnames <- .forbidden_chars_replace(tabnames, pattern = "\\[", replacement = "<", pattern_text = "[", repl_text = "<", quiet = quiet)
-    tabnames <- .forbidden_chars_replace(tabnames, pattern = "]", replacement = ">", pattern_text = "]", repl_text = ">", quiet = quiet)
+    tabnames <- .forbidden_chars_replace(tabnames, pattern = "\\[", replacement = "(", pattern_text = "[", repl_text = "(", quiet = quiet)
+    tabnames <- .forbidden_chars_replace(tabnames, pattern = "]", replacement = ")", pattern_text = "]", repl_text = ")", quiet = quiet)
+    tabnames <- .forbidden_chars_replace(tabnames, pattern = "<", replacement = "(", pattern_text = "<", repl_text = "(", quiet = quiet)
+    tabnames <- .forbidden_chars_replace(tabnames, pattern = ">", replacement = ")", pattern_text = ">", repl_text = ")", quiet = quiet)
     tabnames <- .forbidden_chars_replace(tabnames, pattern = "^'+", replacement = "", pattern_text = "a single quote ' at the start of a tabname", repl_text = "an empty string", quiet = quiet)
     tabnames <- .forbidden_chars_replace(tabnames, pattern = "'+$", replacement = "", pattern_text = "a single quote ' at the end of a tabname", repl_text = "an empty string", quiet = quiet)
     tabnames <- .forbidden_chars_replace(tabnames, pattern = "(?i)(hist)ory", replacement = "\\1", pattern_text = "the word 'history'", repl_text = "hist", quiet = quiet)
@@ -234,10 +239,8 @@ scrub_tabnames <- function(tabnames,
 
   if( base::any(stringr::str_detect(names, pattern), na.rm = TRUE) ){
     if( !quiet ){
-      cli::cli_alert_warning(
-        "Sheet names cannot contain:  {pattern_text}
-         Replacing each with:  {repl_text}
-        \n")
+      cli::cli_alert_warning( "Sheet names should not contain:  `{pattern_text}`" )
+      cli::cli_alert( "Replacing forbidden character with:  `{repl_text}`" )
     }
     stringr::str_replace_all(names, pattern, replacement)
   } else {

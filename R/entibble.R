@@ -26,6 +26,7 @@
 #' @export
 #'
 #' @examples
+#' entibble('')
 #' letters |> entibble()
 #' letters |>  purrr::set_names(LETTERS) |> entibble()
 #' letters |>  purrr::set_names(LETTERS) |> entibble(.rowname = 'user-specified rowname')
@@ -152,7 +153,7 @@ entibble <- function(
   } else {
 
     checkmate::assert_string(.rowname, null.ok = FALSE, na.ok = FALSE)
-    out <- enflatten(in_exprs, .f = identity, name_spec = "{inner}") |>
+    out <- list_iron(!!!in_exprs, .f = identity, name_spec = "{inner}") |>
       purrr::imap(.f = ~.to_tibble(.x, .rowname = .rowname, .vec_name = .y))
     row_counts <- out |> purrr::map_int(nrow) |> unique()
     is_ragged <- length(row_counts)!=1

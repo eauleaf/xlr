@@ -31,39 +31,39 @@ orig_str <- list(
   ) |> setNames(1:2)
 
 
-test_that("enflatten() tibbles multiple dataframes", {
-  expect_equal(orig_str, enflatten(tail(iris,2), tail(mtcars,2)) |> setNames(1:2))
+test_that("list_iron() tibbles multiple dataframes", {
+  expect_equal(orig_str, list_iron(tail(iris,2), tail(mtcars,2)) |> setNames(1:2))
 })
 
-test_that("enflatten() dis-embeds multi-level lists", {
-  expect_equal(orig_str , enflatten(list(list(tail(iris,2), list(tail(mtcars,2))))) |> setNames(1:2))
+test_that("list_iron() dis-embeds multi-level lists", {
+  expect_equal(orig_str , list_iron(list(list(tail(iris,2), list(tail(mtcars,2))))) |> setNames(1:2))
 })
 
-cat('much to do in enflatten tests')
+cat('much to do in list_iron tests')
 
 #' list(c(list(1:5), a = list(5:1, 'green', list('blue'))), purrr::set_names(letters, LETTERS)) |> str()
 #' list(c(list(1:5), a = list(5:1, 'green', list('blue'))), purrr::set_names(letters, LETTERS)) |>
-#'   enflatten() |> str()
+#'   list_iron() |> str()
 #' (embedded_list <- list(list(list(1:5), a = list(5:1, 'green', list('blue')), purrr::set_names(letters, LETTERS)) |> list(head(iris), tail(mtcars))))
 #' embedded_list |> str()
 #' embedded_list |> names()
-#' embedded_list |> enflatten() |> str()
-#' embedded_list |> enflatten() |> names()
-#' embedded_list |> enflatten(name_repair = 'unique') |> names()
-#' embedded_list |> enflatten(name_spec = '{outer}_outer_|{inner}_inner_') |> names()
-#' embedded_list |> enflatten(name_spec = '', name_repair = 'unique') |> names()
+#' embedded_list |> list_iron() |> str()
+#' embedded_list |> list_iron() |> names()
+#' embedded_list |> list_iron(name_repair = 'unique') |> names()
+#' embedded_list |> list_iron(name_spec = '{outer}_outer_|{inner}_inner_') |> names()
+#' embedded_list |> list_iron(name_spec = '', name_repair = 'unique') |> names()
 #' list(list(list(1:5), list(5:1, 'green', list('blue')), purrr::set_names(letters, LETTERS)) |>
-#' list(head(iris), tail(mtcars))) |> enflatten(name_spec = 'tbl_{inner}') |> names()
+#' list(head(iris), tail(mtcars))) |> list_iron(name_spec = 'tbl_{inner}') |> names()
 #' list(list(list(1:5), list(5:1, 'green', list('blue')), purrr::set_names(letters, LETTERS))) |>
-#' list(head(iris), tail(mtcars)) |> enflatten(name_spec = 'lst_grp1.{inner}') |> names()
+#' list(head(iris), tail(mtcars)) |> list_iron(name_spec = 'lst_grp1.{inner}') |> names()
 #' some_list <- list(list(grp_a = 2:1, grp_b = list(b1 = 2, b2 = list(list(f = iris))), grp_c = list(c2 = 3, c1 = 4)))
-#' enflatten(some_list)
+#' list_iron(some_list)
 
 
 
 #' tests
-#' as.list(letters) |> enflatten()
-#' list(c(list(1:5), list(5:1)), letters) |> enflatten()
+#' as.list(letters) |> list_iron()
+#' list(c(list(1:5), list(5:1)), letters) |> list_iron()
 #' list(a = 1,b=5, 1:10, letters,  ) |> xl()
 #' c(1,1:5, list(1:10)) |> xl()
 #' a <- tibble::tibble(iris); xl(a)

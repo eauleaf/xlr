@@ -28,7 +28,7 @@
 #'
 #' # However, these do embed list structure:
 #' enlist(a_name = enlist(letters)) # b/c specified name
-#' enlist(enlist(letters), .f = 'a_name')  # b/c specified name
+#' enlist(enlist(letters), .nm =  'a_name')  # b/c specified name
 #' enlist(enlist(letters),enlist(letters)) # b/c housing additional list elements (list of lists)
 #'
 #'
@@ -48,8 +48,8 @@
 #'
 #'
 #' @param ... any objects; if unnamed, enlist() forces names by input expression
-#' @param .f a function to rename list where forced names are input to a naming
-#'   function, e.g. .f = 'hi', .f = ~gsub('[' ]', '', .) or .f = ~substr(.,1,5)
+#' @param .nm a function to rename list where forced names are input to a naming
+#'   function, e.g. .nm =  'hi', .nm =  ~gsub('[' ]', '', .) or .nm =  ~substr(.,1,5)
 #'
 #'
 #' @return an evaluated named list
@@ -68,8 +68,8 @@
 #' # auto-naming is overridden if you specify a name
 #' enlist(some_named_list_element = tail(iris))
 #'
-#' enlist(letters, head(iris), enlist('green', blue = 'blue'), .f = 'grp')
-#' enlist(letters, head(iris), 'green ish', blue = 'blue', .f = ~paste0(., '-grp_A'))
+#' enlist(letters, head(iris), enlist('green', 'blue', .nm =  'grp2'), .nm =  'grp1') |> list_iron() |> xlr()
+#' enlist(letters, head(iris), 'green ish', blue = 'blue', .nm =  ~paste0(., '-grp_A'))
 #'
 #' ## you can embed enlist() similar to list()
 #' enlist(letters, head(iris), enlist('green', blue = 'blue'))
@@ -93,11 +93,11 @@
 #' list('green','blue') |> a() # still a flat input list
 #'
 #' ## you can change/override names in a particular enlist() call by passing a lambda naming function with ~, (powered by rlang's rlang::as_function())
-#' list(letters, head(iris), colors = enlist('green', blue = 'blue', .f = ~stringr::str_replace_all(., "['aeiou]",'-'))) |> enlist()
-#' enlist(mtcars,iris) |> purrr::map(head) |> enlist(.f = ~gsub('.*', 'new_name_here', .))
-#' enlist(letters, head(iris), colors = enlist('green', blue = 'blue', .f = ~dplyr::if_else(. == 'blue', 'a_very_deep_blue','a_very_deep_green')))
-#' enlist(letters, embed_grp1 = enlist(head(iris)), embed_grp2 = enlist('green', blue = 'blue'), .f = ~paste0('lvl1_',.)) |> enscript()
-#' letters |> enlist( .f = ~'')  # removes names
+#' list(letters, head(iris), colors = enlist('green', blue = 'blue', .nm =  ~stringr::str_replace_all(., "['aeiou]",'-'))) |> enlist()
+#' enlist(mtcars,iris) |> purrr::map(head) |> enlist(.nm =  ~gsub('.*', 'new_name_here', .))
+#' enlist(letters, head(iris), colors = enlist('green', blue = 'blue', .nm =  ~dplyr::if_else(. == 'blue', 'a_very_deep_blue','a_very_deep_green')))
+#' enlist(letters, embed_grp1 = enlist(head(iris)), embed_grp2 = enlist('green', blue = 'blue'), .nm =  ~paste0('lvl1_',.)) |> enscript()
+#' letters |> enlist( .nm =  ~'')  # removes names
 #'
 #' ## enlist() behavior with map() (the latter two below are equivalent)
 #' candy <- c('lollipops','gum')
@@ -131,9 +131,9 @@
 #'  enlist(candy, enlist(nums = 3:1, c = enlist(b1 = 2, enlist(new = c('red','green'), f = enlist(head(iris)))), b = enlist(c2 = 3, c1 = 4:5, letters[1:10])))
 
 
-# enlist <- function( ... , .f = NULL){ out_list <- rlang::quos(...) |> eval_enlist() if (
 
-enlist <- function(..., .f = NULL) {
+enlist <- function(..., .nm =  NULL) {
+
     .quos <- rlang::quos(...) |>
         rlang::exprs_auto_name()
 
@@ -143,7 +143,7 @@ enlist <- function(..., .f = NULL) {
     # if quos list has only 1 quo, and that quo is a list, pull quo and rewrite its expr
     # w/auto-names then place rewritten expr in orig quo (to preserve orig expr names) and eval,
     # otherwise, just map eval every item in the orig quos list
-    if (length(.quos) == 1 && is.null(.f) && stringr::str_detect(base::names(.quos), "^(?:xlr::|base::)?(?:en)?list\\(") ){
+    if (length(.quos) == 1 && is.null(.nm) && stringr::str_detect(base::names(.quos), "^(?:xlr::|base::|rlang::|<)?(?:en|dots_)?list2?[(>]") ){
         .quo <- purrr::pluck(.quos, 1)
         rewritten_expr <- .quo |>
             rlang::quo_get_expr() |>
@@ -153,8 +153,8 @@ enlist <- function(..., .f = NULL) {
             rlang::eval_tidy()
     } else {
         out_list <- .quos |>  purrr::map(rlang::eval_tidy)
-        # out_list <- rlang::dots_list(..., .ignore_empty = 'all', .named = TRUE)
     }
+    # out_list <- rlang::dots_list(..., .ignore_empty = 'all', .named = TRUE)
 
 
     # remove external-quotes from names
@@ -162,8 +162,8 @@ enlist <- function(..., .f = NULL) {
 
 
     # if list elements need to be named by user-function
-    if (!is.null(.f)) {
-      out_list <- out_list |> rlang::set_names(nm = .f)
+    if (!is.null(.nm)) {
+      out_list <- out_list |> rlang::set_names(nm = .nm)
     }
 
 
@@ -192,4 +192,5 @@ enlist <- function(..., .f = NULL) {
   return(named_list)
 
 }
+
 

@@ -25,20 +25,20 @@ a tibble with rownames in a column
 Same as \code{\link[=tibble]{tibble()}} with different defaults.
 \link{entibble}:
 \itemize{
-\item Always includes rownames as a column
+\item Always includes rownames, if available, as the first column of the tibble
 \item Is not concerned with duplicate column names unless specified by user with .name_repair
 \item Does not repeat input elements to obtain common lengths
 \item Transforms lists with uniform arrays into columns of a tibble
 \item Treats ragged list of input elements similar to \code{\link[=tibble]{tibble()}} but includes names as column if possible
-\item Flattens lists of lists to
-flat table if possible
+\item Flattens lists of lists to a single table if possible
 }
 }
 \details{
 @details
-Entibble is designed to work with the function \code{\link[=xl]{xl()}} to produce a viewable
-output of presented data. To help ensure \code{\link[=xl]{xl()}} succeeds, \code{\link[=entibble]{entibble()}} is
-liberal about names and makes an effort to produce a single flat table.
+Entibble is designed to work with the function \code{\link[=xlr]{xlr()}} to produce a viewable
+output of presented data. To help \code{\link[=xlr]{xlr()}} succeed as often as possible, \code{\link[=entibble]{entibble()}} is
+liberal about names, such as duplicate column names, and makes an effort to produce a flat table
+rather than a nested tibble.
 }
 \examples{
 letters |> entibble()
