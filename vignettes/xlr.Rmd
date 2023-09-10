@@ -1,10 +1,14 @@
 ---
 title: "xlr"
+author: "Eauleaf"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{xlr}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r, include = FALSE}
@@ -14,66 +18,105 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+## ***R + Spreadsheets***
+
+<br>
+
+# Overview of xlr
+
+The *`xlr`* package is about 10 functions to make it easier to move
+information between R and spreadsheets.
+
+### Reasons for *`xlr`*:
+
+Spreadsheets are an excellent tool for presenting 2-dimensional data in
+a reader-friendly format and spreadsheets are the workhorse of the
+business community. However, spreadsheets don't have the flexibility or
+raw horsepower of R, so its helpful to use R for the data processing,
+and then pump standardized, reviewable tables out to workbook
+spreadsheets for review, as long as the effort is minimal.
+
+## To get started:
+
+```{r install-xlr, eval = F}
+remotes::install_github('eauleaf/xlr')
 library(xlr)
 ```
 
-## 
+## Primary xlr functions
 
-# Overview
+#### --ordered by use frequency--
 
-`xlr` is simple; it's fewer than 10 functions designed to make it easier to 
-process data in R and view that data in spreadsheets. 
+-   `xlr()` -- quickly view multiple datasets as sheets in a workbook
+-   `enlist()` -- quickly produce named lists of your data
+-   `copy_for_xl()` -- copy an R dataset to clipboard memory for pasting
+    to a spreadsheet
+-   `paste_from_xl()` -- copy spreadsheet data to clipboard memory for
+    pasting in R
+-   `enscript()` -- produce the code to re-create most any R object
+-   `repeated()` -- flag all repeats in a vector
+-   `list_iron()` -- flatten lists of embedded lists to a named,
+    single-file list
+-   `entibble()` -- create tibbles with default behavior useful for
+    workbook view
 
-Spreadsheets excel at presenting 2-D data in a human-friendly formats, and 
-spreadsheets are the workhorse of the business community. Unfortunately, 
-spreadsheets don't have the flexibility or horsepower of R, so I want to 
-use R for the heavy lifting, and then pump those tables out to spreadsheets 
-to review or share the data. 
+<br>
 
-If you work in R, and you work in Libreoffice or Excel, then you'll probably find
-`xlr` helpful. 
+# Function Details
 
+### `xlr()`
 
-# Getting Started
+`xlr()` is the primary function, and the package is named after it. Many
+of the other functions in the package are there to help `xlr()`. The
+function is somewhat similar to `View()` from the utils package in that
+`xlr()` is for quickly viewing datasets. `xlr()` makes it easy to view
+multiple related datasets via spreasheets in a workbook, change your
+code, view the data again--rinse repeat.
 
-To install `xlr`, run:
+It's easiest to see what `xlr()` does by passing it some example data;
+type in something like:
 
-```{r install-xlr, eval = F}
-remotes::install_github('eauleaf/crudr')
+```         
+xlr(mtcars, iris, letters, Titanic, AirPassengers)
 ```
 
-`xlr` is brand-new, so please provide feedback. Try to break the functions. If 
-you can, tell me. Once the package is decently stable, I'll submit it to CRAN. 
+If you send that code to the console, you should get a workbook that
+opens automatically with those datasets presented in a standardized,
+formatted spreadsheets. Once you've looked the workbook over, all you
+have to do is close it; your spreadsheets are temporary. Close them and
+they're gone.
 
+### Use Details
 
-## `view_xl()` 
-The Most Important `xlr` Function
+To use `xlr()`, pass it a dataframe or a list of dataframes. It does not
+matter if you pass nested lists of lists, `xlr()` will flatten and
+auto-name the workbook and the spreadsheet tabs.
 
-The inspiration for `view_xl()` is dplyr's `view()` function. `view()` is
-awesome since it's kind of a stripped-down spreadsheet view. I can look at the
-data, then change my code, view the data again, change my code again, etc.
+```         
+xlr(some_datasets = enlist(flowers = iris, mtcars, datasets::USArrests)) 
 
-Sometimes, however, I need to review a lot of data from a lot of dataframes. So,
-I need dplyr's `view` function, but implemented as a workbook in Libreoffice or
-Excel. This is what `view_xl` is for. **`view_xl()`** is an opinionated way to
-review dataframes via spreadsheet, implemented with a lot of hidden and
-automated conveniences.
+iris |> split(f = iris$Species) |> xlr()
+```
 
+`xlr()` writes the workbook in a temp directory and removes the savefile
+5 minutes after write time to keep them from building up. Temp
+directories delete themselves when you close R. If, however, you want to
+save a workbook, specify a path or a save name in parameter `.path`;
+specified savenames don't get marked for cleanup. (Note that `.path`
+uses `here::here()` internally.)
 
-### Use
-To use `view_xl()`, call a dataframe or a list of dataframes, like so:
-`view_xl(iris)`
-`view_xl(iris, mtcars)`
-`list(flower_data = iris, car_data = mtcars) |> view_xl()`
-`iris |> split(f = iris$Species) |> view_xl()`
+`xlr()` entibbles all datasets you pass, and will optionally (invisibly)
+return the `tibble` data objects in a list, the `openxlsx` workbook
+object, or the path string, as specified through parameter `.return`.
 
-Your spreadsheet is temporary. Close it and it's gone. If you want to save 
-it, then just specify an input path, like: 
+### `enlist()`
 
+`enlist()` is a convenience function for creating and naming lists,
+without unnecessary list nesting.
 
-The path argument uses `here::here()`, so you can sspecify ... our default directory with 
+### `copy_for_xl()`
 
+`copy_for_xl()` is a
 
-Install package `clipr` and 
-Check with `clipr::dr_clipr()`
+The functions Install package `clipr` and check that it works by running
+`clipr::dr_clipr().`

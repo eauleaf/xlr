@@ -41,6 +41,7 @@ liberal about names, such as duplicate column names, and makes an effort to prod
 rather than a nested tibble.
 }
 \examples{
+entibble('')
 letters |> entibble()
 letters |>  purrr::set_names(LETTERS) |> entibble()
 letters |>  purrr::set_names(LETTERS) |> entibble(.rowname = 'user-specified rowname')

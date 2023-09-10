@@ -9,12 +9,12 @@ xlr(
   ...,
   .path = NULL,
   .open = TRUE,
-  .quiet = FALSE,
-  .fieldname_spec = list(~janitor::clean_names(.)),
-  .tabname_spec = list(sep = ".", pad = ".", name_spec = "{outer}|{inner}"),
-  .workbook_spec = list(asTable = TRUE, orientation = "landscape", zoom = 65, start_row =
-    3),
-  .return = c("tibble-list", "workbook-object")
+  .quiet = TRUE,
+  .sheet_titles = TRUE,
+  .fieldname_spec = NULL,
+  .tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}"),
+  .workbook_spec = list(asTable = TRUE, orientation = "landscape", zoom = 70),
+  .return = list(NULL, "savepath", "tibbles", "workbook")
 )
 }
 \arguments{
@@ -25,17 +25,35 @@ or more dataframes.}
 a minimal file name such as 'expenses' or a .path such as
 'my-data-stash/workbook.xlsx'. \link{.path} uses \code{\link[here:here]{here::here()}}. If .path is not
 specified, workbook is removed on or before closure. If .path is specified
-but the folder structure does not exist, \code{\link[=xl]{xl()}} will attempt to
+but the folder structure does not exist, \code{\link[=xlr]{xlr()}} will attempt to
 construct it.}
 
 \item{.open}{If FALSE, workbook will not open after being written.}
 
-\item{.fieldname_spec}{list of purrr-style functions to apply across fieldnames; e.g. "list(~janitor::clean_names(., case = 'title'))" to titlecase fieldnames}
+\item{.quiet}{TRUE or FALSE (default) denoting whether you want messaging}
 
-\item{.return}{Type of output in R. Default is the tibbled dataframes. If workbook-object, then}
+\item{.sheet_titles}{TRUE (default), FALSE, or a character vector/list of the
+same count as spreadsheets to be written}
+
+\item{.fieldname_spec}{NULL (default) or a purrr-style function to apply
+across all fieldnames; e.g. \verb{~janitor::clean_names(., case = 'title'))} to
+titlecase fieldnames, 'toupper' for all caps, or \code{janitor::clean_names} for
+snakecase}
+
+\item{.tabname_spec}{a list that allows the user to define tab labeling
+arguments: sep = ".", pad = ".", name_spec = "{inner}"}
+
+\item{.workbook_spec}{a list of arguments to pass to
+\code{\link[openxlsx:buildWorkbook]{openxlsx::buildWorkbook()}}, e.g. list(asTable = TRUE, orientation =
+'landscape', zoom = 70)}
+
+\item{.return}{defines the type of output to R, such as the dataframes, the
+workbook-object, or the save path. Default is NULL.}
 }
 \value{
-A force-named flat list of tibbles, returned invisibly, and a workbook of spreadsheets as side-effect
+the side-effect, a workbook of spreadsheets, is the primary output of this function
+See
+direct-effect: a flat list of tibbles (returned invisibly)
 }
 \description{
 Provides a means of reviewing datasets through the user's default spreasheet
@@ -45,38 +63,6 @@ which allows for larger datasets and a list of dataframes.
 \details{
 Auto-corrects forbidden sheetnames
 Flattens embedded lists with preserved name structure
-}
-\examples{
-\dontrun{
-xlr(mtcars)
-xl(a = NULL)
-xl(a = NA)
-xl(NULL)
-list(c(list(1:5), list(5:1)), letters) |> xl()
-c(1:5) |> xl()
-xl(c(1:5))
-xl(1)
-xl(list(a = 1,5))
-list(a = 1,b=5, 1:10, letters, as.matrix(warpbreaks[1:10,]) ) |> xl()
-c(1,1:5, list(1:10)) |> xl()
-a <- tibble::tibble(iris); xl(a)
-xl(NA)
-xl(NULL)
-xl(1)
-1:26 |> purrr::set_names(letters) |> xl()
-as.matrix(warpbreaks[1:10,])
-}
-specification args
-
-
-#' list(a = 1,b=5, 1:10, letters) |> xlr()
-c(1,1:5, list(1:10)) |> xl()
-a <- tibble::tibble(iris); xl(a)
-xl(NA)
-xl(NULL)
-xl(1)
-1:26 |> purrr::set_names(letters) |> xl()
-
 }
 \seealso{
 \code{\link[openxlsx:buildWorkbook]{openxlsx::buildWorkbook()}}

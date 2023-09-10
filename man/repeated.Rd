@@ -14,16 +14,15 @@ a logical vector the same length as the input
 }
 \description{
 Similar to \code{\link[=duplicated]{duplicated()}}, but marks all repeated values as TRUE.
-}
-\details{
+
 Removes NULL, and treats NaN, Inf, and NA like any other value.
 \code{repeated(c(NULL, NULL, NULL, NaN, Inf, NA, NA))} returns
 \code{c(FALSE, FALSE, TRUE, TRUE)}
-
+}
+\details{
 Datasets often contain repeated data where there should be unique values.
-\code{\link[=repeated]{repeated()}} is a convenience function that is helpful for reviewing
-repeated observations in a dataframe. It's an alias for
-\code{x \%in\% x[duplicated(x)]}.
+\code{\link[=repeated]{repeated()}} is a convenience function for reviewing
+repeated observations in a dataframe, and an alias for \code{x \%in\% x[duplicated(x)]}.
 
 Filtering a dataframe '.data' by the repeated values in column 'x',
 as in \code{dplyr::filter(.data, xlr::repeated(x))}, performs the same task as
@@ -32,8 +31,6 @@ grouping by a variable and selecting counts greater than 1, as in
 quicker and easier to remember.
 
 Ideally \code{\link[=repeated]{repeated()}} would be written in c++ and included in \link{dplyr}.
-
-https://stackoverflow.com/questions/28244123/find-duplicated-elements-with-dplyr
 }
 \examples{
 repeated(c(1, 2, 3, 4, 5, 5, 5))
@@ -46,8 +43,8 @@ tidyr::billboard |> dplyr::filter(repeated(artist))
 mtcars |> dplyr::filter(repeated(wt))
 mtcars |> dplyr::filter(duplicated(wt))
 
-# To filter on several variables use `&` and `|`, as in:
-mtcars |> dplyr::filter(repeated(qsec), repeated(wt))
+# To filter on several variables, use `&` and `|`, as in:
+mtcars |> dplyr::filter(repeated(qsec) & repeated(wt))
 mtcars |> dplyr::filter(repeated(qsec) | repeated(wt))
 
 }
