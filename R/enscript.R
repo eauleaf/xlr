@@ -13,7 +13,7 @@
 #' @details
 #' Copying formatted output to the clipboard requires package [clipr].
 #'
-#' To set up the key-chord `ctrl+alt+shift+v` in RStudio. Run [xlr::set_xlr_key_chords()].
+#' To set up the key-chord `ctrl+alt+shift+n` in RStudio. Run [xlr::set_xlr_key_chords()].
 #'
 #' If using Linux, make sure to install a clipboard tool:
 #'  apt-get install xclip
@@ -46,7 +46,7 @@
 #' dplyr::starwars |> head() |> enscript()
 #'
 #' (flowers = tail(iris,10))
-#' enscript(flowers, quiet = F)
+#' enscript(flowers, quiet = T)
 #'
 #' (days_to_go <- seq.Date(Sys.Date(), by = 1, length.out = 7))
 #' days_to_go |> enscript()
@@ -56,7 +56,7 @@
 #' colours() |> enscript()
 #'
 #' candy <- list('lollipops','gum')
-#' enlist(candy, !!candy, !!!candy, rlang::list2(!!!candy)) |> enscript()
+#' enlist(candy, !!candy, !!!candy, enlist(!!!candy)) |> enscript()
 #' enlist(!!letters)
 #'
 #'

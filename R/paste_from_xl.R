@@ -155,7 +155,7 @@ run_paste_from_xl <- function(){
   # ask user for a variable name --------------------------------------------
   input_name <- svDialogs::dlg_input(
     message = "Assign `<-` a variable name to the data?",
-    default = 'datr')$res
+    default = 'xl_tbl')$res
 
   input_name <- xlr:::.check_assigned_input(input_name)
 

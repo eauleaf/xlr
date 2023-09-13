@@ -1,175 +1,138 @@
-#' Create a list with each list element force-named by the input expression.
-#' If passed a single list, does not add an additional layer.
-#'
+#' Create a list with auto-named list elements.
+#' If passed a list, `enlist()` does not add an additional list layer.
 #'
 #' @description
-#' Use in place of list() to produce a list with auto-assigned names that does not
-#' stack lists unless the list is named or the list houses more than one element.
+#' Use in place of list() to produce a list with auto-assigned names and to avoid adding excess list structure.
 #'
-#' @details Embedding:
-#' enlist() embedding behavior is different from list(); enlist() only embeds
-#' stacked lists if embed is named or if list contains lists, i.e., enlist() doesn't
-#' stack lists for structure's sake alone.
-#' All superfluous commas are ignored
-#' # Compare:
-#' `enlist(enlist(enlist(letters))) # one list deep`
-#' `list(list(list(letters))) # three lists deep`
+#' @details Specifically:
+#' -- `enlist` creates a list where each list element is force-named by the input expression if no list element name is provided, .e.g  `enlist(mtcars)`.
 #'
-#' Unlike list(), enlist() removes its own embedding layer if not assigned
-#' a user-specified name, or if embedding implies no change in list structure other
-#' than depth, i.e., enlist() doesn't embed its list for embedding's sake alone.
+#' -- If no list exists, `enlist` places its arguments into a list, e.g. `enlist(greetings = c('hi', 'hello'))`.
 #'
-#' # For example, compare:
-#' `enlist(enlist(enlist(letters))) # one list deep`
-#' `list(list(list(letters))) # three lists deep`
+#' -- If passed a single bare list, `enlist` does not add an additional list layer. That is, enlist() doesn't stack lists for structure's sake alone, e.g. `enlist(enlist(letters))`.
 #'
-#' But if you name a list element, enlist() retains that information by embedding a named list:
-#' enlist(enlist(user_named_list = enlist(letters))) # two lists deep
+#' -- `enlist` takes dots, splicing, and injection, and is okay to use in meta-programming, e.g. enlist(!!!letters).
 #'
-#' # However, these do embed list structure:
-#' enlist(a_name = enlist(letters)) # b/c specified name
-#' enlist(enlist(letters), .nm =  'a_name')  # b/c specified name
-#' enlist(enlist(letters),enlist(letters)) # b/c housing additional list elements (list of lists)
+#' -- `enlist` ignores all input argument separator commas, e.g. enlist(,,,,,).
+#'
+#' -- Naming can be performed by function through the parameter `.label`, e.g. .label = ~paste0('name_',.)
+#'
+#' --
 #'
 #'
-#' This careful embedding behavior is convenient if you want to use enlist() to
-#' catch and name dots `...` inside a function where the user wants to handle a
-#' list of items within the function, but doesn't want to require the user to have
-#' to pass in a named list.
-#'
-#' For example, compare these functions a() and b() below with listed inputs:
-#' a <- function(...){ enlist(...) } # function catching inputs with enlist()
-#' b <- function(...){ list(...) } # function catching inputs with list()
-#' a(letters, LETTERS) # named flat input list
-#' b(letters, LETTERS) # flat unnamed flat input list
-#' list(letters, LETTERS) |> a() # still a named flat input list despite user
-#' passing in a list() of elements
-#' list('green','blue') |> b() # an embedded input list
-#'
-#'
-#' @param ... any objects; if unnamed, enlist() forces names by input expression
-#' @param .nm a function to rename list where forced names are input to a naming
-#'   function, e.g. .nm =  'hi', .nm =  ~gsub('[' ]', '', .) or .nm =  ~substr(.,1,5)
+#' @param ... data objects; if unnamed, enlist() forces names by input expression
+#' @param .label a function or character vector to rename list elements, e.g. .label = ~substr(.,1,5).
+#' `.label` is passed directly to `nm` in 'rlang::set_names()'
 #'
 #'
 #' @return an evaluated named list
 #' @export
 #'
 #' @examples
+#' # Examples to compare `enlist()` to `list()`:
 #'
-#' list(head(mtcars), head(iris)) |> enlist()
+#' # Auto-naming by input expression:
+#' list(head(iris), tail(mtcars))
+#' enlist(head(iris), tail(mtcars))
 #'
-#' enlist(letters)
-#' enlist(letters,LETTERS)
-#' enlist(head(iris))
-#' enlist(tail(mtcars),head(iris))
-#' enlist(mtcars,iris) |> purrr::map(head)
+#' # Naming a list element works similar to `list()`:
+#' list(some_name = letters)
+#' enlist(some_name = letters)
 #'
-#' # auto-naming is overridden if you specify a name
-#' enlist(some_named_list_element = tail(iris))
+#' # Naming by passing a function to `.label`:
+#' enlist(letters, .label =  'some_name')
+#' enlist(letters, .label =  ~paste0(.,'_1'))
+#' enlist('black','white','cyan', .label =  'color_grp_1')
+#' letters |> enlist( .label =  ~'')  # removes names
 #'
-#' enlist(letters, head(iris), enlist('green', 'blue', .nm =  'grp2'), .nm =  'grp1') |> list_iron() |> xlr()
-#' enlist(letters, head(iris), 'green ish', blue = 'blue', .nm =  ~paste0(., '-grp_A'))
 #'
-#' ## you can embed enlist() similar to list()
-#' enlist(letters, head(iris), enlist('green', blue = 'blue'))
-#' # but embedding behavior is not exactly the same as list())
-#' # enlist() does not double embed without a specified name or some change in list structure
-#' # compare to depth from embedding list() and enlist()
-#' list(list(list(head(iris)))) |> list() |> list()
-#' enlist(enlist(enlist(head(iris)))) |> enlist() |> enlist()
-#' # enlist() removes its own layer of list() depth if passed a bare list(); compare these
-#' list(head(iris)) |> enlist() # list depth 1
-#' list(head(iris)) |> list() # list depth 2
-#' # but, enlist() only removes it's own layer of list(), so doubling up on list() will embedded list items like you'd expect from list()
-#' list(list(head(iris))) |> str()
-#' list(list(head(iris))) |> enlist() |> str()
-#' # however, if an embedded list element is user-named, then enlist() will embed the list to keep that name info, compare:
-#' enlist(embedded = enlist(head(iris))) # list depth 2
-#' enlist(enlist(head(iris))) # list depth 1
-#' # not adding embedded structure is useful if you want to use enlist() to catch and name dots `...` inside a function where user might or might not pass in a list, e.g.
-#' a <- function(...){enlist(...)}
-#' a('green','blue') # flat input list
-#' list('green','blue') |> a() # still a flat input list
+#' # List embedding:
+#' list(list(list(letters))) # 3 lists deep
+#' enlist(enlist(enlist(letters))) # 1 list deep
 #'
-#' ## you can change/override names in a particular enlist() call by passing a lambda naming function with ~, (powered by rlang's rlang::as_function())
-#' list(letters, head(iris), colors = enlist('green', blue = 'blue', .nm =  ~stringr::str_replace_all(., "['aeiou]",'-'))) |> enlist()
-#' enlist(mtcars,iris) |> purrr::map(head) |> enlist(.nm =  ~gsub('.*', 'new_name_here', .))
-#' enlist(letters, head(iris), colors = enlist('green', blue = 'blue', .nm =  ~dplyr::if_else(. == 'blue', 'a_very_deep_blue','a_very_deep_green')))
-#' enlist(letters, embed_grp1 = enlist(head(iris)), embed_grp2 = enlist('green', blue = 'blue'), .nm =  ~paste0('lvl1_',.)) |> enscript()
-#' letters |> enlist( .nm =  ~'')  # removes names
+#' # This dis-embedding behavior can be useful in a function when the dots `...` can be arguments or a list of arguments.
 #'
-#' ## enlist() behavior with map() (the latter two below are equivalent)
-#' candy <- c('lollipops','gum')
-#' enlist(letters, candy, cars = tail(mtcars)) |> purrr::map(~enlist(.x))
-#' enlist(letters, candy, cars = tail(mtcars)) |> purrr::map(~enlist(!!.x))
-#' enlist(letters, candy, tail(mtcars)) |> purrr::map(enlist)
-#' # without !!, purrr::map() returns the function's expression text '.x' as a list name since enlist() captures the function's internal expr()
-#' # the `<chr>` and `<df[,11]>` names occur because map() performs a layer of evaluation using substitute(arg), and that's what's one eval level below `letters` and `mtcars`
-#'
-#' # handles non-standard evaluation
+#' # Non-standard evaluation:
 #' candy <- list('lollipops','gum')
-#' enlist(letters, candy, rlang::list2(!!!candy))
-#' enlist(letters)
-#' enlist(!!letters)
-#' enlist(!!!letters)
-#' enlist(!!!candy)
-#' enlist(!!!iris)
-#' enlist(!!!candy)
-#' enlist(candy)
+#' enlist(candy, !!!candy)
 #'
-#'
-#' # if you don't want to write the names of the columns you're binding
-#' dplyr::bind_cols(letters,LETTERS)
-#' dplyr::bind_cols(enlist(letters,LETTERS))
-#' dplyr::bind_cols(enlist(letters,LETTERS))
-#' enlist() # if no args passed, returns an empty named list like list()
-#'
-#' # additional tests ## compare the output of these 2; one's all list(), the other's all enlist()
-#'  candy <- c('lollipops','gum')
-#'  list(candy, list(nums = 3:1, c = list(b1 = 2, list(new = c('red','green'), f = list(head(iris)))), b = list(c2 = 3, c1 = 4:5, letters[1:10])))
-#'  enlist(candy, enlist(nums = 3:1, c = enlist(b1 = 2, enlist(new = c('red','green'), f = enlist(head(iris)))), b = enlist(c2 = 3, c1 = 4:5, letters[1:10])))
+enlist <- function(..., .label =  NULL){
 
+  .quos <- rlang::quos(...) |> rlang::exprs_auto_name()
+  .quos <- .quos[names(.quos) != "<empty>"]
+  evaled_list <- .quos |>  purrr::map(rlang::eval_tidy)
 
+  # dis-embed list if user passed just a single expression that evals to a bare list
+  if( length(.quos) == 1 && rlang::is_bare_list(evaled_list[[1]]) ){
+    evaled_list <- evaled_list[[1]]
+  }
 
-enlist <- function(..., .nm =  NULL) {
+  out <- rlang::set_names(evaled_list, nm = names(.quos)) |> .remove_doublequotes()
 
-    .quos <- rlang::quos(...) |>
-        rlang::exprs_auto_name()
+  if (!is.null(.label)){
+    out <- out |> rlang::set_names(nm = .label)
+  }
 
-    .quos <- .quos[names(.quos) != "<empty>"]
-
-
-    # if quos list has only 1 quo, and that quo is a list, pull quo and rewrite its expr
-    # w/auto-names then place rewritten expr in orig quo (to preserve orig expr names) and eval,
-    # otherwise, just map eval every item in the orig quos list
-    if (length(.quos) == 1 && is.null(.nm) && stringr::str_detect(base::names(.quos), "^(?:xlr::|base::|rlang::|<)?(?:en|dots_)?list2?[(>]") ){
-        .quo <- purrr::pluck(.quos, 1)
-        rewritten_expr <- .quo |>
-            rlang::quo_get_expr() |>
-            rlang::exprs_auto_name()
-        out_list <- .quo |>
-            rlang::quo_set_expr(rewritten_expr) |>
-            rlang::eval_tidy()
-    } else {
-        out_list <- .quos |>  purrr::map(rlang::eval_tidy)
-    }
-    # out_list <- rlang::dots_list(..., .ignore_empty = 'all', .named = TRUE)
-
-
-    # remove external-quotes from names
-    out_list <- .remove_doublequotes(out_list)
-
-
-    # if list elements need to be named by user-function
-    if (!is.null(.nm)) {
-      out_list <- out_list |> rlang::set_names(nm = .nm)
-    }
-
-
-    return(out_list)
+  return( out )
 
 }
+
+# quos_raw <- rlang::quos(...)
+# .quos <- quos_raw |> rlang::exprs_auto_name()
+# quos_raw <- quos_raw[names(.quos) != "<empty>"]
+# is.null(.label) &&
+# identical(names(quos_raw), "")
+
+
+# #### ORIGINAL
+# enlist <- function(..., .label =  NULL) {
+#
+#
+#     .quos <- rlang::quos(...) |>
+#         rlang::exprs_auto_name()
+#     .quos <- .quos[names(.quos) != "<empty>"]
+#
+#     .quo <- purrr::pluck(.quos, 1)
+#
+#     # if quos list has only 1 quo, and that quo is a list, pull quo and rewrite its expr
+#     # w/auto-names then place rewritten expr in orig quo (to preserve orig expr names) and eval,
+#     # otherwise, just map eval every item in the orig quos list
+#     # return(.quos)
+#     # if (length(.quos) == 1 && is.null(.label) && stringr::str_detect(base::names(.quos), "^(?:\\()*?(?:xlr::|base::|rlang::|<)?(?:en|dots_)?list2?[(>]") ){
+#     if (length(.quos) == 1 && is.null(.label) && stringr::str_detect(rlang::as_label(.quo), "^(?:\\()*?(?:xlr::|base::|rlang::|<)?(?:en|dots_)?list2?[(>]") ){
+#
+#         rewritten_expr <- .quo |>
+#             rlang::quo_get_expr()
+#
+#           out_list <- .quo |>
+#             rlang::quo_set_expr(rewritten_expr) |>
+#             rlang::eval_tidy()
+#
+#     } else if(length(.quos) == 1 && stringr::str_detect(rlang::as_label(.quo), "^(?:\\()*?(?:base::)?as\\.list?\\(")) {
+#
+#       out_list <- .quo |> rlang::eval_tidy() |> rlang::set_names(nm = ~names(.quos))
+#
+#     } else {
+#
+#         out_list <- .quos |>  purrr::map(rlang::eval_tidy)
+#
+#     }
+#     # out_list <- rlang::dots_list(..., .ignore_empty = 'all', .named = TRUE)
+#
+#
+#     # remove external-quotes from names
+#     out_list <- .remove_doublequotes(out_list)
+#
+#
+#     # if list elements need to be named by user-function
+#     if (!is.null(.label)) {
+#       out_list <- out_list |> rlang::set_names(nm = .label)
+#     }
+#
+#
+#     return(out_list)
+#
+# }
 
 
 

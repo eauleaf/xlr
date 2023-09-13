@@ -7,7 +7,7 @@
 #'  * Does not repeat input elements to obtain common lengths
 #'  * Transforms lists with uniform arrays into columns of a tibble
 #'  * Treats ragged list of input elements similar to [tibble()] but includes names as column if possible
-#'  * Flattens lists of lists to a single table if possible
+#'  * Arranges lists of lists to produce a single table, if row dimensions allow it
 #'
 #'  @details
 #'  Entibble is designed to work with the function [xlr()] to produce a viewable
@@ -17,7 +17,8 @@
 #'
 #'
 #' @param ... object or expression to convert to a tibble
-#' @param .rowname String to name the column of rownames if passed a data object with rownames or names
+#' @param .rowname String to name the column containing rownames. If rownames are not
+#' present in the  if passed a data object with names or rownames
 #' @param .name_repair
 #'
 #' @seealso [tibble::tibble()]

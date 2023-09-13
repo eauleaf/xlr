@@ -5,13 +5,13 @@
 \title{Create a list with each list element force-named by the input expression.
 If passed a single list, does not add an additional layer.}
 \usage{
-enlist(..., .nm = NULL)
+enlist(..., .label = NULL)
 }
 \arguments{
 \item{...}{any objects; if unnamed, enlist() forces names by input expression}
 
-\item{.nm}{a function to rename list where forced names are input to a naming
-function, e.g. .nm =  'hi', .nm =  ~gsub('\link{' }', '', .) or .nm =  ~substr(.,1,5)}
+\item{.label}{a function to rename list where forced names are input to a naming
+function, e.g. .label =  'hi', .label =  ~gsub('\link{' }', '', .) or .label =  ~substr(.,1,5)}
 }
 \value{
 an evaluated named list
@@ -46,7 +46,7 @@ enlist(enlist(user_named_list = enlist(letters))) # two lists deep
 
 \section{However, these do embed list structure:}{
 enlist(a_name = enlist(letters)) # b/c specified name
-enlist(enlist(letters), .nm =  'a_name')  # b/c specified name
+enlist(enlist(letters), .label =  'a_name')  # b/c specified name
 enlist(enlist(letters),enlist(letters)) # b/c housing additional list elements (list of lists)
 
 This careful embedding behavior is convenient if you want to use enlist() to
@@ -77,8 +77,8 @@ enlist(mtcars,iris) |> purrr::map(head)
 # auto-naming is overridden if you specify a name
 enlist(some_named_list_element = tail(iris))
 
-enlist(letters, head(iris), enlist('green', 'blue', .nm =  'grp2'), .nm =  'grp1') |> list_iron() |> xlr()
-enlist(letters, head(iris), 'green ish', blue = 'blue', .nm =  ~paste0(., '-grp_A'))
+enlist(letters, head(iris), enlist('green', 'blue', .label =  'grp2'), .label =  'grp1') |> list_iron() |> xlr()
+enlist(letters, head(iris), 'green ish', blue = 'blue', .label =  ~paste0(., '-grp_A'))
 
 ## you can embed enlist() similar to list()
 enlist(letters, head(iris), enlist('green', blue = 'blue'))
@@ -102,11 +102,11 @@ a('green','blue') # flat input list
 list('green','blue') |> a() # still a flat input list
 
 ## you can change/override names in a particular enlist() call by passing a lambda naming function with ~, (powered by rlang's rlang::as_function())
-list(letters, head(iris), colors = enlist('green', blue = 'blue', .nm =  ~stringr::str_replace_all(., "['aeiou]",'-'))) |> enlist()
-enlist(mtcars,iris) |> purrr::map(head) |> enlist(.nm =  ~gsub('.*', 'new_name_here', .))
-enlist(letters, head(iris), colors = enlist('green', blue = 'blue', .nm =  ~dplyr::if_else(. == 'blue', 'a_very_deep_blue','a_very_deep_green')))
-enlist(letters, embed_grp1 = enlist(head(iris)), embed_grp2 = enlist('green', blue = 'blue'), .nm =  ~paste0('lvl1_',.)) |> enscript()
-letters |> enlist( .nm =  ~'')  # removes names
+list(letters, head(iris), colors = enlist('green', blue = 'blue', .label =  ~stringr::str_replace_all(., "['aeiou]",'-'))) |> enlist()
+enlist(mtcars,iris) |> purrr::map(head) |> enlist(.label =  ~gsub('.*', 'new_name_here', .))
+enlist(letters, head(iris), colors = enlist('green', blue = 'blue', .label =  ~dplyr::if_else(. == 'blue', 'a_very_deep_blue','a_very_deep_green')))
+enlist(letters, embed_grp1 = enlist(head(iris)), embed_grp2 = enlist('green', blue = 'blue'), .label =  ~paste0('lvl1_',.)) |> enscript()
+letters |> enlist( .label =  ~'')  # removes names
 
 ## enlist() behavior with map() (the latter two below are equivalent)
 candy <- c('lollipops','gum')

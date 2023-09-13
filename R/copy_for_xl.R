@@ -1,5 +1,5 @@
-#' Copies data from R to your clipboard that you intend to paste into a
-#' spreadsheet.
+#' Copies data that you intend to paste into a
+#' spreadsheet from R to your clipboard.
 #'
 #'
 #' @description

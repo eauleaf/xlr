@@ -12,7 +12,8 @@
 #' @param ... A dataframe, list of dataframes, or inputs coerceable to one
 #'   or more dataframes.
 #' @param .path Optional path to save a copy of the output spreadsheet. Specify
-#'   a minimal file name such as 'expenses' or a .path such as
+#'   a minimal file name s*-+
+#'   3.6920uch as 'expenses' or a .path such as
 #'   'my-data-stash/workbook.xlsx'. [.path] uses [here::here()]. If .path is not
 #'   specified, workbook is removed on or before closure. If .path is specified
 #'   but the folder structure does not exist, [xlr()] will attempt to
@@ -36,9 +37,12 @@
 #' @seealso [openxlsx::buildWorkbook()]
 #'
 #' @return
-#' the side-effect, a workbook of spreadsheets, is the primary output of this function
-#' See
-#' direct-effect: a flat list of tibbles (returned invisibly)
+#' The side-effect, a workbook of spreadsheets, is the primary output of this function.
+#' The direct-return output is TRUE or FALSE (default) denoting whether the
+#' xlsx workbook file wrote out properly. However, if the parameter `.return` is
+#' specified by the user, the function will instead return the list of inputs as
+#' tibbles, the `openxlsx` workbook-object, or the save path. All direct outputs
+#' are returned invisibly.
 #'
 #' @export
 #'
@@ -196,7 +200,7 @@ xlr <- function(...
 
 
 # save workbook ----------------------------------------------------------------
-openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = TRUE)
+out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = TRUE)
 
 
 
@@ -218,9 +222,7 @@ openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = TRUE)
 
 # prep user-specified direct output --------------------------------------------
   .return = match.arg(.return[[1]], .return, several.ok = FALSE)
-  if(is.null(.return)){
-    out <- NULL
-  } else {
+  if(!is.null(.return)){
     out <- base::switch(
       EXPR = .return,
       savepath = .path,
