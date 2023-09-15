@@ -217,19 +217,10 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
 
 
 
-# pop wb open ------------------------------------------------------------------
-  if( .open ){
-    if(.Platform$OS.type == "unix") {
-      system2('xdg-open', glue::glue("'{.path}'"))
-    } else if((.Platform$OS.type == "windows")){
-      shell.exec(.path)
-    } else (
-      utils::browseURL(.path)
-    )
-  }
 
 
-# unlink wb after ~5 min -------------------------------------------------------
+# open and unlink wb after ~5 min -------------------------------------------------------
+  if( .open ){ sys_open(.path) }
   if(mk_tempfile){ later::later(~base::unlink(.path), 300) }
 
 
