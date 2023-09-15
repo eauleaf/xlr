@@ -12,17 +12,15 @@ paste_from_xl(has_fieldnames = NULL)
 present in the spreadsheet data you copied. If user supplies no value,
 \code{\link[=paste_from_xl]{paste_from_xl()}} guesses by looking at the clipboard data.
 
-Not settable if using quick key shortcut. If data incorrectly guesses field
-names, go to the console window and write 'T' or 'F' in the echoed
-function.}
+Because parameters are not user settable when employing quick keys, go to the
+console window and write 'T' or 'F' in the function echoed to the console
+if the function incorrectly guessed the presence of field names.}
 }
 \value{
-\itemize{
-\item If user copied a single spreadsheet row into the clipboard memory,
+-- If user copied a single spreadsheet row into the clipboard memory,
 returns a vector.
-\item If user copied more than one spreadsheet row to the clipboard, returns a tibble.
-\item If user copied a local file to the clipboard, returns a string with the path to the file.
-}
+** If user copied more than one spreadsheet row to the clipboard, returns a tibble.
+** If user copied a local file to the clipboard, returns a string with the path to the file.
 }
 \description{
 Pastes spreadsheet data from the user's clipboard to RStudio,
@@ -40,18 +38,19 @@ icons in a browser window.
 To set the quick keys.
 }
 \details{
-To set the quick keys in RStudio, run function
-\code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}, or set the quick keys manually by following
-these instructions.
+To set the quick keys in RStudio, run function:
+\code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
+Or, or set the quick keys manually by following these instructions:
 \link{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 }
 \note{
-If you're copying a lot of data from a spreadsheet, instead try reading it in
-with \code{\link[readxl:read_excel]{readxl::read_excel()}}.
+Clipboard memory is limited; if you're copying a lot of data from a
+spreadsheet, try reading it in instead with \code{\link[readxl:read_excel]{readxl::read_excel()}}.
 }
 \examples{
-\dontrun{
+(All examples require the user to interactively select data.)
 
+\dontrun{
 Copy data from a spreadsheet into working memory with 'ctrl + c' or by
 right-clicking with the mouse and selecting 'copy', then type into the R
 console:

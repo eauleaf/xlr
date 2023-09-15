@@ -81,13 +81,18 @@ copy_for_xl <- function(. = NULL){
 
 # nested tibble error ------------------------------------------------------
   if( base::any(purrr::map_lgl(.out, is.list)) ) {
-    cli::cli_alert_danger(
-      'Cannot copy data to the clipboard because the table is nested.'
-      )
-  } else {
-    clipr::write_clip(.out)
-    cli::cli_alert_success('Table copied to clipboard ... ')
+    nested_cols <- purrr::map_lgl(.out, is.list)
+    cli::cat_line()
+    cli::cli_alert_danger('Data contains nested lists. Omitted {sum(nested_cols)} columns. ')
+    cli::cat_line('For complete data, consider running:  ')
+    cli::cli_alert('  xlr({r_label})')
+    cli::cat_line()
+    .out <- .out[!nested_cols]
   }
+
+  clipr::write_clip(.out)
+  cli::cli_alert_success('Table copied to clipboard:')
+
 
   return(.out)
 

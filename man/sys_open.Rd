@@ -25,6 +25,7 @@ sys_open('..')
 sys_open('~')
 sys_open('/')
 sys_open(here::here())
+here::here('tests') |> list.files() |> sys_open()
 }
 
 }

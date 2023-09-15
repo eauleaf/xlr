@@ -16,32 +16,33 @@
 #' To set the quick keys.
 #' @seealso [set_xlr_key_chords()]
 #'
-#' @note If you're copying a lot of data from a spreadsheet, instead try reading it in
-#'   with [readxl::read_excel()].
-#'
+#' @note Clipboard memory is limited; if you're copying a lot of data from a
+#'   spreadsheet, try reading it in instead with [readxl::read_excel()].
 #'
 #' @param has_fieldnames TRUE or FALSE indicating whether field names are
 #'   present in the spreadsheet data you copied. If user supplies no value,
 #'   [paste_from_xl()] guesses by looking at the clipboard data.
 #'
-#'   Not settable if using quick key shortcut. If data incorrectly guesses field
-#'   names, go to the console window and write 'T' or 'F' in the echoed
-#'   function.
+#'   Because parameters are not user settable when employing quick keys, go to the
+#'   console window and write 'T' or 'F' in the function echoed to the console
+#'   if the function incorrectly guessed the presence of field names.
 #'
-#' @details To set the quick keys in RStudio, run function
-#' [set_xlr_key_chords()], or set the quick keys manually by following
-#' these instructions.
+#' @details To set the quick keys in RStudio, run function:
+#' [set_xlr_key_chords()].
+#' Or, or set the quick keys manually by following these instructions:
 #' [https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE]
 #'
-#' @return
-#' * If user copied a single spreadsheet row into the clipboard memory,
+#' @returns
+#' -- If user copied a single spreadsheet row into the clipboard memory,
 #'   returns a vector.
-#' * If user copied more than one spreadsheet row to the clipboard, returns a tibble.
-#' * If user copied a local file to the clipboard, returns a string with the path to the file.
+#' ** If user copied more than one spreadsheet row to the clipboard, returns a tibble.
+#' ** If user copied a local file to the clipboard, returns a string with the path to the file.
+#'
 #' @export
 #'
-#' @examples \dontrun{
+#' @examples (All examples require the user to interactively select data.)
 #'
+#' \dontrun{
 #' Copy data from a spreadsheet into working memory with 'ctrl + c' or by
 #' right-clicking with the mouse and selecting 'copy', then type into the R
 #' console:
@@ -126,10 +127,12 @@ return(from_xl)
 
 
 
-#' Addin function for user to call [paste_from_xl()]
-#' Responds to `ctrl+alt+shift+v`
+#' Rstudio addin function to call [paste_from_xl()]
 #'
-#' @return void
+#' This function responds to key-chord `ctrl+alt+shift+v`.
+#'
+#' @returns void
+#'
 #' @export
 #'
 run_paste_from_xl <- function(){
@@ -194,17 +197,19 @@ run_paste_from_xl <- function(){
 
 
 
-
-
-#' Used in [run_paste_from_xl()] to require usable console name
+#' Pop-up used in [run_paste_from_xl()]
 #'
-#' @noRd
+#' If user specified a syntactically invalid variable name, provides a
+#' suggested name and asks user to accept or change it.
 #'
 #' @param input_name variable name as a string
 #'
 #' @return user assigned name as a string
 #'
-#' @examples if (interactive()){ .check_assigned_input(' 1 bad name') }
+#' @examples if (interactive()){
+#' .check_assigned_input(' 1 bad name')
+#' }
+#'
 .check_assigned_input <- function(input_name){
   # input_name <- svDialogs::dlg_list(choices = preselect)
   if( identical(input_name, as.character()) ){
@@ -214,7 +219,7 @@ run_paste_from_xl <- function(){
     temp_name <- base::make.names(input_name)
     if(temp_name != input_name){
       input_name <- svDialogs::dlg_input(
-        message = c("The assignment name is syntatically invalid. Use this name instead?"),
+        message = c("Your assigned name is syntatically invalid. Perhaps this name instead?"),
         default = temp_name)$res
       input_name <- .check_assigned_input(input_name)
     }

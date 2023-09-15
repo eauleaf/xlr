@@ -61,8 +61,8 @@ library(xlr)
 -   `paste_from_xl()` -- copy spreadsheet data to clipboard memory for
     pasting to R
 -   `enscript()` -- produce the code to re-create an R object
--   `sys_open()` -- open files or folders from paths
 -   `repeated()` -- flag all repeats in a vector
+-   `sys_open()` -- open files or folders from paths
 -   `list_iron()` -- flatten lists of embedded lists to a named,
     single-file list
 -   `entibble()` -- create tibbles with default behavior useful for
@@ -71,6 +71,7 @@ library(xlr)
 <br>
 
 ## Function Details:
+
 
 # `xlr()`
 
@@ -99,7 +100,7 @@ data object provided becomes a labeled spreadsheet in the workbook.
 ![xlr(iris,1:100,letters,mtcars)](www/Screencast-xlr.webm)
 
 
-### Use Details
+### `xlr()` use details
 
 To use `xlr()`, pass it a dataframe or a list of dataframes. It does not
 matter if you pass nested lists of lists where your data objects are
@@ -128,7 +129,9 @@ the user parameter `.return`, will optionally return (invisibly) the
 data objects in a list, the `openxlsx` workbook object, or the workbook
 path as a string.
 
-### `enlist()`
+
+
+# `enlist()`
 
 `enlist()` is for easy list naming in xlr(). This function produces
 named lists, without list-nesting when passed a single bare list. That
@@ -156,7 +159,7 @@ new list.
 enlist(list(letters), list(letters)) |> lobstr::tree()
 ```
 
-#### A few additional notes about `enlist()`: 
+### A few additional notes about `enlist()`: 
 
 -- Naming is permissive, you can have duplicate names in a list, so be careful about indexing by
 name. 
@@ -177,7 +180,7 @@ If using Linux, like me, make sure to also install a clipboard tool via a
 terminal with: `sudo apt-get install xclip`
 
 
-## `copy_for_xl()`
+# `copy_for_xl()`
 
 `copy_for_xl()` copies data to your clipboard memory that's formatted
 for pasting to cells in a spreadsheet. You can pass a data object to it,
@@ -187,28 +190,29 @@ like:
 copy_for_xl(mtcars)
 ```
 
-#### `copy_for_xl()` key-chord
+### `copy_for_xl()` key-chord
 
 However, a copying method that is way, way better is to use the quick
 keys `ctrl + alt + shift + c`. To use these quick keys, run the
-function, `set_xlr_key_chords()`. You only ever have to run the
-key-chord function once. Then type `mtcars` in an RStudio editor window
-(not in the console). Use your cursor to highlight the word `mtcars`,
-and then press `ctrl + alt + shift + c` all together. (Just like copying
-with `ctrl + c`, but use all 3 control keys, plus the `c`.)
+function, `set_xlr_key_chords()`. (To set up quick keys, you only ever have to
+run this function once in RStudio.) Then:
+1) Type `mtcars` in an RStudio text editor window (not in the console window). 
+2) Use your cursor to highlight the word `mtcars`, and 
+3) Then press `ctrl + alt + shift + c` all together. (It's just like copying with 
+`ctrl + c`, but instead use all 3 control keys, plus the `c`.)
 
-You should see `✔ Table copied to clipboard ...` written in the console.
-Open a spreadsheet and paste the `mtcars` data table.
+You should see `✔ Table copied to clipboard:` written in the console.
+Open a spreadsheet and paste the copied `mtcars` data to it.
 
-Note that this, and some other functions, use the `clipr` package.
-Install it and then check that the package works by running
-`clipr::dr_clipr().`
+The below video example uses `copy_for_xl()`, via the console, to copy some starwars data.
+![copy_for_xl(dplyr::starwars)](www/Screencast-copy_for_xl.webm)
 
-## `paste_from_xl()`
+
+# `paste_from_xl()`
 
 `paste_from_xl()` pastes data from your clipboard memory to an R tibble
 object. You can pass spreadsheet data to R by copying data from your
-spreadsheet, and then by typing into the console:
+spreadsheet, and then by typing the following into the console:
 
 ```{r paste_from_xl-example, eval = F}
 my_data <- paste_from_xl()
@@ -222,52 +226,55 @@ function guessed wrong, you can specify with the parameter
 my_data <- paste_from_xl(has_fieldnames = TRUE)
 ```
 
-#### `paste_from_xl()` key-chord
+### `paste_from_xl()` key-chord
 
 However, a pasting method that is way, way better is to use the quick
-keys `ctrl + alt + shift + v`. To use these quick keys, run the
-function, `set_xlr_key_chords()` if you haven't already done so.
-Then copy some data from a spreadsheet. Click over to the console or to
-an RStudio editor. (The console and editor behave differently.) Now press
-`ctrl + alt + shift + v` all together to paste. (Just like pasting with
-`ctrl + v`, but use all 3 control keys, plus the `v`.)
+keys `ctrl + alt + shift + v`. To use this key-chord, run the function, 
+`set_xlr_key_chords()` if you haven't already done so. Then: 
+1) Copy some data from a spreadsheet. 
+2) Click over to the RStudio console or to an RStudio editor. (The console and 
+editor have different paste_from_xl() functionality.) 
+3) Press `ctrl + alt + shift + v` all together to paste. (Just
+like pasting with `ctrl + v`, but using all 3 control keys, plus the `v`.)
 
 You should see a tibble of your spreadsheet data assigned to a variable
-and the data echoed to the console. However, if you pressed 
+and the dataset echoed to the console. However, if you pressed 
 `ctrl + alt + shift + v`, and you were over an editor
 window instead of the console, you also get formatted code written into
 the editor window that will recreate the data object from script. The script is
-R's deparsed internal representation of the data.
+a formatted version of R's deparsed internal data representation.
 
 
-#### `paste_from_xl()` copy workbook paths
+### `paste_from_xl()` copy workbook paths
 In addition to spreadsheet data, you can copy file paths with `paste_from_xl()`. 
 Open a file navigation window in your operating system, highlight a 
 few files or folders, and press `ctrl + c`; then go back to RStudio, click on an editor 
 window, and press the key-chord `ctrl + alt + shift + v`, you get an 
 enscripted vector of file paths pasted into your text editor.
 
-The video below is an example of copying paths.
+The video below is an example of copying file paths and then using key-chord
+`ctrl + alt + shift + v` in RStudio.
 
 ![ctrl + alt + shift + v](www/Screencast-paste_from_xl-paths.webm)
 
 
-## `enscript()`
+
+# `enscript()`
 
 I often process data manually down to particular information that's too
-small to deal with saving to or retrieving from a database or serialized
-file. Instead, I just want to save the information as text within the
-script, but I hate manually recreating the object.
+small to deal with saving and retrieving from a serialized
+file or database. Instead, I just want to save the information as text within
+the script, but I hate manually recreating the object.
 
-If you have information in a variable, and want that data to be deparsed
-into a formatted script, pass that variable into `enscript()`, like:
+If you have an object in a variable, and want that variable's data to be deparsed
+into a formatted script, pass that variable into `enscript()`, as in:
 
 ```{r enscript-example1, eval = F}
 enscript(mtcars)
 ```
 
 `enscript()` copies formatted code to your clipboard that will reproduce
-a variable's internal R object.
+that variable's internal R object.
 
 You can also pass in an expression by piping 'enscript()' onto the end
 of anything, like:
@@ -276,17 +283,16 @@ of anything, like:
 iris |> split(f = iris$Species) |> purrr::map(head, 3) |> enscript()
 ```
 
-#### `enscript()` key-chord
+### `enscript()` key-chord
 
 However, it's also convenient to use the quick keys for `enscript()`,
-which are `ctrl + alt + shift + n`. To use these quick keys, run the
-function, `set_xlr_key_chords()` if you haven't already done so.
-Then type `mtcars` or some other variable name in an RStudio editor
-window (not in the console). Use your cursor to highlight the word
-`mtcars`, and then press `ctrl + alt + shift + n` all together.
+which are `ctrl + alt + shift + n`. (I remember the key-chord as all three
+control keys, plus the `n`, which is short for enscript.)
 
-(I remember the quick keys as all three control keys, plus the `n`,
-which is short for enscript.)
+To use the `enscript()` quick keys, Run the function, `set_xlr_key_chords()` if you haven't already done so. Then:
+1) Then type a variable name like `mtcars` in your RStudio editor window (not in the console). 
+2) Use your cursor to highlight the word `mtcars`. 
+3) Press `ctrl + alt + shift + n` all together.
 
 You should see the success message, `✔ Script copied to clipboard:`,
 written to the console with the deparsed object echoed below it. You can
@@ -294,20 +300,16 @@ now paste a formatted script into an editor window or the console with
 `ctrl + v`.
 
 You can also highlight an entire expression in an editor window, and
-then key-chord `ctrl + alt + shift + n`. Expressions evaluate and also
+then key-chord `ctrl + alt + shift + n`. Expressions evaluate and 
 produce a deparsed script that is copied to the clipboard.
 
 Note that the `enscript()` quick keys only work for a highlighted
 variable or highlighted expression in the RStudio editor window; the
-quick keys do not work for anything highlighted in the console. Also,
-`enscript()` is for interactive use, not for use in programming.
-
-## `sys_open()`
-
-I often process data manually down to particular information that's too
+quick keys do not interpret anything highlighted in the console.
 
 
-## `repeated()`
+
+# `repeated()`
 
 I use `repeated()` all the time and wish it were in `dplyr`. When I
 filter a dataframe, I often need to quickly see all the observations
@@ -318,9 +320,35 @@ mtcars |> dplyr::filter(repeated(mpg))
 ```
 
 `repeated()` is just `x %in% x[duplicated(x)]` with some assertion
-checks, but way easier to remember than `x %in% x[duplicated(x)]`.
+checks, but way easier to remember than `x %in% x[duplicated(x)]`. Use it
+for `and` and `or` statements like this: 
 
-## `list_iron()`
+```{r repeated-example2, eval = T}
+# Identify any data repeated in the mpg or in the cyl columns
+mtcars |> dplyr::filter(repeated(mpg) | repeated(cyl))
+```
+
+
+
+# `sys_open()`
+
+`sys_open()` opens .xlsx files, but also any file or folder. This function passes a
+path string (or many, if you like) to your operating system's command line
+interface, asking it to open up the location using the default application.
+
+If you aren't able to open a file with `sys_open()`, using your operating system's 
+navigation window, right-click on the file to make sure your operating system
+has a default application assigned that file type, and that double-clicking opens
+it in that default application.
+
+The video below is an example of opening up some PDF files by piping them from 
+`paste_from_xl()` to `sys_open()`. 
+
+![paste_from_xl() |> sys_open()](Screencast-sys_open.webm)
+
+
+
+# `list_iron()`
 
 `list_iron()` takes any nested list of lists and irons it out to get a
 single-file list of objects.
@@ -347,15 +375,16 @@ parameter `.f`, like:
 list_iron(rediculous, .f = ~tail(.,2))
 ```
 
-## `entibble()`
+
+# `entibble()`
 
 `entibble()` makes tibbles, but has defaults useful for spreadsheets.
 `entibble()` automatically includes rownames, if they exist, in the
 tibble. It does not repeat input elements to obtain common lengths in
-order to produce a dataframe, and treats listed inputs the same as
-comma-separated argument inputs.
+order to produce a dataframe, and it treats a list of data inputs equivalent to 
+comma-separated data inputs.
 
-Compare the tibbled and entibbled data below.
+For example, compare the tibbled and entibbled data below.
 
 ```{r entibble-example, eval = T}
 alpha <- rlang::set_names(letters)

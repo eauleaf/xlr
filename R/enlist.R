@@ -64,6 +64,7 @@ enlist <- function(..., .label =  NULL){
   # dis-embed list if user passed just a single expression that evals to a bare list
   if( length(.quos) == 1 && rlang::is_bare_list(evaled_list[[1]]) ){
     evaled_list <- evaled_list[[1]]
+    # keep embedded list names if they exist, otherwise overwrite with outer-list name
     if( identical(names(evaled_list),NULL) ){
       evaled_list <- evaled_list |> rlang::set_names(nm = names(.quos))
     }

@@ -2,8 +2,7 @@
 % Please edit documentation in R/paste_from_xl.R
 \name{run_paste_from_xl}
 \alias{run_paste_from_xl}
-\title{Addin function for user to call \code{\link[=paste_from_xl]{paste_from_xl()}}
-Responds to \code{ctrl+alt+shift+v}}
+\title{Rstudio addin function to call \code{\link[=paste_from_xl]{paste_from_xl()}}}
 \usage{
 run_paste_from_xl()
 }
@@ -11,6 +10,5 @@ run_paste_from_xl()
 void
 }
 \description{
-Addin function for user to call \code{\link[=paste_from_xl]{paste_from_xl()}}
-Responds to \code{ctrl+alt+shift+v}
+This function responds to key-chord \code{ctrl+alt+shift+v}.
 }
