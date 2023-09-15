@@ -18,71 +18,81 @@ knitr::opts_chunk$set(
 )
 ```
 
-## ***R + Spreadsheets***
+```{r install-xlr, eval = T, include = FALSE}
+library(xlr)
+```
+
 
 <br>
 
-# Overview
 
-The *`xlr`* package makes it easier to move information between
-spreadsheets and R, thus xlr.
+## ***R + Spreadsheets***
 
-## Reason for *`xlr`*:
+
+<br>
+
+
+*Package is currently beta.*
+
+##### Install: 
+```{r download-xlr, eval = F}
+remotes::install_github('eauleaf/xlr')
+library(xlr)
+```
+
+
+<br>
+
+## Overview:
+
+
+**xlr** makes it easier to move information between **spreadsheets** and **R**.
+
+<br>
 
 Spreadsheets are an excellent tool for presenting 2-dimensional data in
 a reader-friendly format, and spreadsheets are the workhorse of the
 business community. However, spreadsheets don't have the flexibility or
-raw horsepower of R, so its helpful to use R for the data processing,
-and then send standardized, formatted tables out to workbook
-spreadsheets to review.
-
-### Note that the package is in beta, so functions are likely to change.
+raw horsepower of R, so its helpful to use R for the things it's good at, 
+and Excel/Libreoffice for the things they're good at. **xlr** is an effort 
+to reduce the friction that comes from working in both. 
 
 
-## To setup xlr, run:
 
-```{r download-xlr, eval = F}
-remotes::install_github('eauleaf/xlr')
-```
+## Functions:
 
-```{r install-xlr, eval = T}
-library(xlr)
-```
-
-## Overview of functions:
-
-(ordered by use frequency)
-
--   `xlr()` -- quickly view a list of datasets as spreadsheets in a
+-   **`xlr()`** -- quickly output a list of datasets as spreadsheets in a
     workbook
--   `enlist()` -- easily produce named lists
--   `copy_for_xl()` -- copy an R dataset to clipboard memory for pasting
+-   **`enlist()`** -- make named lists without additional nesting
+-   **`copy_for_xl()`** -- copy an R dataset to clipboard memory, formatted for pasting
     to a spreadsheet
--   `paste_from_xl()` -- copy spreadsheet data to clipboard memory for
+-   **`paste_from_xl()`** -- copy spreadsheet data to clipboard memory, formatted for
     pasting to R
--   `enscript()` -- produce the code to re-create an R object
--   `repeated()` -- flag all repeats in a vector
--   `sys_open()` -- open files or folders from paths
--   `list_iron()` -- flatten lists of embedded lists to a named,
-    single-file list
--   `entibble()` -- create tibbles with default behavior useful for
-    workbook view
+-   **`enscript()`** -- produce the code to re-create an R object
+-   **`repeated()`** -- flag all repeats in a vector
+-   **`sys_open()`** -- request the OS open files or folders from paths
+-   **`list_iron()`** -- flatten lists of embedded lists to a named, single-file list
+-   **`entibble()`** -- create tibbles with default behavior useful for spreadsheets
+
 
 <br>
 
-## Function Details:
+
+## How to use 'xlr':
+
+
+<br>
 
 
 # `xlr()`
 
-`xlr()` is the primary function, and the package is named after it. Many
-of the other functions in the package were developed to help `xlr()`.
+`xlr()` is the primary function of the package 'xlr', and many
+of the other functions in the package were developed to help it.
 The function is somewhat similar to `View()` from the `utils` package in
-that `xlr()` is for quickly viewing datasets. `xlr()` makes it easy to
-pass multiple related datasets out as spreadsheets to a workbook.
+that `xlr()` is for quickly viewing datasets. 
 
 It's easiest to see what `xlr()` does by passing it some example data;
-try sending in some preloaded datasets, like:
+try sending it some preloaded datasets, like:
 
 ```{r xlr-example1, eval = F}
 xlr(mtcars, iris, letters, Titanic, AirPassengers)
@@ -91,22 +101,22 @@ xlr(mtcars, iris, letters, Titanic, AirPassengers)
 If you type that code to the R console, you should get a workbook that
 pops open automatically with those datasets presented in standardized,
 formatted sheets. Once you're done with the workbook, all you have to do
-is close it; your spreadsheets are temporary. Close them and they're
+is close it; your spreadsheets are temporary. Close them, and they're
 gone.
 
 The video below is of `xlr()` creating a temporary workbook where each
-data object provided becomes a labeled spreadsheet in the workbook.
+data object becomes a labeled spreadsheet in the workbook.
 
 ![xlr(iris,1:100,letters,mtcars)](www/Screencast-xlr.webm)
 
 
-### `xlr()` use details
+### `xlr()` use details:
 
-To use `xlr()`, pass it a dataframe or a list of dataframes. It does not
+To use `xlr()`, pass a dataframe or lists of dataframes. It does not
 matter if you pass nested lists of lists where your data objects are
 buried at various depths, `xlr()` will flatten and auto-name the
 workbook and the spreadsheet tabs. Nested lists can be useful for the
-naming groups in spreadsheet tabs.
+naming of groups on spreadsheet tabs.
 
 Try running the below examples in your console.
 
@@ -129,6 +139,8 @@ the user parameter `.return`, will optionally return (invisibly) the
 data objects in a list, the `openxlsx` workbook object, or the workbook
 path as a string.
 
+
+<br>
 
 
 # `enlist()`
@@ -180,6 +192,9 @@ If using Linux, like me, make sure to also install a clipboard tool via a
 terminal with: `sudo apt-get install xclip`
 
 
+<br>
+
+
 # `copy_for_xl()`
 
 `copy_for_xl()` copies data to your clipboard memory that's formatted
@@ -206,6 +221,9 @@ Open a spreadsheet and paste the copied `mtcars` data to it.
 
 The below video example uses `copy_for_xl()`, via the console, to copy some starwars data.
 ![copy_for_xl(dplyr::starwars)](www/Screencast-copy_for_xl.webm)
+
+
+<br>
 
 
 # `paste_from_xl()`
@@ -258,6 +276,8 @@ The video below is an example of copying file paths and then using key-chord
 ![ctrl + alt + shift + v](www/Screencast-paste_from_xl-paths.webm)
 
 
+<br>
+
 
 # `enscript()`
 
@@ -308,6 +328,8 @@ variable or highlighted expression in the RStudio editor window; the
 quick keys do not interpret anything highlighted in the console.
 
 
+<br>
+
 
 # `repeated()`
 
@@ -329,6 +351,8 @@ mtcars |> dplyr::filter(repeated(mpg) | repeated(cyl))
 ```
 
 
+<br>
+
 
 # `sys_open()`
 
@@ -346,6 +370,8 @@ The video below is an example of opening up some PDF files by piping them from
 
 ![paste_from_xl() |> sys_open()](Screencast-sys_open.webm)
 
+
+<br>
 
 
 # `list_iron()`
@@ -375,6 +401,8 @@ parameter `.f`, like:
 list_iron(rediculous, .f = ~tail(.,2))
 ```
 
+<br>
+
 
 # `entibble()`
 
@@ -398,3 +426,4 @@ tibble::tibble(alpha) |> head()
 entibble(list(alpha), LETTERS) |> tail()
 tibble::tibble(list(alpha), LETTERS) |> tail()
 ```
+
