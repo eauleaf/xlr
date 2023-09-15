@@ -13,20 +13,40 @@
 #' those sheetnames are grouped and numbered to make each name in that group
 #' unique.
 #'
+#'
 #' @references
 #' https://support.microsoft.com/en-us/office/rename-a-worksheet-3f1f7148-ee83-404d-8ef0-9ff99fbad1f9
 #' Worksheet names cannot: Be blank or have the same name, regardless of upper
 #' or lowercase Contain more than 31 characters Contain any of the following
 #' characters: / \ ? * : [ ] Begin or end with an apostrophe ('), but
-#' apostrophe's can be used in between text or numbers in a name Be named
+#' apostrophe's can be used in between text or numbers in a name. Be named
 #' 'History' in either lower or uppercase. This is a reserved word that Excel
 #' uses internally.
 #' https://help.libreoffice.org/latest/he/text/scalc/guide/rename_table.html The
 #' document can contain up to 10,000 individual sheets, which must have
 #' different names. Sheet names cannot contain the following characters: colon :
 #' back slash \ forward slash / question mark ?  asterisk * left square bracket
-#' [ right square bracket ] apostrophe/single-quote ' (Unicode U+0027) as the
+#' "[ right square bracket ]" apostrophe/single-quote ' (Unicode U+0027) as the
 #' first or last character of the name.
+#' https://colinfay.me/writing-r-extensions/creating-r-packages.html
+#' To ensure that file names are valid across file systems and supported
+#' operating systems, the ASCII control characters as well as the characters
+#' ‘“’, ‘*’, ‘:’, ‘/’, ‘<’, ‘>’, ‘?’, ‘\’, and ‘|’ are not allowed in file
+#' names. In addition, files with names ‘con’, ‘prn’, ‘aux’, ‘clock$’, ‘nul’,
+#' ‘com1’ to ‘com9’, and ‘lpt1’ to ‘lpt9’ after conversion to lower case and
+#' stripping possible “extensions” (e.g., ‘lpt5.foo.bar’), are disallowed. Also,
+#' file names in the same directory must not differ only by case (see the
+#' previous paragraph). In addition, the basenames of ‘.Rd’ files may be used in
+#' URLs and so must be ASCII and not contain %. For maximal portability
+#' filenames should only contain only ASCII characters not excluded already
+#' (that is A-Za-z0-9._!#$%&+,;=@^(){}‘[] — we exclude space as many utilities
+#' do not accept spaces in file paths): non-English alphabetic characters cannot
+#' be guaranteed to be supported in all locales. It would be good practice to
+#' avoid the shell metacharacters (){}’[]$~: ~ is also used as part of ‘8.3’
+#' filenames on Windows. In addition, packages are normally distributed as
+#' tarballs, and these have a limit on path lengths: for maximal portability 100
+#' bytes.
+
 #'
 #'
 #' @param tabnames strings: character vector of names
@@ -186,9 +206,10 @@ scrub_tabnames <- function(tabnames,
 .fix_forbidden_tabnames <- function(tabnames, quiet = FALSE) {
   tabnames <- as.character(tabnames)
   # On average, faster to check if any issues exist before calling replacements.
-  if( base::any(stringr::str_detect(tabnames, pattern = "(^')|[\\\\/:?*\\[\\]]|(?i)history|('$)"),na.rm = TRUE) ){
+  if( base::any(stringr::str_detect(tabnames, pattern = "(^')|[\\\\/\":?*\\[\\]]|(?i)history|('$)"),na.rm = TRUE) ){
 
     # tabnames <- .forbidden_chars_replace(tabnames, pattern = "[\\\\/:]", replacement = "-", pattern_text = "\\, /, or :", quiet = quiet)
+    tabnames <- .forbidden_chars_replace(tabnames, pattern = "\"", replacement = "`", pattern_text = "quotes", repl_text = "`", quiet = quiet)
     tabnames <- .forbidden_chars_replace(tabnames, pattern = "[\\\\]", replacement = "-", pattern_text = "\\", quiet = quiet)
     tabnames <- .forbidden_chars_replace(tabnames, pattern = "/", replacement = "-", pattern_text = "/", quiet = quiet)
     tabnames <- .forbidden_chars_replace(tabnames, pattern = ":", replacement = "-", pattern_text = ":", quiet = quiet)
@@ -198,12 +219,12 @@ scrub_tabnames <- function(tabnames,
     tabnames <- .forbidden_chars_replace(tabnames, pattern = "]", replacement = ")", pattern_text = "]", repl_text = ")", quiet = quiet)
     tabnames <- .forbidden_chars_replace(tabnames, pattern = "<", replacement = "(", pattern_text = "<", repl_text = "(", quiet = quiet)
     tabnames <- .forbidden_chars_replace(tabnames, pattern = ">", replacement = ")", pattern_text = ">", repl_text = ")", quiet = quiet)
-    tabnames <- .forbidden_chars_replace(tabnames, pattern = "^'+", replacement = "", pattern_text = "a single quote ' at the start of a tabname", repl_text = "an empty string", quiet = quiet)
-    tabnames <- .forbidden_chars_replace(tabnames, pattern = "'+$", replacement = "", pattern_text = "a single quote ' at the end of a tabname", repl_text = "an empty string", quiet = quiet)
+    tabnames <- .forbidden_chars_replace(tabnames, pattern = "^'+", replacement = "`", pattern_text = "a single quote ' at the start of a tabname", repl_text = "an empty string", quiet = quiet)
+    tabnames <- .forbidden_chars_replace(tabnames, pattern = "'+$", replacement = "`", pattern_text = "a single quote ' at the end of a tabname", repl_text = "an empty string", quiet = quiet)
     tabnames <- .forbidden_chars_replace(tabnames, pattern = "(?i)(hist)ory", replacement = "\\1", pattern_text = "the word 'history'", repl_text = "hist", quiet = quiet)
   }
 
-  tabnames
+  return(tabnames)
 
 }
 
@@ -229,9 +250,9 @@ scrub_tabnames <- function(tabnames,
 #' tab_names |> .forbidden_chars_replace(pattern = '(?i)(hist)ory', replacement = '\\1', pattern_text = 'history', repl_text = 'hist')
 #' tab_names |> .forbidden_chars_replace(pattern = '\\[', replacement = '{', pattern_text = '[brackets]', repl_text = '{curly braces}')
 #' tab_names |> .forbidden_chars_replace(pattern = ']', replacement = '}', quiet = TRUE)
-#' tab_names |> .forbidden_chars_replace(pattern = '^'+', replacement = ' ', pattern_text = 'single quotes '' at tabname start or end', repl_text = 'the empty string ''')
-#' tab_names |> .forbidden_chars_replace(pattern = ''+$', replacement = '', quiet = TRUE)
-# "'[history coursework]'" |> base::any(stringr::str_detect(pattern = ), na.rm = TRUE)
+#' tab_names |> .forbidden_chars_replace(pattern = "^'+", replacement = '`', pattern_text = "single quotes '' at tabname start or end", repl_text = "the empty string ''")
+#' tab_names |> .forbidden_chars_replace(pattern = "'+$", replacement = '', quiet = TRUE)
+# "'[history coursework]'" |> scrub_tabnames()
 
 .forbidden_chars_replace <- function(names, pattern = "", replacement = "",
                                      pattern_text = pattern,

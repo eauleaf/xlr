@@ -10,4 +10,8 @@ test_that("NULL is returned as a logical zero to mimic duplicated()", {
   expect_equal(repeated(NULL), logical(0))
 })
 
+test_that("assert catches no or incorrect arg types ", {
+  expect_error(repeated())
+  expect_error(repeated(list('hello')))
+})
 

@@ -13,7 +13,7 @@
 #'  repeated observations in a dataframe, and an alias for `x %in% x[duplicated(x)]`.
 #'
 #' Filtering a dataframe '.data' by the repeated values in column 'x',
-#'   as in `dplyr::filter(.data, xlr::repeated(x))`, performs the same task as
+#'   as in `dplyr::filter(.data, repeated(x))`, performs the same task as
 #'   grouping by a variable and selecting counts greater than 1, as in
 #'   `dplyr::group_by(.data, x)  |> dplyr::filter(dplyr::n()>1)`, but is
 #'   quicker and easier to remember.

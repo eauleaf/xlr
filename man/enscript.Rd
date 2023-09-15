@@ -2,7 +2,7 @@
 % Please edit documentation in R/enscript.R
 \name{enscript}
 \alias{enscript}
-\title{Write your data into an expression for a script.}
+\title{Writes the script to produce an input}
 \usage{
 enscript(. = NULL, to_clipboard = TRUE, quiet = FALSE)
 }
@@ -19,7 +19,7 @@ The formatted deparsed expression, invisibly if to_clipboard = TRUE.
 The object's internal expression written to clipboard memory as side-effect.
 }
 \description{
-A convenience function for interactive use. \code{\link[=enscript]{enscript()}} obtains R's
+A convenience function for interactive use. \code{enscript()} obtains R's
 deparsed internal representation of the input data object and prepares that
 object to be input from a script. The function's purpose is to save the user
 the inconvenience of reformatting console output data as input code.
@@ -30,7 +30,7 @@ to the console.
 
 Copying formatted output to the clipboard requires package \link{clipr}.
 
-To set up the key-chord \code{ctrl+alt+shift+v} in RStudio. Run \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
+To set up the key-chord \code{ctrl+alt+shift+n} in RStudio. Run \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
 
 If using Linux, make sure to install a clipboard tool:
 apt-get install xclip
@@ -54,7 +54,7 @@ rep("🎊🌈",3) |> enscript()
 dplyr::starwars |> head() |> enscript()
 
 (flowers = tail(iris,10))
-enscript(flowers, quiet = F)
+enscript(flowers, quiet = T)
 
 (days_to_go <- seq.Date(Sys.Date(), by = 1, length.out = 7))
 days_to_go |> enscript()
@@ -64,11 +64,9 @@ letters |> purrr::set_names(LETTERS) |> enlist() |> enscript()
 colours() |> enscript()
 
 candy <- list('lollipops','gum')
-enlist(candy, !!candy, !!!candy, rlang::list2(!!!candy)) |> enscript()
+enlist(candy, !!candy, !!!candy, enlist(!!!candy)) |> enscript()
 enlist(!!letters)
 
-
 }
-
 
 }

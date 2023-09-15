@@ -46,7 +46,7 @@ these instructions.
 \link{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 }
 \note{
-If you're copying a lot of data from a spreadsheet, instead read it in
+If you're copying a lot of data from a spreadsheet, instead try reading it in
 with \code{\link[readxl:read_excel]{readxl::read_excel()}}.
 }
 \examples{

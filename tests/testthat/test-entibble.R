@@ -14,9 +14,9 @@ test_that("names are maintained vectors (#630)", {
 
 
 test_that("entibble returns correct number of rows with all combinatinos", {
-  expect_equal(entibble(value = 1:10), 10)
-  expect_equal(entibble(value = 1:10, name = "dont_recycle_me"), 2)
-  expect_equal(nrow(entibble(name = "recycle_me", value = 1:10, value2 = 11:20)), 10L)
+  expect_equal(nrow(entibble(value = 1:10)), 10)
+  expect_equal(nrow(entibble(value = 1:10, name = "dont_recycle_me")), 2)
+  expect_equal(nrow(entibble(name = "recycle_me", value = 1:10, value2 = 11:20)), 3)
   expect_equal(nrow(entibble(value = 1:10, name = "recycle_me", value2 = 11:20)), 10L)
 })
 

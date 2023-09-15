@@ -2,8 +2,7 @@
 % Please edit documentation in R/xlr.R
 \name{xlr}
 \alias{xlr}
-\title{View an R dataframe or dataframes quickly in a Libreoffice or Excel workbook.
-TODO: background-color: #00A500;}
+\title{View an R objects in a Libreoffice or Excel workbook}
 \usage{
 xlr(
   ...,
@@ -22,7 +21,8 @@ xlr(
 or more dataframes.}
 
 \item{.path}{Optional path to save a copy of the output spreadsheet. Specify
-a minimal file name such as 'expenses' or a .path such as
+a minimal file name s*-+
+3.6920uch as 'expenses' or a .path such as
 'my-data-stash/workbook.xlsx'. \link{.path} uses \code{\link[here:here]{here::here()}}. If .path is not
 specified, workbook is removed on or before closure. If .path is specified
 but the folder structure does not exist, \code{\link[=xlr]{xlr()}} will attempt to
@@ -51,11 +51,15 @@ arguments: sep = ".", pad = ".", name_spec = "{inner}"}
 workbook-object, or the save path. Default is NULL.}
 }
 \value{
-the side-effect, a workbook of spreadsheets, is the primary output of this function
-See
-direct-effect: a flat list of tibbles (returned invisibly)
+The side-effect, a workbook of spreadsheets, is the primary output of this function.
+The direct-return output is TRUE or FALSE (default) denoting whether the
+xlsx workbook file wrote out properly. However, if the parameter \code{.return} is
+specified by the user, the function will instead return the list of inputs as
+tibbles, the \code{openxlsx} workbook-object, or the save path. All direct outputs
+are returned invisibly.
 }
 \description{
+TODO: background-color: #00A500;
 Provides a means of reviewing datasets through the user's default spreasheet
 program. Produces output similar to \code{\link[tibble:view]{tibble::view()}}, but in a spreadsheet,
 which allows for larger datasets and a list of dataframes.
@@ -63,6 +67,35 @@ which allows for larger datasets and a list of dataframes.
 \details{
 Auto-corrects forbidden sheetnames
 Flattens embedded lists with preserved name structure
+}
+\examples{
+\dontrun{
+xlr(list('hi'))
+enlist('hi') |> xlr()
+enlist(hi) |> xlr()
+xlr(mtcars)
+xlr(NA)
+xlr(a = NA)
+xlr(character(0))
+xlr(';')
+xlr(TRUE)
+list(c(list(1:5), list(5:1)), letters) |> xlr()
+xlr(c(1:5))
+c(1:5) |> xlr()
+xlr(1)
+xlr(list(a = 1,5))
+list(a = 1,b=5, 1:10, letters, as.matrix(warpbreaks[1:10,]) ) |> xlr()
+c(1,1:5, list(1:10)) |> xlr()
+a <- tibble::tibble(iris); xlr(a)
+rlang::set_names(as.list(letters), LETTERS) |> xlr()
+a_dataframe <- tibble::tibble(iris); xlr(a_dataframe)
+xlr()
+xlr('')
+xlr(NULL)
+xlr(a = NULL)
+xlr(iris, dplyr::starwars, mtcars, cars)
+}
+
 }
 \seealso{
 \code{\link[openxlsx:buildWorkbook]{openxlsx::buildWorkbook()}}

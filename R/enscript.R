@@ -1,11 +1,11 @@
-#' Write your data into an expression for a script.
+#' Writes the script to produce an input
 #'
 #' Copies a formatted script to the clipboard and prints unformatted output
 #' to the console.
 #'
 #'
 #' @description
-#' A convenience function for interactive use. [enscript()] obtains R's
+#' A convenience function for interactive use. `enscript()` obtains R's
 #' deparsed internal representation of the input data object and prepares that
 #' object to be input from a script. The function's purpose is to save the user
 #' the inconvenience of reformatting console output data as input code.
@@ -13,7 +13,7 @@
 #' @details
 #' Copying formatted output to the clipboard requires package [clipr].
 #'
-#' To set up the key-chord `ctrl+alt+shift+n` in RStudio. Run [xlr::set_xlr_key_chords()].
+#' To set up the key-chord `ctrl+alt+shift+n` in RStudio. Run [set_xlr_key_chords()].
 #'
 #' If using Linux, make sure to install a clipboard tool:
 #'  apt-get install xclip
@@ -59,13 +59,9 @@
 #' enlist(candy, !!candy, !!!candy, enlist(!!!candy)) |> enscript()
 #' enlist(!!letters)
 #'
-#'
 #' }
 #'
-# dplyr::starwars |> head() |> encodeString() |> deparse() |> clipr::write_clip()
-#'
 enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
-
 
   # from console --------------------------------------------------------------
   .quo <- rlang::enquo(.)
@@ -75,8 +71,12 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 
   checkmate::assert_flag(to_clipboard)
   checkmate::assert_flag(quiet)
-  width <- rstudioapi::readRStudioPreference( 'margin_column' ,base::getOption('deparse.cutoff'))
-  width <- base::max(4, width, na.rm = TRUE)
+  # safe_width <- purrr::safely(.f = rstudioapi::readRStudioPreference( 'margin_column' ,base::getOption('deparse.cutoff')), otherwise = 65)
+  # width <- safe_width
+  width <- base::max(4, base::getOption('deparse.cutoff'), na.rm = TRUE)
+  if( rstudioapi::isAvailable() ){
+    width <- rstudioapi::readRStudioPreference( 'margin_column' , width)
+  }
 
 
   # check if user used a name assignment
@@ -165,7 +165,6 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 
 
 
-
 #' Adds breaks to the text of a deparsed data structure script
 #'
 #' @param obj_expr text for a data structure
@@ -175,8 +174,7 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 #'
 #' @examples
 #'
-#'
-#'todo:
+#'TODO:
  # head(dplyr::starwars) |> enlist() |> deparse(backtick = TRUE) |> glue::glue_collapse() |> stringr::str_squish() |> .format_script() |> cat()
  # enlist(head(iris), "  `quick_text` = 'hello()'`", tail(dplyr::starwars)) |> deparse(backtick = T) |> glue::glue_collapse() |> stringr::str_squish() |> stringr::str_extract_all('(?<=\\(|, )`.+?` = ')
 #'
@@ -238,9 +236,7 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 
 
 
-
-
-#' Addin function to call [xlr::enscript()]
+#' Addin function to call [enscript()]
 #'
 #' Requires RStudio
 #'
@@ -250,7 +246,7 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 #'
 #' @examples \dontrun{
 #' # Highlight each text item below and press key-chord `ctrl + alt + shift + n`.
-#' # To implement quick key-chord. Run {.fn xlr::set_xlr_key_chords}.
+#' # To implement quick key-chord. Run {.fn set_xlr_key_chords}.
 #'
 #' (1:5 * 10)
 #' rep("🎊🌈",3)
@@ -272,11 +268,11 @@ run_enscript <- function(){
 
   if( base::identical(text_expr, base::character(0)) || text_expr == '' ){
     cli::cli_bullets(c(
-      "x" = '{.strong Nothing selected to {.fn xlr::enscript} }',
+      "x" = '{.strong Nothing selected to {.fn enscript} }',
       "i" = "Highlight an expression in your text editor, then press `ctrl+alt+shift+n`."
     ))
   } else {
-    rstudioapi::sendToConsole(code = base::paste(text_expr, '|> xlr::enscript()'))
+    rstudioapi::sendToConsole(code = base::paste(text_expr, '|> enscript()'))
   }
 
 

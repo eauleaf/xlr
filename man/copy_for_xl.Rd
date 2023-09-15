@@ -2,8 +2,8 @@
 % Please edit documentation in R/copy_for_xl.R
 \name{copy_for_xl}
 \alias{copy_for_xl}
-\title{Copies data from R to your clipboard that you intend to paste into a
-spreadsheet.}
+\title{Copies data that you intend to paste into a
+spreadsheet from R to your clipboard.}
 \usage{
 copy_for_xl(. = NULL)
 }
@@ -55,7 +55,7 @@ letters |> rlang::set_names(LETTERS) |> copy_for_xl()
 
 enlist(head(iris),head(mtcars)) |> copy_for_xl()
 
-# To use quick keys. Run {.fn xlr::set_xlr_key_chords}.
+# To use quick keys. Run {.fn set_xlr_key_chords}.
 # Then highlight the word 'letters' below and press key-chord `ctrl + alt + shift + c`.
 letters
 

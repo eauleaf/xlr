@@ -6,6 +6,6 @@
 \alias{xlr-package}
 \title{xlr: Tools for working interactively between Excel and R}
 \description{
-'xlr' is a group of convenience functions for data scientists who use both Excel and R. The goal is to make it trivial to interactively move data back and forth.
+'xlr' is a group of functions for data scientists who use both spreadsheets and R. 'xlr' makes moving data back and forth between spreadsheets and R easier.
 }
 \keyword{internal}

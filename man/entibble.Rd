@@ -14,7 +14,8 @@ entibble(
 \arguments{
 \item{...}{object or expression to convert to a tibble}
 
-\item{.rowname}{String to name the column of rownames if passed a data object with rownames or names}
+\item{.rowname}{string; to name the column containing rownames. If rownames are not
+present in the data, \code{.rowname} is ignored.}
 
 \item{.name_repair}{}
 }
@@ -30,15 +31,15 @@ Same as \code{\link[=tibble]{tibble()}} with different defaults.
 \item Does not repeat input elements to obtain common lengths
 \item Transforms lists with uniform arrays into columns of a tibble
 \item Treats ragged list of input elements similar to \code{\link[=tibble]{tibble()}} but includes names as column if possible
-\item Flattens lists of lists to a single table if possible
+\item Arranges lists of lists to produce a single table, if row dimensions allow it
 }
 }
 \details{
 @details
 Entibble is designed to work with the function \code{\link[=xlr]{xlr()}} to produce a viewable
-output of presented data. To help \code{\link[=xlr]{xlr()}} succeed as often as possible, \code{\link[=entibble]{entibble()}} is
+output of R data in spreadsheets. To help \code{\link[=xlr]{xlr()}} succeed as often as possible, \code{\link[=entibble]{entibble()}} is
 liberal about names, such as duplicate column names, and makes an effort to produce a flat table
-rather than a nested tibble.
+in place of a nested tibble.
 }
 \examples{
 entibble('')

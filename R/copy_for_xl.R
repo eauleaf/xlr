@@ -12,7 +12,7 @@
 #'
 #'
 #' @details
-#' To set up the key-chord in RStudio. Run [xlr::set_xlr_key_chords()].
+#' To set up the key-chord in RStudio. Run [set_xlr_key_chords()].
 #'
 #' Copying formatted output to the clipboard requires package [clipr].
 #'
@@ -49,7 +49,7 @@
 #'
 #' enlist(head(iris),head(mtcars)) |> copy_for_xl()
 #'
-#' # To use quick keys. Run {.fn xlr::set_xlr_key_chords}.
+#' # To use quick keys. Run {.fn set_xlr_key_chords}.
 #' # Then highlight the word 'letters' below and press key-chord `ctrl + alt + shift + c`.
 #' letters
 #'
@@ -75,7 +75,7 @@ copy_for_xl <- function(. = NULL){
   }
 
 # from console ------------------------------------------------------------
-  .out <- xlr::entibble(!!.)
+  .out <- entibble(!!.)
   if( length(.out) == 1 ){ .out <- rlang::set_names(.out, r_label) }
   if( length(.out) == 2 && names(.out)[1] == 'rowname'){ .out <- rlang::set_names(.out, c('rowname', r_label)) }
 
@@ -107,8 +107,8 @@ copy_for_xl <- function(. = NULL){
 #'
 #' @examples \dontrun{
 #' # Highlight a text item below and press key-chord `ctrl + alt + shift + c`.
-#' # To implement the key-chord in RStudio. Run [xlr::set_xlr_key_chords()].
-#' # Note that setting [xlr::set_xlr_key_chords()] will restart the R session.
+#' # To implement the key-chord in RStudio. Run [set_xlr_key_chords()].
+#' # Note that setting [set_xlr_key_chords()] will restart the R session.
 #'
 #' head(iris)
 #' colours()
@@ -138,7 +138,7 @@ run_copy_for_xl <- function(){
   if( base::identical(text_expr, base::character(0)) || text_expr == '' ){
 
     cli::cli_bullets(c(
-      "x" = '{.strong Nothing selected to {.fn xlr::copy_for_xl} }',
+      "x" = '{.strong Nothing selected to {.fn copy_for_xl} }',
       "i" = "Highlight an expression in your text editor, then press `ctrl+alt+shift+c`."
     ))
 
@@ -147,7 +147,6 @@ run_copy_for_xl <- function(){
     rstudioapi::sendToConsole(code = base::paste(text_expr, '|> xlr::copy_for_xl()'))
 
   }
-
 
 
 }

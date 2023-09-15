@@ -2,7 +2,7 @@
 % Please edit documentation in R/enlist.R
 \name{.remove_doublequotes}
 \alias{.remove_doublequotes}
-\title{Removes external set of quotes for named list where some names have double-quotes}
+\title{Removes external set of quotes for named list if the list names have double-quotes}
 \usage{
 .remove_doublequotes(named_list = NULL)
 }
@@ -10,10 +10,10 @@
 \item{named_list}{}
 }
 \value{
-named list where names have no doublequotes
+named list where names have no double-quotes
 }
 \description{
-Removes external set of quotes for named list where some names have double-quotes
+Removes external set of quotes for named list if the list names have double-quotes
 }
 \examples{
 tibble::tibble(!!!letters) |> as.list() |> .remove_doublequotes()

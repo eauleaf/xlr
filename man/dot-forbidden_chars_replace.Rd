@@ -40,8 +40,8 @@ tab_names |> .forbidden_chars_replace(pattern = '[?*]', replacement = '#', patte
 tab_names |> .forbidden_chars_replace(pattern = '(?i)(hist)ory', replacement = '\\\\1', pattern_text = 'history', repl_text = 'hist')
 tab_names |> .forbidden_chars_replace(pattern = '\\\\[', replacement = '{', pattern_text = '[brackets]', repl_text = '{curly braces}')
 tab_names |> .forbidden_chars_replace(pattern = ']', replacement = '}', quiet = TRUE)
-tab_names |> .forbidden_chars_replace(pattern = '^'+', replacement = ' ', pattern_text = 'single quotes '' at tabname start or end', repl_text = 'the empty string ''')
-tab_names |> .forbidden_chars_replace(pattern = ''+$', replacement = '', quiet = TRUE)
+tab_names |> .forbidden_chars_replace(pattern = "^'+", replacement = '`', pattern_text = "single quotes '' at tabname start or end", repl_text = "the empty string ''")
+tab_names |> .forbidden_chars_replace(pattern = "'+$", replacement = '', quiet = TRUE)
 }
 \seealso{
 \code{\link[=.fix_forbidden_tabnames]{.fix_forbidden_tabnames()}}

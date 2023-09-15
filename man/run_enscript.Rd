@@ -15,7 +15,7 @@ Requires RStudio
 \examples{
 \dontrun{
 # Highlight each text item below and press key-chord `ctrl + alt + shift + n`.
-# To implement quick key-chord. Run {.fn xlr::set_xlr_key_chords}.
+# To implement quick key-chord. Run {.fn set_xlr_key_chords}.
 
 (1:5 * 10)
 rep("🎊🌈",3)

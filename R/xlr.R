@@ -1,6 +1,6 @@
-#' View an R dataframe or dataframes quickly in a Libreoffice or Excel workbook.
-#' TODO: background-color: #00A500;
+#' View an R objects in a Libreoffice or Excel workbook
 #'
+#' TODO: background-color: #00A500;
 #' Provides a means of reviewing datasets through the user's default spreasheet
 #' program. Produces output similar to [tibble::view()], but in a spreadsheet,
 #' which allows for larger datasets and a list of dataframes.
@@ -47,6 +47,9 @@
 #' @export
 #'
 #' @examples \dontrun{
+#' xlr(list('hi'))
+#' enlist('hi') |> xlr()
+#' enlist(hi) |> xlr()
 #' xlr(mtcars)
 #' xlr(NA)
 #' xlr(a = NA)
@@ -68,6 +71,7 @@
 #' xlr(NULL)
 #' xlr(a = NULL)
 #' xlr(iris, dplyr::starwars, mtcars, cars)
+#' }
 #'
 xlr <- function(...
                ,.path = NULL
@@ -85,7 +89,7 @@ xlr <- function(...
   checkmate::assert_string(.path, null.ok = TRUE, na.ok = FALSE)
   checkmate::assert_flag(.open, na.ok = FALSE, null.ok = FALSE)
   checkmate::assert_flag(.quiet, na.ok = FALSE, null.ok = FALSE)
-  # parameter '.sheet_titles' done way below
+  # parameter '.sheet_titles' controlled way below
   checkmate::assert(
     checkmate::check_formula(.fieldname_spec, null.ok = TRUE),
     checkmate::check_function(.fieldname_spec, null.ok = TRUE)
@@ -106,7 +110,7 @@ xlr <- function(...
 
 # more input checks ------------------------------------------------------------
   if( length(df_list)==0 ){
-    cli::cli_alert_danger('Insufficient data provided.')
+    cli::cli_alert_danger('Insufficient data provided to create a workbook.')
     return(invisible(NULL))
   }
 
@@ -132,14 +136,15 @@ xlr <- function(...
 
 # flatten lists, prep sheet names, entibble data, adjust fieldnames ------------
   if(!is.null(.fieldname_spec)){ df_list <- purrr::map(df_list, .f = .fieldname_spec) }
-  raw_tabnames <- names(df_list)
-  for_scrub_tabnames <- list(tabnames = raw_tabnames, quiet = .quiet) |>
+  in_names <- names(df_list)
+  for_scrub_tabnames <- list(tabnames = in_names, quiet = .quiet) |>
     purrr::list_assign(rlang::splice(.tabname_spec)) |>
     purrr::discard_at('name_spec') |> purrr::map_at(.at = c('sep','pad'), .f = scrub_tabnames)
-  names(df_list) <- rlang::call2(xlr::scrub_tabnames, rlang::splice(for_scrub_tabnames)) |>
+  sheet_names <- rlang::call2(scrub_tabnames, rlang::splice(for_scrub_tabnames)) |>
     rlang::eval_tidy()
+  names(df_list) <- sheet_names
 
-
+  cli::cat_line(.sheet_titles)
 
 # Sheet Titles -----------------------------------------------------------------
   no_titles <- identical(FALSE,.sheet_titles)
@@ -147,16 +152,16 @@ xlr <- function(...
     start_row <- 1
   } else if( identical(TRUE,.sheet_titles) ){
     start_row <- 3
-    .sheet_titles <- raw_tabnames |>
-      janitor::make_clean_names(case = 'title', allow_dupes = T) |>
-      as.list() |> purrr::set_names(names(df_list))
+    sheet_titles <- in_names |>
+      janitor::make_clean_names(case = 'title', allow_dupes = TRUE)
   } else {
-    if(length(.sheet_titles)!=length(names(df_list))){
-      cli::cli_abort('Input (.sheet_titles) must be TRUE, FALSE,
-                   or a character vector/list of the same count as the spreadsheets.')
-      }
+    if( length(.sheet_titles) != length(names(df_list)) ){
+      cli::cli_abort(
+        'Input (.sheet_titles) must be TRUE, FALSE, or a character vector/list
+        of the same count as the spreadsheets.')
+    }
+    sheet_titles <- .sheet_titles
     start_row <- 3
-    names(.sheet_titles) <- names(df_list)
   }
 
 
@@ -179,24 +184,32 @@ xlr <- function(...
     startRow = start_row ) |>
     purrr::list_assign(rlang::splice(.workbook_spec))
   wb <- rlang::call2(openxlsx::buildWorkbook, rlang::splice(for_buildWorkbook)) |> rlang::eval_tidy()
-  names(wb) <- names(df_list)
+  names(wb) <- sheet_names
+  names(sheet_names) <- names(df_list)
+  names(sheet_titles) <- names(df_list)
+
+
+
+  # allow user to overwrite 'start_row' if provided in 'for_buildWorkbook'
   start_row <- for_buildWorkbook$startRow
 
-
 # apply formatting workbook ----------------------------------------------------
-  for(sheet_name in names(df_list)){
-    dt_cols <- which(purrr::map_lgl(df_list[[sheet_name]], lubridate::is.Date))
-    px_cols <- which(purrr::map_lgl(df_list[[sheet_name]], lubridate::is.POSIXt))
-    purrr::map(dt_cols, ~openxlsx::addStyle(wb, sheet_name, style = date_style, rows = 1:(nrow(df_list[[sheet_name]])+1), cols = .))
-    openxlsx::addStyle(wb, sheet = sheet_name, style = fieldname_style, rows = start_row:start_row, cols = 1:ncol(df_list[[sheet_name]]))
-    openxlsx::freezePane(wb, sheet = sheet_name, firstRow = TRUE)
-    openxlsx::freezePane(wb, sheet = sheet_name, firstActiveRow = start_row+1)
-    openxlsx::setColWidths(wb, sheet = sheet_name, widths = 'auto', cols = 1:ncol(df_list[[sheet_name]]))
-    openxlsx::setColWidths(wb, sheet = sheet_name, widths = 18, cols = px_cols)
-    openxlsx::setColWidths(wb, sheet = sheet_name, widths = 10, cols = dt_cols)
-    openxlsx::addStyle(wb, sheet = sheet_name, style = header_style, rows = 1, cols = 1, stack = TRUE)
-    if(!no_titles){openxlsx::writeData(wb, sheet = sheet_name, x = .sheet_titles[[sheet_name]], startCol = 1, startRow = 1, name = NULL, colNames = FALSE)}
+  for(df_name in names(df_list)){
+    df_nm <- df_list[[df_name]]
+    sheet_nm <- sheet_names[[df_name]]
+    dt_cols <- which(purrr::map_lgl(df_nm, lubridate::is.Date))
+    px_cols <- which(purrr::map_lgl(df_nm, lubridate::is.POSIXt))
+    purrr::map(dt_cols, ~openxlsx::addStyle(wb, sheet = sheet_nm, style = date_style, rows = 1:(nrow(df_nm)+1), cols = .))
+    openxlsx::addStyle(wb, sheet = sheet_nm, style = fieldname_style, rows = start_row:start_row, cols = 1:ncol(df_nm))
+    openxlsx::freezePane(wb, sheet = sheet_nm, firstRow = TRUE)
+    openxlsx::freezePane(wb, sheet = sheet_nm, firstActiveRow = start_row+1)
+    openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 'auto', cols = 1:ncol(df_nm))
+    openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 18, cols = px_cols)
+    openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 10, cols = dt_cols)
+    openxlsx::addStyle(wb, sheet = sheet_nm, style = header_style, rows = 1, cols = 1, stack = TRUE)
+    if(!no_titles){openxlsx::writeData(wb, sheet = sheet_nm, x = sheet_titles[[df_name]], startCol = 1, startRow = 1, name = NULL, colNames = FALSE)}
   }
+  # return(enlist(names(wb), names(df_list), sheet_names, sheet_titles))
 
 
 # save workbook ----------------------------------------------------------------
@@ -211,7 +224,7 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
     } else if((.Platform$OS.type == "windows")){
       shell.exec(.path)
     } else (
-      browseURL(.path)
+      utils::browseURL(.path)
     )
   }
 
@@ -247,4 +260,4 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
 
 
 # is.posix <- function(x) any(grepl('POSIX', class(x)), na.rm = TRUE)
-# px_cols <- which(purrr::map_lgl(df_list[[sheet_name]], is.posix))
+# px_cols <- which(purrr::map_lgl(df_nm, is.posix))

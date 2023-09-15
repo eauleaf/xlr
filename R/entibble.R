@@ -11,14 +11,14 @@
 #'
 #'  @details
 #'  Entibble is designed to work with the function [xlr()] to produce a viewable
-#'  output of presented data. To help [xlr()] succeed as often as possible, [entibble()] is
+#'  output of R data in spreadsheets. To help [xlr()] succeed as often as possible, [entibble()] is
 #'  liberal about names, such as duplicate column names, and makes an effort to produce a flat table
-#'  rather than a nested tibble.
+#'  in place of a nested tibble.
 #'
 #'
 #' @param ... object or expression to convert to a tibble
-#' @param .rowname String to name the column containing rownames. If rownames are not
-#' present in the  if passed a data object with names or rownames
+#' @param .rowname string; to name the column containing rownames. If rownames are not
+#' present in the data, `.rowname` is ignored.
 #' @param .name_repair
 #'
 #' @seealso [tibble::tibble()]
@@ -161,7 +161,7 @@ entibble <- function(
 
     if(is_ragged){
 
-      out <- .vector_2_tibble(.in_vec = out, .rowname = .rowname, .vec_name = 'list(irregular_elements)')
+      out <- .vector_2_tibble(.in_vec = out, .rowname = .rowname, .vec_name = 'list(ragged_elements)')
 
     } else {
 
@@ -186,6 +186,8 @@ entibble <- function(
 #' @param .in_data user data to tibble
 #' @param .rowname user specified rowname; ignored if no rownames
 #' @param .vec_name The name of the expression; passed to [.vector_2_tibble()]
+#'
+#' @importFrom rlang :=
 #'
 #' @return a tibble
 #' @export

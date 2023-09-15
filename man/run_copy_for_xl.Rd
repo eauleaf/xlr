@@ -15,8 +15,8 @@ For interactive use in RStudio.
 \examples{
 \dontrun{
 # Highlight a text item below and press key-chord `ctrl + alt + shift + c`.
-# To implement the key-chord in RStudio. Run [xlr::set_xlr_key_chords()].
-# Note that setting [xlr::set_xlr_key_chords()] will restart the R session.
+# To implement the key-chord in RStudio. Run [set_xlr_key_chords()].
+# Note that setting [set_xlr_key_chords()] will restart the R session.
 
 head(iris)
 colours()

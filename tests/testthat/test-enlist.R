@@ -11,6 +11,7 @@ test_that("dis-embeds itself when passed a list", {
     purrr::pluck_depth(enlist(list('hi')))
     ,purrr::pluck_depth(enlist('hi'))
   )
+
   expect_equal(
     purrr::pluck_depth(enlist(as.list('hi')))
     ,purrr::pluck_depth(enlist('hi'))
@@ -32,3 +33,12 @@ test_that("removes all empty args", {
     ,list(green = 'hi')
   )
 })
+
+test_that("double-quotes removed from names", {
+  expect_equal(
+    enlist('a') |> names()
+    ,'a'
+  )
+})
+
+

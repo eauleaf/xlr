@@ -14,9 +14,9 @@
 #' icons in a browser window.
 #'
 #' To set the quick keys.
-#' @seealso [xlr::set_xlr_key_chords()]
+#' @seealso [set_xlr_key_chords()]
 #'
-#' @note If you're copying a lot of data from a spreadsheet, instead read it in
+#' @note If you're copying a lot of data from a spreadsheet, instead try reading it in
 #'   with [readxl::read_excel()].
 #'
 #'
@@ -29,7 +29,7 @@
 #'   function.
 #'
 #' @details To set the quick keys in RStudio, run function
-#' [xlr::set_xlr_key_chords()], or set the quick keys manually by following
+#' [set_xlr_key_chords()], or set the quick keys manually by following
 #' these instructions.
 #' [https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE]
 #'
@@ -104,7 +104,7 @@ paste_from_xl <- function( has_fieldnames = NULL ){
       readr::read_delim(delim = '\t', col_names = headers, show_col_types = FALSE,
                         name_repair = "universal_quiet",trim_ws = TRUE) |>
       base::as.data.frame() |>
-      xlr::entibble()
+      entibble()
 
   }
 
@@ -112,7 +112,7 @@ paste_from_xl <- function( has_fieldnames = NULL ){
   # check if windows path
   # Sys.info()['sysname']=='Windows'
   # chartr("\\", "/", from_xl)
-  if( length(from_xl)==1 && base::all(stringr::str_detect(from_xl[[1]], '^([A-Z]:\\\\|//)'), na.rm = TRUE) ){
+  if( length(from_xl)==1 && base::all(stringr::str_detect(from_xl[[1]], '^((?:[A-Z]:\\\\)|(?:/))'), na.rm = TRUE) ){
     from_xl <- from_xl |> rlang::set_names('path')
   }
 
@@ -152,12 +152,20 @@ run_paste_from_xl <- function(){
   }
 
 
+  out <- paste_from_xl()
+  default_input_name <- 'xl_data'
+  if( length(out)==1 && identical(names(out),'path') ){
+    out <- out[[1]]
+    default_input_name <- 'path'
+  }
+
   # ask user for a variable name --------------------------------------------
   input_name <- svDialogs::dlg_input(
     message = "Assign `<-` a variable name to the data?",
-    default = 'xl_tbl')$res
+    default = default_input_name)$res
 
-  input_name <- xlr:::.check_assigned_input(input_name)
+  # check the variable name
+  input_name <- .check_assigned_input(input_name)
 
   if( input_name != '' ){
     input_name <- paste0(input_name,' <- ')
@@ -168,8 +176,6 @@ run_paste_from_xl <- function(){
   # if pasting to script ----------------------------------------------------
   if( paste_locn != "#console" ){
 
-    out <- xlr::paste_from_xl()
-    if(base::identical(base::names(out)[1],'path') && base::length(out)==1 ){ out <- out[[1]] }
     out_expr <- glue::glue('\n{input_name}{enscript({out}, to_clipboard = FALSE )}\n')
     row1 <- purrr::pluck(rstudioapi::getSourceEditorContext(id = paste_locn),'selection', 1, 'range', 'start', 'row')
     rstudioapi::insertText(text = out_expr, id = paste_locn)

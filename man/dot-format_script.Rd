@@ -19,7 +19,6 @@ Adds breaks to the text of a deparsed data structure script
 }
 \examples{
 
-
-todo:
+TODO:
 
 }

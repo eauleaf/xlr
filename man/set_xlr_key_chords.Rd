@@ -21,7 +21,7 @@ To set quick-keys manually, follow these instructions from Posit:
 \link{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 }
 \examples{
-\dontrun{ xlr::set_xlr_key_chords() }
+\dontrun{ set_xlr_key_chords() }
 
 }
 \seealso{

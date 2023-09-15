@@ -1,23 +1,10 @@
 test_that('invisible deparsed output and quiet', {
   expect_equal(
-    1:5 |> enscript(quiet = T),
+    1:5 |> enscript(to_clipboard = F, quiet = T),
     "1:5"
   )
 })
 
-test_that('width works', {
-  expect_equal(
-    dplyr::starwars$name[1:5] |> enscript(width = 4, quiet = T),
-    c(
-      "", "c(", "\"Luke Skywalker\", ", "\"C-3PO\", ", "\"R2-D2\", ",
-      "\"Darth Vader\", ", "\"Leia Organa\"", ")", ""
-    )
-  )
-  expect_equal(
-    dplyr::starwars$name[1:5] |> enscript(width = 80, quiet = T),
-    "c(\"Luke Skywalker\", \"C-3PO\", \"R2-D2\", \"Darth Vader\", \"Leia Organa\")"
-  )
-})
 
 test_that('iris script (copied to user clipboard) is correct: datasets::iris |> head() |> enscript()', {
   expect_equal(

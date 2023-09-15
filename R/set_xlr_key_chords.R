@@ -17,7 +17,7 @@
 #' @return NULL
 #' @export
 #'
-#' @examples \dontrun{ xlr::set_xlr_key_chords() }
+#' @examples \dontrun{ set_xlr_key_chords() }
 #'
 set_xlr_key_chords <- function(){
 

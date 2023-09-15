@@ -2,140 +2,63 @@
 % Please edit documentation in R/enlist.R
 \name{enlist}
 \alias{enlist}
-\title{Create a list with each list element force-named by the input expression.
-If passed a single list, does not add an additional layer.}
+\title{Create a list with auto-named list elements.}
 \usage{
 enlist(..., .label = NULL)
 }
 \arguments{
-\item{...}{any objects; if unnamed, enlist() forces names by input expression}
+\item{...}{data objects; if unnamed, enlist() forces names by input expression}
 
-\item{.label}{a function to rename list where forced names are input to a naming
-function, e.g. .label =  'hi', .label =  ~gsub('\link{' }', '', .) or .label =  ~substr(.,1,5)}
+\item{.label}{a function or character vector to rename list elements, e.g. .label = ~substr(.,1,5).
+\code{.label} is passed to \code{nm} in 'rlang::set_names()'}
 }
 \value{
-an evaluated named list
+a named list
 }
 \description{
-Use in place of list() to produce a list with auto-assigned names that does not
-stack lists unless the list is named or the list houses more than one element.
+When passed a list, \code{enlist()} does not add an additional list layer.
+Use in place of \link{list} to produce a list with auto-assigned names and to avoid adding excess list structure.
 }
 \details{
-Embedding:
-enlist() embedding behavior is different from list(); enlist() only embeds
-stacked lists if embed is named or if list contains lists, i.e., enlist() doesn't
-stack lists for structure's sake alone.
-All superfluous commas are ignored
+Specifically:
+-- \code{enlist} creates a list where each list element is force-named by the input expression if no list element name is available, .e.g  \code{enlist(mtcars)}.
+
+-- If no list exists, \code{enlist} places its arguments into a list, e.g. \code{enlist(c('hi', 'hello'))}.
+
+-- If passed a single bare list, \code{enlist} does not add an additional list layer. That is, enlist() doesn't stack lists for structure's sake alone, e.g. \code{enlist(enlist(letters))}.
+
+-- \code{enlist} takes dots, splicing, and injection, and is okay to use in non-standard evaluation or meta-programming, e.g. enlist(!!!letters).
+
+-- \code{enlist} ignores input argument separator commas, e.g. enlist(,,,,,).
+
+-- Naming can be performed by function through the parameter \code{.label}, e.g. enlist('me', .label = ~paste0('name_',.))
 }
-\section{Compare:}{
-\code{enlist(enlist(enlist(letters))) # one list deep}
-\code{list(list(list(letters))) # three lists deep}
-
-Unlike list(), enlist() removes its own embedding layer if not assigned
-a user-specified name, or if embedding implies no change in list structure other
-than depth, i.e., enlist() doesn't embed its list for embedding's sake alone.
-}
-
-\section{For example, compare:}{
-\code{enlist(enlist(enlist(letters))) # one list deep}
-\code{list(list(list(letters))) # three lists deep}
-
-But if you name a list element, enlist() retains that information by embedding a named list:
-enlist(enlist(user_named_list = enlist(letters))) # two lists deep
-}
-
-\section{However, these do embed list structure:}{
-enlist(a_name = enlist(letters)) # b/c specified name
-enlist(enlist(letters), .label =  'a_name')  # b/c specified name
-enlist(enlist(letters),enlist(letters)) # b/c housing additional list elements (list of lists)
-
-This careful embedding behavior is convenient if you want to use enlist() to
-catch and name dots \code{...} inside a function where the user wants to handle a
-list of items within the function, but doesn't want to require the user to have
-to pass in a named list.
-
-For example, compare these functions a() and b() below with listed inputs:
-a <- function(...){ enlist(...) } # function catching inputs with enlist()
-b <- function(...){ list(...) } # function catching inputs with list()
-a(letters, LETTERS) # named flat input list
-b(letters, LETTERS) # flat unnamed flat input list
-list(letters, LETTERS) |> a() # still a named flat input list despite user
-passing in a list() of elements
-list('green','blue') |> b() # an embedded input list
-}
-
 \examples{
+# Examples compare `enlist()` to `list()`:
 
-list(head(mtcars), head(iris)) |> enlist()
+# Auto-naming by input expression:
+enlist(head(iris), tail(mtcars))
+list(head(iris), tail(mtcars))
 
-enlist(letters)
-enlist(letters,LETTERS)
-enlist(head(iris))
-enlist(tail(mtcars),head(iris))
-enlist(mtcars,iris) |> purrr::map(head)
+# Naming a list element works similar to `list()`:
+enlist(some_name = letters)
+list(some_name = letters)
 
-# auto-naming is overridden if you specify a name
-enlist(some_named_list_element = tail(iris))
+# Naming by passing a function to `.label`:
+enlist(letters, .label =  'some_name')
+enlist(letters, .label =  ~paste0(.,'_1'))
+enlist('black','white','cyan', .label =  'color_grp_1')
+enlist(letters, .label =  ~'')  # removes names
 
-enlist(letters, head(iris), enlist('green', 'blue', .label =  'grp2'), .label =  'grp1') |> list_iron() |> xlr()
-enlist(letters, head(iris), 'green ish', blue = 'blue', .label =  ~paste0(., '-grp_A'))
 
-## you can embed enlist() similar to list()
-enlist(letters, head(iris), enlist('green', blue = 'blue'))
-# but embedding behavior is not exactly the same as list())
-# enlist() does not double embed without a specified name or some change in list structure
-# compare to depth from embedding list() and enlist()
-list(list(list(head(iris)))) |> list() |> list()
-enlist(enlist(enlist(head(iris)))) |> enlist() |> enlist()
-# enlist() removes its own layer of list() depth if passed a bare list(); compare these
-list(head(iris)) |> enlist() # list depth 1
-list(head(iris)) |> list() # list depth 2
-# but, enlist() only removes it's own layer of list(), so doubling up on list() will embedded list items like you'd expect from list()
-list(list(head(iris))) |> str()
-list(list(head(iris))) |> enlist() |> str()
-# however, if an embedded list element is user-named, then enlist() will embed the list to keep that name info, compare:
-enlist(embedded = enlist(head(iris))) # list depth 2
-enlist(enlist(head(iris))) # list depth 1
-# not adding embedded structure is useful if you want to use enlist() to catch and name dots `...` inside a function where user might or might not pass in a list, e.g.
-a <- function(...){enlist(...)}
-a('green','blue') # flat input list
-list('green','blue') |> a() # still a flat input list
+# List embedding:
+list(list(list(letters))) # 3 lists deep
+enlist(enlist(enlist(letters))) # 1 list deep
 
-## you can change/override names in a particular enlist() call by passing a lambda naming function with ~, (powered by rlang's rlang::as_function())
-list(letters, head(iris), colors = enlist('green', blue = 'blue', .label =  ~stringr::str_replace_all(., "['aeiou]",'-'))) |> enlist()
-enlist(mtcars,iris) |> purrr::map(head) |> enlist(.label =  ~gsub('.*', 'new_name_here', .))
-enlist(letters, head(iris), colors = enlist('green', blue = 'blue', .label =  ~dplyr::if_else(. == 'blue', 'a_very_deep_blue','a_very_deep_green')))
-enlist(letters, embed_grp1 = enlist(head(iris)), embed_grp2 = enlist('green', blue = 'blue'), .label =  ~paste0('lvl1_',.)) |> enscript()
-letters |> enlist( .label =  ~'')  # removes names
+# This dis-embedding behavior can be useful in a function when the dots `...` can be arguments or a list of arguments.
 
-## enlist() behavior with map() (the latter two below are equivalent)
-candy <- c('lollipops','gum')
-enlist(letters, candy, cars = tail(mtcars)) |> purrr::map(~enlist(.x))
-enlist(letters, candy, cars = tail(mtcars)) |> purrr::map(~enlist(!!.x))
-enlist(letters, candy, tail(mtcars)) |> purrr::map(enlist)
-# without !!, purrr::map() returns the function's expression text '.x' as a list name since enlist() captures the function's internal expr()
-# the `<chr>` and `<df[,11]>` names occur because map() performs a layer of evaluation using substitute(arg), and that's what's one eval level below `letters` and `mtcars`
-
-# handles non-standard evaluation
+# Handles non-standard evaluation:
 candy <- list('lollipops','gum')
-enlist(letters, candy, rlang::list2(!!!candy))
-enlist(letters)
-enlist(!!letters)
-enlist(!!!letters)
-enlist(!!!candy)
-enlist(!!!iris)
-enlist(!!!candy)
-enlist(candy)
+enlist(candy, !!!candy)
 
-
-# if you don't want to write the names of the columns you're binding
-dplyr::bind_cols(letters,LETTERS)
-dplyr::bind_cols(enlist(letters,LETTERS))
-dplyr::bind_cols(enlist(letters,LETTERS))
-enlist() # if no args passed, returns an empty named list like list()
-
-# additional tests ## compare the output of these 2; one's all list(), the other's all enlist()
- candy <- c('lollipops','gum')
- list(candy, list(nums = 3:1, c = list(b1 = 2, list(new = c('red','green'), f = list(head(iris)))), b = list(c2 = 3, c1 = 4:5, letters[1:10])))
- enlist(candy, enlist(nums = 3:1, c = enlist(b1 = 2, enlist(new = c('red','green'), f = enlist(head(iris)))), b = enlist(c2 = 3, c1 = 4:5, letters[1:10])))
 }
