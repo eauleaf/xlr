@@ -11,12 +11,21 @@
 #' @export
 #'
 #' @examples \dontrun{
+#' # open current working directory
 #' sys_open('.')
-#' sys_open('..')
-#' sys_open('~')
-#' sys_open('/')
 #' sys_open(here::here())
-#' here::here('tests') |> list.files() |> sys_open()
+#'
+#' # open parent of current working directory
+#' sys_open('..')
+#'
+#' # open user home dir
+#' sys_open('~')
+#'
+#' # open system dir
+#' sys_open('/')
+#'
+#' # open the first 3 files or folders in the current directory
+#' list.files(here::here())[1:3] |> sys_open()
 #' }
 #'
 sys_open <- function( ... ){
