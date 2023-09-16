@@ -30,7 +30,7 @@
 #' @details To set the quick keys in RStudio, run function:
 #' [set_xlr_key_chords()].
 #' Or, or set the quick keys manually by following these instructions:
-#' [https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE]
+#' \url{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 #'
 #' @returns
 #' -- If user copied a single spreadsheet row into the clipboard memory,

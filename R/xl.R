@@ -1,6 +1,6 @@
 #' View an R objects in a Libreoffice or Excel workbook
 #'
-#' Provides a means of reviewing datasets through the user's default spreasheet
+#' Provides output of R datasets through the user's default spreasheet
 #' program. Produces output similar to [tibble::view()], but in a spreadsheet,
 #' which allows for larger datasets and a list of dataframes.
 #'
@@ -10,13 +10,9 @@
 #'
 #' @param ... A dataframe, list of dataframes, or inputs coerceable to one
 #'   or more dataframes.
-#' @param .path Optional path to save a copy of the output spreadsheet. Specify
-#'   a minimal file name s*-+
-#'   3.6920uch as 'expenses' or a .path such as
-#'   'my-data-stash/workbook.xlsx'. [.path] uses [here::here()]. If .path is not
-#'   specified, workbook is removed on or before closure. If .path is specified
-#'   but the folder structure does not exist, [xl()] will attempt to
-#'   construct it.
+#' @param .path Optional path to save a copy of the workbook output. Uses
+#'   [here::here()]. If `.path` is not specified, workbook is removed on or before
+#'   closure.
 #' @param .open TRUE (default); If FALSE, workbook will not open after being written.
 #' @param .quiet TRUE or FALSE (default), denoting whether you want messaging.
 #' @param .sheet_titles NULL, a character vector the same length as the number of
@@ -29,9 +25,9 @@
 #'   arguments: sep = ".", pad = ".", name_spec = "{inner}"
 #' @param .workbook_spec a list of arguments to pass to
 #'   [openxlsx::buildWorkbook()], e.g. list(asTable = TRUE, orientation =
-#'   'landscape', zoom = 70)
-#' @param .return defines the type of output to R, such as the dataframes, the
-#'   workbook-object, or the save path. Default is NULL.
+#'   'landscape', zoom = 70, startRow = 7)
+#' @param .return one of NULL, 'savepath', 'tibbles', or 'workbook'
+#' specifying the return information
 #'
 #' @seealso [openxlsx::buildWorkbook()]
 #'

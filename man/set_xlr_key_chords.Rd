@@ -3,7 +3,7 @@
 \name{set_xlr_key_chords}
 \alias{set_xlr_key_chords}
 \title{Sets key chord "ctrl + alt + shift + v" to auto-run \code{\link[=paste_from_xl]{paste_from_xl()}}.
-Sets key chord "ctrl + alt + shift + c" to auto-run \code{\link[=copy_from_xl]{copy_from_xl()}}.
+Sets key chord "ctrl + alt + shift + c" to auto-run \code{\link[=copy_for_xl]{copy_for_xl()}}.
 Restarts rstudio session.}
 \usage{
 set_xlr_key_chords()
@@ -18,7 +18,7 @@ When in Rstudio, running this function allows the user to:
 }
 \details{
 To set quick-keys manually, follow these instructions from Posit:
-\link{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
+\url{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 }
 \examples{
 \dontrun{ set_xlr_key_chords() }

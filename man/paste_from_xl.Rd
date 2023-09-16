@@ -41,7 +41,7 @@ To set the quick keys.
 To set the quick keys in RStudio, run function:
 \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
 Or, or set the quick keys manually by following these instructions:
-\link{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
+\url{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 }
 \note{
 Clipboard memory is limited; if you're copying a lot of data from a

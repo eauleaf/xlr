@@ -20,13 +20,9 @@ xl(
 \item{...}{A dataframe, list of dataframes, or inputs coerceable to one
 or more dataframes.}
 
-\item{.path}{Optional path to save a copy of the output spreadsheet. Specify
-a minimal file name s*-+
-3.6920uch as 'expenses' or a .path such as
-'my-data-stash/workbook.xlsx'. \link{.path} uses \code{\link[here:here]{here::here()}}. If .path is not
-specified, workbook is removed on or before closure. If .path is specified
-but the folder structure does not exist, \code{\link[=xl]{xl()}} will attempt to
-construct it.}
+\item{.path}{Optional path to save a copy of the workbook output. Uses
+\code{\link[here:here]{here::here()}}. If \code{.path} is not specified, workbook is removed on or before
+closure.}
 
 \item{.open}{TRUE (default); If FALSE, workbook will not open after being written.}
 
@@ -45,10 +41,10 @@ arguments: sep = ".", pad = ".", name_spec = "{inner}"}
 
 \item{.workbook_spec}{a list of arguments to pass to
 \code{\link[openxlsx:buildWorkbook]{openxlsx::buildWorkbook()}}, e.g. list(asTable = TRUE, orientation =
-'landscape', zoom = 70)}
+'landscape', zoom = 70, startRow = 7)}
 
-\item{.return}{defines the type of output to R, such as the dataframes, the
-workbook-object, or the save path. Default is NULL.}
+\item{.return}{one of NULL, 'savepath', 'tibbles', or 'workbook'
+specifying the return information}
 }
 \value{
 The side-effect, a workbook of spreadsheets, is the primary output of this function.
@@ -59,7 +55,7 @@ tibbles, the \code{openxlsx} workbook-object, or the save path. All direct outpu
 are returned invisibly.
 }
 \description{
-Provides a means of reviewing datasets through the user's default spreasheet
+Provides output of R datasets through the user's default spreasheet
 program. Produces output similar to \code{\link[tibble:view]{tibble::view()}}, but in a spreadsheet,
 which allows for larger datasets and a list of dataframes.
 }

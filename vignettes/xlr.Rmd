@@ -178,7 +178,7 @@ about indexing by name. R returns only the first observation it finds in the lis
 
 -- Enlist has input parameter `.label`, that takes a naming function. Internally, `.label` is passed to `nm` in `rlang::set_names()` and so takes the same inputs. 
 
--- `enlist()` uses non-standard evaluation and is okay for use in meta-programming.
+-- `enlist()` supports non-standard evaluation.
 
 
 ### Some clipboard notes:

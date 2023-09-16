@@ -277,7 +277,7 @@ scrub_tabnames <- function(tabnames,
 #'
 #' @seealso [scrub_tabnames()]
 #'
-#' @param arg 'pad' in function scrub_tabnames()
+#' @inheritParams scrub_tabnames
 #'
 #' @return a single character; throws an error if input is any of these characters \/:?*'[]
 #'
@@ -296,7 +296,7 @@ scrub_tabnames <- function(tabnames,
 
   checkmate::assert_string(pad, n.chars = 1)
 
-  if (stringr::str_detect(pad, "[\\\\/:?*\\[\\]']")) {
+  if (stringr::str_detect(pad, "[\\\\/:?*\"\\[\\]']")) {
     cli::cli_abort(
       "The {.var pad} argument cannot include the character `{substitute(pad)}`
         because spreadsheets cannot include it within a tabname."
@@ -315,7 +315,6 @@ scrub_tabnames <- function(tabnames,
 #'
 #' Note: min checks should already have been done in scrub_tabnames() before passing width info
 #'
-#' @noRd
 #' @param width the number of characters user requested for the tab/sheet names
 #' @param min_width the minimum number of characters to permit in a tab/sheet name
 #' @param quiet quiet overrides to the tab/sheet names
@@ -360,7 +359,6 @@ scrub_tabnames <- function(tabnames,
 
 
 #' Paste name components together in order specified by paste_side
-#' @noRd
 #'
 #' @param prefix_suffix vector of padded numbers
 #' @param tabnames vector of tab/sheet names

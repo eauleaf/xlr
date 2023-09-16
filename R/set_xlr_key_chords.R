@@ -1,5 +1,5 @@
 #' Sets key chord "ctrl + alt + shift + v" to auto-run [paste_from_xl()].
-#' Sets key chord "ctrl + alt + shift + c" to auto-run [copy_from_xl()].
+#' Sets key chord "ctrl + alt + shift + c" to auto-run [copy_for_xl()].
 #' Restarts rstudio session.
 #'
 #' When in Rstudio, running this function allows the user to:
@@ -8,7 +8,7 @@
 #'  * press the key chord "ctrl + alt + shift + n" to create a script to reproduce a highlighted data object or expression
 #'
 #' @details To set quick-keys manually, follow these instructions from Posit:
-#' [https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE]
+#' \url{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 #'
 #' @seealso [paste_from_xl()]
 #' @seealso [copy_for_xl()]
