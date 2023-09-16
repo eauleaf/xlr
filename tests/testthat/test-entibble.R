@@ -383,8 +383,8 @@ expect_equal( tibble::tibble(x = list(diag(1), diag(2))), entibble(x = list(diag
 expect_equal( tibble::tibble(`a + b` = 1:5), entibble(`a + b` = 1:5) )
 # but it forces you to take charge of names, if they need repair:
 expect_equal(
-  base::suppressMessages( tibble::tibble(x = 1, x = 2, .name_repair = "unique") ),
-  base::suppressMessages( entibble(x = 1, x = 2, .name_repair = "unique") )
+  suppressMessages( tibble::tibble(x = 1, x = 2, .name_repair = "unique") ),
+  suppressMessages( entibble(x = 1, x = 2, .name_repair = "unique") )
 )
 expect_equal(
   tibble::tibble(x = 1, x = 2, .name_repair = "minimal"),

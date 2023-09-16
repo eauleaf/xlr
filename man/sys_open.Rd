@@ -18,14 +18,29 @@ character vector of named paths
 \description{
 Open files or folders through the operating system default launch application
 }
+\details{
+If you aren't able to open a file with \code{sys_open()}, right-click on
+the file to make sure your operating system has a default application
+assigned to that file type, and that double-clicking the file opens it in that
+default application.
+}
 \examples{
 \dontrun{
+# open current working directory
 sys_open('.')
-sys_open('..')
-sys_open('~')
-sys_open('/')
 sys_open(here::here())
-here::here('tests') |> list.files() |> sys_open()
+
+# open parent of current working directory
+sys_open('..')
+
+# open user home dir
+sys_open('~')
+
+# open system dir
+sys_open('/')
+
+# open the first 3 files or folders in the current directory
+list.files(here::here())[1:3] |> sys_open()
 }
 
 }

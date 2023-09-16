@@ -2,12 +2,18 @@
 #'
 #' Open files or folders through the operating system default launch application
 #'
+#' @details If you aren't able to open a file with `sys_open()`, right-click on
+#'   the file to make sure your operating system has a default application
+#'   assigned to that file type, and that double-clicking the file opens it in that
+#'   default application.
+#'
 #' @param ... path strings to the files or folder you want to open
 #' -- inputs can be any combination of lists, vectors, or comma-separated inputs
 #' -- no input opens the current working folder location
 #' -- paths are automatically expanded using [normalizePath()]
 #'
 #' @return character vector of named paths
+#'
 #' @export
 #'
 #' @examples \dontrun{

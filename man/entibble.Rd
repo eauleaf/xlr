@@ -17,7 +17,21 @@ entibble(
 \item{.rowname}{string; to name the column containing rownames. If rownames are not
 present in the data, \code{.rowname} is ignored.}
 
-\item{.name_repair}{}
+\item{.name_repair}{Treatment of problematic column names:
+\itemize{
+\item \code{"minimal"}: No name repair or checks, beyond basic existence,
+\item \code{"unique"}: Make sure names are unique and not empty,
+\item \code{"check_unique"}: (default value), no name repair, but check they are
+\code{unique},
+\item \code{"universal"}: Make the names \code{unique} and syntactic
+\item a function: apply custom name repair (e.g., \code{.name_repair = make.names}
+for names in the style of base R).
+\item A purrr-style anonymous function, see \code{\link[rlang:as_function]{rlang::as_function()}}
+}
+
+This argument is passed on as \code{repair} to \code{\link[vctrs:vec_as_names]{vctrs::vec_as_names()}}.
+See there for more details on these terms and the strategies used
+to enforce them.}
 }
 \value{
 a tibble with rownames in a column
@@ -36,8 +50,8 @@ Same as \code{\link[=tibble]{tibble()}} with different defaults.
 }
 \details{
 @details
-Entibble is designed to work with the function \code{\link[=xlr]{xlr()}} to produce a viewable
-output of R data in spreadsheets. To help \code{\link[=xlr]{xlr()}} succeed as often as possible, \code{\link[=entibble]{entibble()}} is
+Entibble is designed to work with the function \code{\link[=xl]{xl()}} to produce a viewable
+output of R data in spreadsheets. To help \code{\link[=xl]{xl()}} succeed as often as possible, \code{\link[=entibble]{entibble()}} is
 liberal about names, such as duplicate column names, and makes an effort to produce a flat table
 in place of a nested tibble.
 }

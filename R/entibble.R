@@ -10,16 +10,15 @@
 #'  * Arranges lists of lists to produce a single table, if row dimensions allow it
 #'
 #'  @details
-#'  Entibble is designed to work with the function [xlr()] to produce a viewable
-#'  output of R data in spreadsheets. To help [xlr()] succeed as often as possible, [entibble()] is
+#'  Entibble is designed to work with the function [xl()] to produce a viewable
+#'  output of R data in spreadsheets. To help [xl()] succeed as often as possible, [entibble()] is
 #'  liberal about names, such as duplicate column names, and makes an effort to produce a flat table
 #'  in place of a nested tibble.
 #'
-#'
+#' @inheritParams tibble::tibble
 #' @param ... object or expression to convert to a tibble
 #' @param .rowname string; to name the column containing rownames. If rownames are not
 #' present in the data, `.rowname` is ignored.
-#' @param .name_repair
 #'
 #' @seealso [tibble::tibble()]
 #'
@@ -199,19 +198,19 @@ entibble <- function(
 ){
 
 
-  if( base::is.data.frame(.in_data) || is.matrix(.in_data) ){
+  if( is.data.frame(.in_data) || is.matrix(.in_data) ){
 
     if( tibble::is_tibble( .in_data ) ){
       out <- .in_data
     } else {
-      out <- base::asplit(x = .in_data, MARGIN = 2) |> purrr::map(as.vector) |> dplyr::bind_cols()
+      out <- asplit(x = .in_data, MARGIN = 2) |> purrr::map(as.vector) |> dplyr::bind_cols()
       if( tibble::has_rownames( .in_data ) ){
         out <-  tibble::add_column(.data = out, !!.rowname := rownames(.in_data), .before = 1, .name_repair = "minimal")
       }
     }
 
 
-  } else if (base::is.vector( .in_data ) || base::is.factor(.in_data) ){
+  } else if (is.vector( .in_data ) || is.factor(.in_data) ){
 
     out <- .vector_2_tibble(.in_vec = .in_data, .rowname = .rowname, .vec_name = .vec_name )
 
@@ -243,7 +242,7 @@ entibble <- function(
 #'
 .vector_2_tibble <- function(.in_vec, .rowname = 'rowname', .vec_name = ''){
 
-  if (!base::is.null(base::names( .in_vec ))) {
+  if (!is.null(names( .in_vec ))) {
     out <- .in_vec |> tibble::enframe( name = .rowname, value = .vec_name )
   } else {
     out <- .in_vec |> tibble::tibble( .name_repair = ~.vec_name )

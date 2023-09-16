@@ -104,7 +104,7 @@ scrub_tabnames <- function(tabnames,
 
   # check inputs 'pad', 'sep', 'quiet', 'max_width', etc., and ensure 'width' request is reasonable
   if (is.null(tabnames)){ cli::cli_abort("{.fn scrub_tabnames} called with no input for {.var tabnames}.") }
-  original_tabnames <- tabnames |> base::paste()
+  original_tabnames <- tabnames |> paste()
   n_tabs <- length(original_tabnames)
   pad <- .check_forbidden_pad(pad)
   checkmate::qassert(quiet, "B1")
@@ -119,8 +119,8 @@ scrub_tabnames <- function(tabnames,
     ))
   }
   width <- .check_tabwidth(width = max_width, min_width = nchar(sep) + nchar(n_tabs), quiet = quiet)
-  paste_side <- base::match.arg(paste_side[1], choices = c("right", "left"))
-  truncate_side <- base::match.arg(truncate_side[1], choices = c("right", "left", "center"))
+  paste_side <- match.arg(paste_side[1], choices = c("right", "left"))
+  truncate_side <- match.arg(truncate_side[1], choices = c("right", "left", "center"))
   ellipsis <- if( truncate_side == "center" && max_width > 0 ){ "~" } else { "" }
 
 
@@ -135,7 +135,7 @@ scrub_tabnames <- function(tabnames,
 
 
   # it is possible to get duplicates when renaming by truncation; recurse if required
-  if( base::any(repeated(tabnames), na.rm = TRUE) || base::any(nchar(tabnames) > width, na.rm = TRUE) ){
+  if( any(repeated(tabnames), na.rm = TRUE) || any(nchar(tabnames) > width, na.rm = TRUE) ){
 
     if( !quiet ){
       message("\n****************************************************************************")
@@ -206,7 +206,7 @@ scrub_tabnames <- function(tabnames,
 .fix_forbidden_tabnames <- function(tabnames, quiet = FALSE) {
   tabnames <- as.character(tabnames)
   # On average, faster to check if any issues exist before calling replacements.
-  if( base::any(stringr::str_detect(tabnames, pattern = "(^')|[\\\\/\":?*\\[\\]]|(?i)history|('$)"),na.rm = TRUE) ){
+  if( any(stringr::str_detect(tabnames, pattern = "(^')|[\\\\/\":?*\\[\\]]|(?i)history|('$)"),na.rm = TRUE) ){
 
     # tabnames <- .forbidden_chars_replace(tabnames, pattern = "[\\\\/:]", replacement = "-", pattern_text = "\\, /, or :", quiet = quiet)
     tabnames <- .forbidden_chars_replace(tabnames, pattern = "\"", replacement = "`", pattern_text = "quotes", repl_text = "`", quiet = quiet)
@@ -258,7 +258,7 @@ scrub_tabnames <- function(tabnames,
                                      pattern_text = pattern,
                                      repl_text = replacement, quiet = FALSE) {
 
-  if( base::any(stringr::str_detect(names, pattern), na.rm = TRUE) ){
+  if( any(stringr::str_detect(names, pattern), na.rm = TRUE) ){
     if( !quiet ){
       cli::cli_alert_warning( "Sheet names should not contain:  `{pattern_text}`" )
       cli::cli_alert( "Replacing forbidden character with:  `{repl_text}`" )
@@ -375,9 +375,9 @@ scrub_tabnames <- function(tabnames,
 #' .paste_names(NA, c('hello','goodbye'), '->', 'left')
 .paste_names <- function( prefix_suffix, tabnames, sep = ".", paste_side = "right" ){
   if( paste_side == "left" ){
-    base::paste0(prefix_suffix, sep, tabnames)
+    paste0(prefix_suffix, sep, tabnames)
   } else {
-    base::paste0(tabnames, sep, prefix_suffix)
+    paste0(tabnames, sep, prefix_suffix)
   }
 }
 
@@ -422,7 +422,7 @@ scrub_tabnames <- function(tabnames,
     .fix_forbidden_tabnames(quiet = quiet)
 
   is_repeated <- repeated(tabnames)
-  if( base::any(is_repeated) ){
+  if( any(is_repeated) ){
 
     if( !quiet ){
       cli::cli_alert_warning("Duplicate tab/sheet names exist. Numbering within each group ...")
@@ -468,7 +468,7 @@ scrub_tabnames <- function(tabnames,
   # return ---------------------------------------------------------------
   # check if tabnames are unique; if not:
   #  recall .uniquify_tabnames() with snipped_names instead of uniq_tabnames
-  if( base::any(repeated(tabnames)) ){
+  if( any(repeated(tabnames)) ){
     if( !quiet ){
     cli::cli_alert_warning("Duplicates remain after replacements. Trying again ... ")
     }

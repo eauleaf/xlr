@@ -71,9 +71,9 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 
   checkmate::assert_flag(to_clipboard)
   checkmate::assert_flag(quiet)
-  # safe_width <- purrr::safely(.f = rstudioapi::readRStudioPreference( 'margin_column' ,base::getOption('deparse.cutoff')), otherwise = 65)
+  # safe_width <- purrr::safely(.f = rstudioapi::readRStudioPreference( 'margin_column' ,getOption('deparse.cutoff')), otherwise = 65)
   # width <- safe_width
-  width <- base::max(4, base::getOption('deparse.cutoff'), na.rm = TRUE)
+  width <- max(4, getOption('deparse.cutoff'), na.rm = TRUE)
   if( rstudioapi::isAvailable() ){
     width <- rstudioapi::readRStudioPreference( 'margin_column' , width)
   }
@@ -82,20 +82,20 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
   # check if user used a name assignment
   if (rlang::quo_is_symbol(.quo) ){
     assignment <- rlang::quo_name(.quo) |>
-      base::paste0(" <- ")
+      paste0(" <- ")
   }
 
 
 
   # deparse & format expression text -----------------------------------------
 
-  safe_deparse <- purrr::safely(base::deparse)
+  safe_deparse <- purrr::safely(deparse)
   # name_collection <- encodeString(.)
   deparsed_expr <- safe_deparse(., backtick = TRUE)
 
 
 
-  if( base::is.null(deparsed_expr[[1]]) ){
+  if( is.null(deparsed_expr[[1]]) ){
 
     cli::cli_abort('{deparsed_expr[[2]]}')
 
@@ -264,15 +264,15 @@ run_enscript <- function(){
   }
 
   last_editor <- rstudioapi::documentId(allowConsole = FALSE)
-  text_expr <- base::suppressWarnings(stringr::str_trim(rstudioapi::selectionGet(id = last_editor)$value))
+  text_expr <- suppressWarnings(stringr::str_trim(rstudioapi::selectionGet(id = last_editor)$value))
 
-  if( base::identical(text_expr, base::character(0)) || text_expr == '' ){
+  if( identical(text_expr, character(0)) || text_expr == '' ){
     cli::cli_bullets(c(
       "x" = '{.strong Nothing selected to {.fn enscript} }',
       "i" = "Highlight an expression in your text editor, then press `ctrl+alt+shift+n`."
     ))
   } else {
-    rstudioapi::sendToConsole(code = base::paste(text_expr, '|> enscript()'))
+    rstudioapi::sendToConsole(code = paste(text_expr, '|> enscript()'))
   }
 
 

@@ -84,7 +84,7 @@ enlist <- function(..., .label =  NULL){
 
 #' Removes external set of quotes for named list if the list names have double-quotes
 #'
-#' @param named_list
+#' @param named_list list with names
 #'
 #' @return named list where names have no double-quotes
 #'
@@ -93,8 +93,8 @@ enlist <- function(..., .label =  NULL){
 .remove_doublequotes <- function(named_list = NULL){
   # remove external-quotes from list with names
   double_quoted <- names(named_list) |> stringr::str_detect('^".*"$')
-  if( base::any(double_quoted, na.rm = TRUE)){
-    base::names(named_list)[double_quoted] <- base::names(named_list)[double_quoted] |>
+  if( any(double_quoted, na.rm = TRUE)){
+    names(named_list)[double_quoted] <- names(named_list)[double_quoted] |>
       stringr::str_extract('(?<=^").*(?="$)')
   }
 

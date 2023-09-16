@@ -1,6 +1,5 @@
 #' View an R objects in a Libreoffice or Excel workbook
 #'
-#' TODO: background-color: #00A500;
 #' Provides a means of reviewing datasets through the user's default spreasheet
 #' program. Produces output similar to [tibble::view()], but in a spreadsheet,
 #' which allows for larger datasets and a list of dataframes.
@@ -16,16 +15,16 @@
 #'   3.6920uch as 'expenses' or a .path such as
 #'   'my-data-stash/workbook.xlsx'. [.path] uses [here::here()]. If .path is not
 #'   specified, workbook is removed on or before closure. If .path is specified
-#'   but the folder structure does not exist, [xlr()] will attempt to
+#'   but the folder structure does not exist, [xl()] will attempt to
 #'   construct it.
-#' @param .open If FALSE, workbook will not open after being written.
-#' @param .quiet TRUE or FALSE (default) denoting whether you want messaging
-#' @param .sheet_titles TRUE (default), FALSE, or a character vector/list of the
-#'   same count as spreadsheets to be written
-#' @param .fieldname_spec NULL (default) or a purrr-style function to apply
-#'   across all fieldnames; e.g. `~janitor::clean_names(., case = 'title'))` to
-#'   titlecase fieldnames, 'toupper' for all caps, or `janitor::clean_names` for
-#'   snakecase
+#' @param .open TRUE (default); If FALSE, workbook will not open after being written.
+#' @param .quiet TRUE or FALSE (default), denoting whether you want messaging.
+#' @param .sheet_titles NULL, a character vector the same length as the number of
+#' spreadsheets, or a purrr-style function/formula to apply to the default input names.
+#' Default is the function `stringr::str_to_title`.
+#' @param .dataframe_spec NULL (default), or a purrr-style function to apply
+#'   across all dataframes; e.g. `~janitor::clean_names(., case = 'title'))` or
+#'   `janitor::clean_names` to titlecase or snakecase fieldnames.
 #' @param .tabname_spec a list that allows the user to define tab labeling
 #'   arguments: sep = ".", pad = ".", name_spec = "{inner}"
 #' @param .workbook_spec a list of arguments to pass to
@@ -47,38 +46,38 @@
 #' @export
 #'
 #' @examples \dontrun{
-#' xlr(list('hi'))
-#' enlist('hi') |> xlr()
-#' enlist(hi) |> xlr()
-#' xlr(mtcars)
-#' xlr(NA)
-#' xlr(a = NA)
-#' xlr(character(0))
-#' xlr(';')
-#' xlr(TRUE)
-#' list(c(list(1:5), list(5:1)), letters) |> xlr()
-#' xlr(c(1:5))
-#' c(1:5) |> xlr()
-#' xlr(1)
-#' xlr(list(a = 1,5))
-#' list(a = 1,b=5, 1:10, letters, as.matrix(warpbreaks[1:10,]) ) |> xlr()
-#' c(1,1:5, list(1:10)) |> xlr()
-#' a <- tibble::tibble(iris); xlr(a)
-#' rlang::set_names(as.list(letters), LETTERS) |> xlr()
-#' a_dataframe <- tibble::tibble(iris); xlr(a_dataframe)
-#' xlr()
-#' xlr('')
-#' xlr(NULL)
-#' xlr(a = NULL)
-#' xlr(iris, dplyr::starwars, mtcars, cars)
+#' xl(list('hi'))
+#' enlist('hi') |> xl()
+#' enlist(hi) |> xl()
+#' xl(mtcars)
+#' xl(NA)
+#' xl(a = NA)
+#' xl(character(0))
+#' xl(';')
+#' xl(TRUE)
+#' list(c(list(1:5), list(5:1)), letters) |> xl()
+#' xl(c(1:5))
+#' c(1:5) |> xl()
+#' xl(1)
+#' xl(list(a = 1,5))
+#' list(a = 1,b=5, 1:10, letters, as.matrix(warpbreaks[1:10,]) ) |> xl()
+#' c(1,1:5, list(1:10)) |> xl()
+#' a <- tibble::tibble(iris); xl(a)
+#' rlang::set_names(as.list(letters), LETTERS) |> xl()
+#' a_dataframe <- tibble::tibble(iris); xl(a_dataframe)
+#' xl()
+#' xl('')
+#' xl(NULL)
+#' xl(a = NULL)
+#' xl(iris, dplyr::starwars, mtcars, cars)
 #' }
 #'
-xlr <- function(...
+xl <- function(...
                ,.path = NULL
                ,.open = TRUE
                ,.quiet = TRUE
-               ,.sheet_titles = TRUE
-               ,.fieldname_spec = NULL
+               ,.sheet_titles = stringr::str_to_title
+               ,.dataframe_spec = NULL
                ,.tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}") # arguments passed to scrub tabnames, see [scrub_tabnames] for options; # collapse description for list-embedded tabnames grouped, passed to purrr::list_flatten @importParam
                ,.workbook_spec = list(asTable = TRUE, orientation = 'landscape', zoom = 70) # @seealso [opensxlsx::buildWorkbook] args as a named list
                ,.return = list(NULL, 'savepath', 'tibbles', 'workbook')
@@ -86,33 +85,37 @@ xlr <- function(...
 
 
 # do some input checks ---------------------------------------------------------
-  checkmate::assert_string(.path, null.ok = TRUE, na.ok = FALSE)
-  checkmate::assert_flag(.open, na.ok = FALSE, null.ok = FALSE)
-  checkmate::assert_flag(.quiet, na.ok = FALSE, null.ok = FALSE)
-  # parameter '.sheet_titles' controlled way below
-  checkmate::assert(
-    checkmate::check_formula(.fieldname_spec, null.ok = TRUE),
-    checkmate::check_function(.fieldname_spec, null.ok = TRUE)
-  )
   checkmate::assert(
     checkmate::check_list(.tabname_spec, any.missing = FALSE, len = 3),
     checkmate::check_names(.tabname_spec, must.include = c('sep', 'pad', 'name_spec'))
   )
+  checkmate::assert_string(.path, null.ok = TRUE, na.ok = FALSE)
+  checkmate::assert_flag(.open, na.ok = FALSE, null.ok = FALSE)
+  checkmate::assert_flag(.quiet, na.ok = FALSE, null.ok = FALSE)
+  checkmate::assert(
+    checkmate::check_formula(.dataframe_spec, null.ok = TRUE),
+    checkmate::check_function(.dataframe_spec, null.ok = TRUE)
+  )
   checkmate::assert_list(.workbook_spec, null.ok = FALSE)
 
-
-
-# put ...dots in tibbles and a list  -------------------------------------------
+# build list of tibbles --------------------------------------------------------
   df_list <- list_iron( ... , name_spec = .tabname_spec[['name_spec']], .f = entibble) |>
     purrr::discard( \(.x) identical(.x, entibble()) )
   df_list <- df_list[names(df_list) != '']
 
+# some more input checks -------------------------------------------------------
+  checkmate::assert(
+    checkmate::check_function(.sheet_titles),
+    checkmate::check_formula(.sheet_titles),
+    checkmate::check_character(.sheet_titles, len = length(df_list)),
+    checkmate::check_null(.sheet_titles)
+  )
 
-# more input checks ------------------------------------------------------------
   if( length(df_list)==0 ){
     cli::cli_alert_danger('Insufficient data provided to create a workbook.')
     return(invisible(NULL))
   }
+
 
 
 # construct savename path ------------------------------------------------------
@@ -135,7 +138,7 @@ xlr <- function(...
 
 
 # flatten lists, prep sheet names, entibble data, adjust fieldnames ------------
-  if(!is.null(.fieldname_spec)){ df_list <- purrr::map(df_list, .f = .fieldname_spec) }
+  if(!is.null(.dataframe_spec)){ df_list <- purrr::map(df_list, .f = .dataframe_spec) }
   in_names <- names(df_list)
   for_scrub_tabnames <- list(tabnames = in_names, quiet = .quiet) |>
     purrr::list_assign(rlang::splice(.tabname_spec)) |>
@@ -144,24 +147,18 @@ xlr <- function(...
     rlang::eval_tidy()
   names(df_list) <- sheet_names
 
-  cli::cat_line(.sheet_titles)
 
-# Sheet Titles -----------------------------------------------------------------
-  no_titles <- identical(FALSE,.sheet_titles)
+
+# sheet titles -----------------------------------------------------------------
+  start_row <- 3
+  no_titles <- identical(NULL,.sheet_titles)
   if( no_titles ){
     start_row <- 1
-  } else if( identical(TRUE,.sheet_titles) ){
-    start_row <- 3
-    sheet_titles <- in_names |>
-      janitor::make_clean_names(case = 'title', allow_dupes = TRUE)
-  } else {
-    if( length(.sheet_titles) != length(names(df_list)) ){
-      cli::cli_abort(
-        'Input (.sheet_titles) must be TRUE, FALSE, or a character vector/list
-        of the same count as the spreadsheets.')
-    }
+  } else if( is.character(.sheet_titles) ){
     sheet_titles <- .sheet_titles
-    start_row <- 3
+  } else {
+    sheet_fun <- rlang::as_function(.sheet_titles)
+    sheet_titles <- in_names |> sheet_fun()
   }
 
 
@@ -189,8 +186,7 @@ xlr <- function(...
   names(sheet_titles) <- names(df_list)
 
 
-
-  # allow user to overwrite 'start_row' if provided in 'for_buildWorkbook'
+  # allows user to overwrite 'start_row' if provided in 'for_buildWorkbook'
   start_row <- for_buildWorkbook$startRow
 
 # apply formatting workbook ----------------------------------------------------
@@ -217,17 +213,15 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
 
 
 
-
-
-# open and unlink wb after ~5 min -------------------------------------------------------
+# open and unlink wb after ~5 min ----------------------------------------------
   if( .open ){ sys_open(.path) }
-  if(mk_tempfile){ later::later(~base::unlink(.path), 300) }
+  if(mk_tempfile){ later::later(~unlink(.path), 300) }
 
 
 # prep user-specified direct output --------------------------------------------
   .return = match.arg(.return[[1]], .return, several.ok = FALSE)
   if(!is.null(.return)){
-    out <- base::switch(
+    out <- switch(
       EXPR = .return,
       savepath = .path,
       tibbles = df_list,
@@ -238,7 +232,7 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
 
 # report -----------------------------------------------------------------------
   cli::cat_line()
-  cli::cat_line('Workbook save location:')
+  cli::cat_line('Workbook location:')
   cli::cli_alert('{(.path)}')
   cli::cat_line()
 
@@ -252,3 +246,4 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
 
 # is.posix <- function(x) any(grepl('POSIX', class(x)), na.rm = TRUE)
 # px_cols <- which(purrr::map_lgl(df_nm, is.posix))
+#' background-color: #00A500;

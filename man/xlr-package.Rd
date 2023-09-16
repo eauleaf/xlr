@@ -4,7 +4,7 @@
 \name{xlr-package}
 \alias{xlr}
 \alias{xlr-package}
-\title{xlr: Tools for working interactively between Excel and R}
+\title{xlr: Tools for working interactively between Excel/Libreoffice and R}
 \description{
 'xlr' is a group of functions for data scientists who use both spreadsheets and R. 'xlr' makes moving data back and forth between spreadsheets and R easier.
 }

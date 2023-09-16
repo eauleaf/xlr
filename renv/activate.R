@@ -398,13 +398,13 @@ local({
       extra <- sprintf(fmt, pat)
       saved <- options("download.file.method", "download.file.extra")
       options(download.file.method = "curl", download.file.extra = extra)
-      on.exit(do.call(base::options, saved), add = TRUE)
+      on.exit(do.call(options, saved), add = TRUE)
     } else if (nzchar(Sys.which("wget")) && nzchar(pat)) {
       fmt <- "--header=\"Authorization: token %s\""
       extra <- sprintf(fmt, pat)
       saved <- options("download.file.method", "download.file.extra")
       options(download.file.method = "wget", download.file.extra = extra)
-      on.exit(do.call(base::options, saved), add = TRUE)
+      on.exit(do.call(options, saved), add = TRUE)
     }
   
     message("* Downloading renv ", version, " from GitHub ... ", appendLF = FALSE)

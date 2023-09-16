@@ -27,7 +27,7 @@ set_xlr_key_chords <- function(){
       {.fn set_xlr_key_chords} requires RStudio.'
     )}
 
-  if( !base::interactive() ){
+  if( !interactive() ){
     cli::cli_alert_danger(
       '{.fn set_xlr_key_chords} requires interactive use in RStudio.'
     )}

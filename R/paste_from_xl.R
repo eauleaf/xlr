@@ -61,12 +61,12 @@ paste_from_xl <- function( has_fieldnames = NULL ){
   checkmate::assert_flag(has_fieldnames, null.ok = TRUE)
 
   # run checks & copy data -----------------------------------------------
-  if( !base::interactive() ){
+  if( !interactive() ){
     cli::cli_abort('[.fn paste_from_xl] must be run interactively.')
   }
 
   xl_data <- suppressWarnings(clipr::read_clip())
-  if ( base::is.null(xl_data) ) {
+  if ( is.null(xl_data) ) {
     cli::cli_alert_danger('The clipboard is empty. Nothing to paste.')
     return(invisible())
   }
@@ -74,25 +74,25 @@ paste_from_xl <- function( has_fieldnames = NULL ){
 
 
   # process clip ------------------------------------------------------------
-  if( base::length(xl_data) == 1 ){
+  if( length(xl_data) == 1 ){
 
     # clip to vector
-    from_xl <- base::I(xl_data) |>
+    from_xl <- I(xl_data) |>
       readr::read_delim(
         delim = '\t', col_names = FALSE,
         show_col_types = FALSE, trim_ws = TRUE) |>
-      base::unlist(use.names = FALSE)
+      unlist(use.names = FALSE)
 
   } else {
 
     # guess headers
-    if( base::is.null(has_fieldnames) ){
-      headers <- base::I(xl_data[1]) |>
+    if( is.null(has_fieldnames) ){
+      headers <- I(xl_data[1]) |>
         readr::read_delim( delim = '\t', col_names = FALSE,
                            show_col_types = FALSE,
                            name_repair = "universal_quiet") |>
-        purrr::map_lgl(~ (base::is.character(.) | base::is.na(.)) & !grepl('[\\/]',.) ) |>
-        base::all()
+        purrr::map_lgl(~ (is.character(.) | is.na(.)) & !grepl('[\\/]',.) ) |>
+        all()
     } else if ( has_fieldnames ) {
       # unless user specified
       headers <- TRUE
@@ -101,10 +101,10 @@ paste_from_xl <- function( has_fieldnames = NULL ){
     }
 
     # clip to tibble
-    from_xl <- base::I(xl_data) |>
+    from_xl <- I(xl_data) |>
       readr::read_delim(delim = '\t', col_names = headers, show_col_types = FALSE,
                         name_repair = "universal_quiet",trim_ws = TRUE) |>
-      base::as.data.frame() |>
+      as.data.frame() |>
       entibble()
 
   }
@@ -113,7 +113,7 @@ paste_from_xl <- function( has_fieldnames = NULL ){
   # check if windows path
   # Sys.info()['sysname']=='Windows'
   # chartr("\\", "/", from_xl)
-  if( length(from_xl)==1 && base::all(stringr::str_detect(from_xl[[1]], '^((?:[A-Z]:\\\\)|(?:/))'), na.rm = TRUE) ){
+  if( length(from_xl)==1 && all(stringr::str_detect(from_xl[[1]], '^((?:[A-Z]:\\\\)|(?:/))'), na.rm = TRUE) ){
     from_xl <- from_xl |> rlang::set_names('path')
   }
 
@@ -149,7 +149,7 @@ run_paste_from_xl <- function(){
 
 
   xl_data <- suppressWarnings(clipr::read_clip())
-  if ( base::is.null(xl_data) ) {
+  if ( is.null(xl_data) ) {
     cli::cli_alert_danger('The clipboard is empty. Nothing to paste.')
     return(invisible())
   }
@@ -190,7 +190,7 @@ run_paste_from_xl <- function(){
 
   }
 
-  rstudioapi::sendToConsole(code = base::paste0("(",input_name, 'xlr::paste_from_xl())'), focus = FALSE)
+  rstudioapi::sendToConsole(code = paste0("(",input_name, 'xlr::paste_from_xl())'), focus = FALSE)
 
 }
 
@@ -216,7 +216,7 @@ run_paste_from_xl <- function(){
     return('')
   } else {
     input_name <- stringr::str_trim(input_name)
-    temp_name <- base::make.names(input_name)
+    temp_name <- make.names(input_name)
     if(temp_name != input_name){
       input_name <- svDialogs::dlg_input(
         message = c("Your assigned name is syntatically invalid. Perhaps this name instead?"),

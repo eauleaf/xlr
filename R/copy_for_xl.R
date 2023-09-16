@@ -57,7 +57,7 @@
 #'
 copy_for_xl <- function(. = NULL){
 
-  if( !base::interactive() ){
+  if( !interactive() ){
     cli::cli_abort('[.fn copy_for_xl] must be run interactively.')
   }
 
@@ -80,12 +80,12 @@ copy_for_xl <- function(. = NULL){
   if( length(.out) == 2 && names(.out)[1] == 'rowname'){ .out <- rlang::set_names(.out, c('rowname', r_label)) }
 
 # nested tibble error ------------------------------------------------------
-  if( base::any(purrr::map_lgl(.out, is.list)) ) {
+  if( any(purrr::map_lgl(.out, is.list)) ) {
     nested_cols <- purrr::map_lgl(.out, is.list)
     cli::cat_line()
     cli::cli_alert_danger('Data contains nested lists. Omitted {sum(nested_cols)} columns. ')
     cli::cat_line('For complete data, consider running:  ')
-    cli::cli_alert('  xlr({r_label})')
+    cli::cli_alert('  xl({r_label})')
     cli::cat_line()
     .out <- .out[!nested_cols]
   }
@@ -137,10 +137,10 @@ run_copy_for_xl <- function(){
 
 
   last_editor <- rstudioapi::documentId(allowConsole = FALSE)
-  text_expr <- base::suppressWarnings(stringr::str_trim(rstudioapi::selectionGet(id = last_editor)$value))
+  text_expr <- suppressWarnings(stringr::str_trim(rstudioapi::selectionGet(id = last_editor)$value))
 
 
-  if( base::identical(text_expr, base::character(0)) || text_expr == '' ){
+  if( identical(text_expr, character(0)) || text_expr == '' ){
 
     cli::cli_bullets(c(
       "x" = '{.strong Nothing selected to {.fn copy_for_xl} }',
@@ -149,7 +149,7 @@ run_copy_for_xl <- function(){
 
   } else {
 
-    rstudioapi::sendToConsole(code = base::paste(text_expr, '|> xlr::copy_for_xl()'))
+    rstudioapi::sendToConsole(code = paste(text_expr, '|> xlr::copy_for_xl()'))
 
   }
 

@@ -7,7 +7,7 @@
 .remove_doublequotes(named_list = NULL)
 }
 \arguments{
-\item{named_list}{}
+\item{named_list}{list with names}
 }
 \value{
 named list where names have no double-quotes
