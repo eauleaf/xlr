@@ -69,11 +69,13 @@ paste0(names(datasets::precip),'/',datasets::precip) |> scrub_tabnames(max_width
 paste0(names(datasets::precip),'/',datasets::precip) |> scrub_tabnames(max_width = 0, sep = '...', pad = '0')
 paste0(names(datasets::precip),'/',datasets::precip) |> scrub_tabnames(max_width = 0, sep = '..', pad = '.')
 rep('', 15) |> scrub_tabnames(max_width = 0, sep = '..', pad = '.')
-rep('', 15) |> scrub_tabnames(max_width = 0, sep = '', pad = '') # expect_fail
-rep('', 15) |> scrub_tabnames(max_width = 0, sep = '', pad = ' ') # expect_fail
-dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 20, sep = '//', pad = ']') # expect_fail
-dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '.', pad = '.') # expect_fail
-dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '', pad = '.') # ??????
+# rep('', 15) |> scrub_tabnames(max_width = 0, sep = '', pad = '') # expect_fail
+# rep('', 15) |> scrub_tabnames(max_width = 0, sep = '', pad = ' ') # expect_fail
+# dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 20, sep = '//', pad = ']') # expect_fail
+# dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '.', pad = '.') # expect_fail
+
+# when stringr::str_trunc() gets fixed, the below code will work.
+### dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '', pad = '.') # ??????
 # if you request a width of characters that is fewer than your replacement characters, you get some weird looking names:
 dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 2, sep = '...', pad = '.')
 # However, if you call zero width..., that's useful for naming.

@@ -82,11 +82,13 @@
 #' paste0(names(datasets::precip),'/',datasets::precip) |> scrub_tabnames(max_width = 0, sep = '...', pad = '0')
 #' paste0(names(datasets::precip),'/',datasets::precip) |> scrub_tabnames(max_width = 0, sep = '..', pad = '.')
 #' rep('', 15) |> scrub_tabnames(max_width = 0, sep = '..', pad = '.')
-#' rep('', 15) |> scrub_tabnames(max_width = 0, sep = '', pad = '') # expect_fail
-#' rep('', 15) |> scrub_tabnames(max_width = 0, sep = '', pad = ' ') # expect_fail
-#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 20, sep = '//', pad = ']') # expect_fail
-#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '.', pad = '.') # expect_fail
-#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '', pad = '.') # ??????
+#' # rep('', 15) |> scrub_tabnames(max_width = 0, sep = '', pad = '') # expect_fail
+#' # rep('', 15) |> scrub_tabnames(max_width = 0, sep = '', pad = ' ') # expect_fail
+#' # dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 20, sep = '//', pad = ']') # expect_fail
+#' # dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '.', pad = '.') # expect_fail
+#'
+#' # when stringr::str_trunc() gets fixed, the below code will work.
+#' ### dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '', pad = '.') # ??????
 #' # if you request a width of characters that is fewer than your replacement characters, you get some weird looking names:
 #' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 2, sep = '...', pad = '.')
 #' # However, if you call zero width..., that's useful for naming.
@@ -184,24 +186,24 @@ scrub_tabnames <- function(tabnames,
 #' @return the input vector with forbidden characters replaced/removed
 #'
 #' @examples
-#' c("' '?HisTory,*?*!@#$%^&*()_+ '[{1'}]'[:/\\]''", "", NA, NULL) |>  .fix_forbidden_tabnames()
+#' c("' '?HisTory,*?*!@#$%^&*()_+ '[{1'}]'[:/\\]''", "", NA, NULL) |>  xlr:::.fix_forbidden_tabnames()
 #'
-#' " ''''''" |> .fix_forbidden_tabnames()
-#' "'''1' '" |> .fix_forbidden_tabnames()
-#' "'[ ]hi];'" |> .fix_forbidden_tabnames()
-#' "!@#$%^&*()_+ {HI} ^" |> .fix_forbidden_tabnames()
-#' "'histor'y'" |> .fix_forbidden_tabnames()
-#' "[:/] " |> .fix_forbidden_tabnames()
-#' "?/a\\" |> .fix_forbidden_tabnames()
-#' "?,*?*?'" |> .fix_forbidden_tabnames()
-#' "[history coursework]" |> .fix_forbidden_tabnames()
-#' "'HISTORIC' History '''" |> .fix_forbidden_tabnames()
-#' "*[history' buff]*' " |> .fix_forbidden_tabnames()
-#' NA |> .fix_forbidden_tabnames()
-#' NULL |> .fix_forbidden_tabnames()
-#' c(NULL, NA, '[hi?]') |> .fix_forbidden_tabnames()
-#' c(NULL, NULL) |> .fix_forbidden_tabnames()
-#' enlist(NULL, NA, '[hi?]') |>  purrr::map(.fix_forbidden_tabnames)
+#' " ''''''" |> xlr:::.fix_forbidden_tabnames()
+#' "'''1' '" |> xlr:::.fix_forbidden_tabnames()
+#' "'[ ]hi];'" |> xlr:::.fix_forbidden_tabnames()
+#' "!@#$%^&*()_+ {HI} ^" |> xlr:::.fix_forbidden_tabnames()
+#' "'histor'y'" |> xlr:::.fix_forbidden_tabnames()
+#' "[:/] " |> xlr:::.fix_forbidden_tabnames()
+#' "?/a\\" |> xlr:::.fix_forbidden_tabnames()
+#' "?,*?*?'" |> xlr:::.fix_forbidden_tabnames()
+#' "[history coursework]" |> xlr:::.fix_forbidden_tabnames()
+#' "'HISTORIC' History '''" |> xlr:::.fix_forbidden_tabnames()
+#' "*[history' buff]*' " |> xlr:::.fix_forbidden_tabnames()
+#' NA |> xlr:::.fix_forbidden_tabnames()
+#' NULL |> xlr:::.fix_forbidden_tabnames()
+#' c(NULL, NA, '[hi?]') |> xlr:::.fix_forbidden_tabnames()
+#' c(NULL, NULL) |> xlr:::.fix_forbidden_tabnames()
+#' enlist(NULL, NA, '[hi?]') |>  purrr::map(xlr:::.fix_forbidden_tabnames)
 #'
 .fix_forbidden_tabnames <- function(tabnames, quiet = FALSE) {
   tabnames <- as.character(tabnames)
@@ -243,15 +245,15 @@ scrub_tabnames <- function(tabnames,
 #' @return the input vector with forbidden characters replaced/removed
 #'
 #' @examples
-#' tab_names <- c(NA, "''''''", "[]hi];", "'HI'", "'hist''", "[:/]", "?/a\\\\", "'?,*?*'", "'[history coursework]'", "'HISTORIC'AL''''")
+#' # for tests: tab_names <- c(NA, "''''''", "[]hi];", "'HI'", "'hist''", "[:/]", "?/a\\\\", "'?,*?*'", "'[history coursework]'", "'HISTORIC'AL''''")
 #' tab_names <- c("c(list(1-5), list(5-1))|1", "c(list(1-5), list(5-1))|2", "letters")
-#' tab_names |> .forbidden_chars_replace(pattern = '[\\\\/:]', replacement = '-', pattern_text = '\\, /, or :')
-#' tab_names |> .forbidden_chars_replace(pattern = '[?*]', replacement = '#', pattern_text = '? or *')
-#' tab_names |> .forbidden_chars_replace(pattern = '(?i)(hist)ory', replacement = '\\1', pattern_text = 'history', repl_text = 'hist')
-#' tab_names |> .forbidden_chars_replace(pattern = '\\[', replacement = '{', pattern_text = '[brackets]', repl_text = '{curly braces}')
-#' tab_names |> .forbidden_chars_replace(pattern = ']', replacement = '}', quiet = TRUE)
-#' tab_names |> .forbidden_chars_replace(pattern = "^'+", replacement = '`', pattern_text = "single quotes '' at tabname start or end", repl_text = "the empty string ''")
-#' tab_names |> .forbidden_chars_replace(pattern = "'+$", replacement = '', quiet = TRUE)
+#' tab_names |> xlr:::.forbidden_chars_replace(pattern = '[\\\\/:]', replacement = '-', pattern_text = '\\, /, or :')
+#' tab_names |> xlr:::.forbidden_chars_replace(pattern = '[?*]', replacement = '#', pattern_text = '? or *')
+#' tab_names |> xlr:::.forbidden_chars_replace(pattern = '(?i)(hist)ory', replacement = '\\1', pattern_text = 'history', repl_text = 'hist')
+#' tab_names |> xlr:::.forbidden_chars_replace(pattern = '\\[', replacement = '{', pattern_text = '[brackets]', repl_text = '{curly braces}')
+#' tab_names |> xlr:::.forbidden_chars_replace(pattern = ']', replacement = '}', quiet = TRUE)
+#' tab_names |> xlr:::.forbidden_chars_replace(pattern = "^'+", replacement = '`', pattern_text = "single quotes '' at tabname start or end", repl_text = "the empty string ''")
+#' tab_names |> xlr:::.forbidden_chars_replace(pattern = "'+$", replacement = '', quiet = TRUE)
 # "'[history coursework]'" |> scrub_tabnames()
 
 .forbidden_chars_replace <- function(names, pattern = "", replacement = "",
@@ -282,14 +284,14 @@ scrub_tabnames <- function(tabnames,
 #' @return a single character; throws an error if input is any of these characters \/:?*'[]
 #'
 #' @examples
-#' .check_forbidden_pad('.')
-#' .check_forbidden_pad('-')
+#' xlr:::.check_forbidden_pad('.')
+#' xlr:::.check_forbidden_pad('-')
 #' \dontrun{ # expect error if any of these: \/:?*'[]
-#' .check_forbidden_pad(':')
-#' .check_forbidden_pad('')
-#' .check_forbidden_pad(NA)
-#' .check_forbidden_pad(NULL)
-#' .check_forbidden_pad("\\")
+#' xlr:::.check_forbidden_pad(':')
+#' xlr:::.check_forbidden_pad('')
+#' xlr:::.check_forbidden_pad(NA)
+#' xlr:::.check_forbidden_pad(NULL)
+#' xlr:::.check_forbidden_pad("\\")
 #' }
 #'
 .check_forbidden_pad <- function(pad = "") {
@@ -322,9 +324,10 @@ scrub_tabnames <- function(tabnames,
 #' @return between 0 and 31 where returned number is as close to user request
 #'   as possible after adjusting for reasonableness on input data
 #'
-#' @examples .check_tabwidth(31)
-#' .check_tabwidth(3, 4)
-#' .check_tabwidth(34)
+#' @examples
+#' xlr:::.check_tabwidth(31)
+#' xlr:::.check_tabwidth(3, 4)
+#' xlr:::.check_tabwidth(34)
 #'
 .check_tabwidth <- function(width = 31, min_width = 0, quiet = FALSE) {
 
@@ -368,9 +371,9 @@ scrub_tabnames <- function(tabnames,
 #' @return a vector of glued tabnames
 #'
 #' @examples
-#' .paste_names('--1', c('hello','goodbye'))
-#' .paste_names('..1', c('hello','goodbye'), '->', 'left')
-#' .paste_names(NA, c('hello','goodbye'), '->', 'left')
+#' xlr:::.paste_names('--1', c('hello','goodbye'))
+#' xlr:::.paste_names('..1', c('hello','goodbye'), '->', 'left')
+#' xlr:::.paste_names(NA, c('hello','goodbye'), '->', 'left')
 .paste_names <- function( prefix_suffix, tabnames, sep = ".", paste_side = "right" ){
   if( paste_side == "left" ){
     paste0(prefix_suffix, sep, tabnames)
@@ -401,15 +404,19 @@ scrub_tabnames <- function(tabnames,
 #'
 #' @return vector or unique tabnames
 #'
-#' @examples \donttest{
-#' .uniquify_tabnames(tabnames = c(NULL, NULL, NA, NA, 'a', 'a', 'a', 'b', 'b', 'c', rep('d',11)) )
-#' .uniquify_tabnames(tabnames = c(NULL, NULL, NA, NA, 'a', 'a', 'a', 'b', 'b', 'c', rep('d',11)), paste_side = 'left' , sep = '|')
-#' .uniquify_tabnames('supercalifragalisticexpealidocious')
-#' .uniquify_tabnames(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'), width = 10,  truncate_side = 'center', ellipsis = '~')
-#' .uniquify_tabnames(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'),truncate_side = 'center', ellipsis = '~', paste_side='left')
-#' }
+#' @examples
+#' xlr:::.uniquify_tabnames(tabnames = c(NULL, NULL, NA, NA, 'a', 'a', 'a', 'b', 'b', 'c', rep('d',11)) )
+#' xlr:::.uniquify_tabnames(tabnames = c(NULL, NULL, NA, NA, 'a', 'a', 'a', 'b', 'b', 'c', rep('d',11)), paste_side = 'left' , sep = '|')
+#' xlr:::.uniquify_tabnames('supercalifragalisticexpealidocious')
+#' xlr:::.uniquify_tabnames(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'), width = 10,  truncate_side = 'center', ellipsis = '~')
+#' xlr:::.uniquify_tabnames(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'),truncate_side = 'center', ellipsis = '~', paste_side='left')
+#'
 .uniquify_tabnames <- function(tabnames, truncate_side = "right", paste_side = "right",
                                width = 31, sep = "->", pad = ".", ellipsis = "", quiet = FALSE) {
+
+  # NULLs are to correct for: "no visible binding for global variable"
+  n_obs <- snipped_names <- uniq_numbering <- uniq_tabnames <- NULL
+
 
   if( is.null(tabnames) ){ return() }
   checkmate::assert_string(pad, n.chars = 1)

@@ -1,15 +1,19 @@
-Name: Paste from XL
-Description: Imports into R data copied to the clipboard from a spreadsheet.
+Name: xl()
+Description: Send highligted R object or expression to a workbook.
+Binding: run_xl
+Interactive: true
+
+Name: paste_from_xl()
+Description: Import into R the spreadsheet data in your clipboard.
 Binding: run_paste_from_xl
 Interactive: true
 
-Name: Copy for XL
-Description: Copies an R table to the clipboard formatted to paste to a spreadsheet.
+Name: copy_for_xl()
+Description: Copy to your clipboard the contents of a highlighted data object.
 Binding: run_copy_for_xl
 Interactive: true
 
-Name: Enscript
-Description: Copies to clipboard memory a script that creates the input dataset.
+Name: enscript()
+Description: Copy to clipboard a script of your hightlighted object.
 Binding: run_enscript
 Interactive: true
-

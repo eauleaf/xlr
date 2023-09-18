@@ -16,5 +16,5 @@ named list where names have no double-quotes
 Removes external set of quotes for named list if the list names have double-quotes
 }
 \examples{
-tibble::tibble(!!!letters) |> as.list() |> .remove_doublequotes()
+tibble::tibble(!!!letters) |> as.list() |> xlr:::.remove_doublequotes()
 }

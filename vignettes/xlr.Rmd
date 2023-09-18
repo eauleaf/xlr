@@ -153,13 +153,13 @@ the user passes in a list.
 For instance, compare the structure and naming created by enlist:
 
 ```{r enlist-example1, eval = T}
-enlist(enlist(enlist(letters))) |> lobstr::tree()
+enlist(enlist(enlist(letters))) |> str()
 ```
 
 To the structure and naming created by list:
 
 ```{r enlist-example2, eval = T}
-list(list(list(letters))) |> lobstr::tree()
+list(list(list(letters))) |> str()
 ```
 
 The `enlist` example is one list deep, whereas the `list` example is
@@ -168,7 +168,7 @@ shown in the example below, enlist has no choice but to wrap them in a
 new list.
 
 ```{r enlist-example3, eval = T}
-enlist(list(letters), list(letters)) |> lobstr::tree()
+enlist(list(letters), list(letters)) |> str()
 ```
 
 ### A few additional notes about `enlist()`: 
@@ -402,10 +402,10 @@ simplification of it:
 rediculous <- list(list(list(list(flower_data = iris)), car_data = mtcars))
 
 # Original list depth
-rediculous |> lobstr::tree()
+rediculous |> str()
 
 # Ironed list depth
-rediculous |> list_iron() |> lobstr::tree()
+rediculous |> list_iron() |> str()
 ```
 
 Notice the auto-naming of the list items above, i.e.

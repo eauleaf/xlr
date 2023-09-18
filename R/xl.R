@@ -243,3 +243,50 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
 # is.posix <- function(x) any(grepl('POSIX', class(x)), na.rm = TRUE)
 # px_cols <- which(purrr::map_lgl(df_nm, is.posix))
 #' background-color: #00A500;
+
+
+
+#' Addin function to call [xl()]
+#'
+#' Requires RStudio
+#'
+#' @return void
+#' @export
+#'
+#'
+#' @examples \dontrun{
+#' # Highlight each item below and press key-chord `ctrl + alt + shift + >`.
+#' # To implement the quick-keys. Run {.fn set_xlr_key_chords}.
+#'
+#' mtcars
+#' (1:5 * 10)
+#' rep("🎊🌈",3)
+#' dplyr::starwars |> head()
+#' letters
+#'}
+#'
+run_xl <- function(){
+
+  if( !rstudioapi::isAvailable() ){
+    cli::cli_abort(
+      'RStudio is not available.
+      {.fn run_enscript} is for interactive use in RStudio.'
+    )
+  }
+
+  last_editor <- rstudioapi::documentId(allowConsole = FALSE)
+  text_expr <- suppressWarnings(stringr::str_trim(rstudioapi::selectionGet(id = last_editor)$value))
+
+  if( identical(text_expr, character(0)) || text_expr == '' ){
+    cli::cli_bullets(c(
+      "x" = '{.strong Nothing selected to {.fn xl} }',
+      "i" = "Highlight an expression in your text editor, then press `ctrl+alt+shift+>`."
+    ))
+  } else {
+    rstudioapi::sendToConsole(code = paste(text_expr, '|> xlr::xl()'))
+  }
+
+}
+
+
+

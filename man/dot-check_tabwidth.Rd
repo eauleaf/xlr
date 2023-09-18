@@ -24,8 +24,8 @@ values and notify user with a warning when changes are made
 Note: min checks should already have been done in scrub_tabnames() before passing width info
 }
 \examples{
-.check_tabwidth(31)
-.check_tabwidth(3, 4)
-.check_tabwidth(34)
+xlr:::.check_tabwidth(31)
+xlr:::.check_tabwidth(3, 4)
+xlr:::.check_tabwidth(34)
 
 }

@@ -36,15 +36,15 @@ Ideally \code{\link[=repeated]{repeated()}} would be written in c++ and included
 repeated(c(1, 2, 3, 4, 5, 5, 5))
 c(NA, NA, '', NULL, NULL, NULL) |> repeated()
 
-# Find all 'artists' in dataset 'billboard' who had more than one hit:
-tidyr::billboard |> dplyr::filter(repeated(artist))
+# Find all cars where 'qsec' is the same as another car's:
+mtcars |> dplyr::filter(repeated(qsec))
 
 # Compare repeated() output to duplicated() output:
 mtcars |> dplyr::filter(repeated(wt))
 mtcars |> dplyr::filter(duplicated(wt))
 
 # To filter on several variables, use `&` and `|`, as in:
-mtcars |> dplyr::filter(repeated(qsec) & repeated(wt))
+mtcars |> dplyr::filter(repeated(qsec), repeated(wt))
 mtcars |> dplyr::filter(repeated(qsec) | repeated(wt))
 
 }

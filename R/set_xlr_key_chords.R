@@ -32,13 +32,20 @@ set_xlr_key_chords <- function(){
       '{.fn set_xlr_key_chords} requires interactive use in RStudio.'
     )}
 
-  cli::cli_alert_warning('Setting quick-keys will restart your RStudio Session.')
+  cli::cli_alert_warning('After setting quick-keys, you must restart your RStudio Session.')
 
-  rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+V" = "xlr::run_paste_from_xl" )
-  rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+C" = "xlr::run_copy_for_xl" )
-  rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+N" = "xlr::run_enscript" )
+  # rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+V" = "xlr::run_paste_from_xl" )
+  # rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+C" = "xlr::run_copy_for_xl" )
+  # rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+N" = "xlr::run_enscript" )
+  # rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+>" = "xlr::run_xl" )
+  rstudio.prefs::use_rstudio_keyboard_shortcut(
+    "Ctrl+Alt+Shift+L" = "xlr::run_xl",
+    "Ctrl+Alt+Shift+V" = "xlr::run_paste_from_xl",
+    "Ctrl+Alt+Shift+C" = "xlr::run_copy_for_xl",
+    "Ctrl+Alt+Shift+N" = "xlr::run_enscript"
+    )
 
-  rstudioapi::restartSession()
+  # rstudioapi::restartSession()
 
 }
 

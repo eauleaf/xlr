@@ -14,6 +14,7 @@
 #' Copying formatted output to the clipboard requires package [clipr].
 #'
 #' To set up the key-chord `ctrl+alt+shift+n` in RStudio. Run [set_xlr_key_chords()].
+#' The `enscript` key-chord is very helpful when making tests for a function's test file.
 #'
 #' If using Linux, make sure to install a clipboard tool:
 #'  apt-get install xclip
@@ -35,7 +36,6 @@
 #' @export
 #'
 #' @examples \dontrun{
-#'
 #'
 #' enscript(letters)
 #' # [letters] is copied to clipboard; press `ctrl + v` to paste the output
@@ -172,11 +172,12 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 #'
 #' @return a string with embedded '/n' line breaks
 #'
-#' @examples
-#'
-#'TODO:
- # head(dplyr::starwars) |> enlist() |> deparse(backtick = TRUE) |> glue::glue_collapse() |> stringr::str_squish() |> .format_script() |> cat()
- # enlist(head(iris), "  `quick_text` = 'hello()'`", tail(dplyr::starwars)) |> deparse(backtick = T) |> glue::glue_collapse() |> stringr::str_squish() |> stringr::str_extract_all('(?<=\\(|, )`.+?` = ')
+#' @examples \dontrun{
+#' # list(head(mtcars)) |> deparse1(backtick = TRUE) |> xlr:::.format_script()
+#' # TODO: # fix formatting script for these:
+#' # head(dplyr::starwars) |> enlist() |> deparse(backtick = TRUE) |> glue::glue_collapse() |> stringr::str_squish() |> xlr:::.format_script() |> cat()
+#' # enlist(head(iris), "`quick_text`='hello'`", tail(dplyr::starwars)) |> deparse(backtick = T) |> glue::glue_collapse() |> stringr::str_squish() |> stringr::str_extract_all('(?<=\\(|, )`.+?` = ')
+#'}
 #'
 .format_script <- function(obj_expr, snip_width = 70) {
 
@@ -241,6 +242,7 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 #' Requires RStudio
 #'
 #' @return void
+#'
 #' @export
 #'
 #'
@@ -272,7 +274,7 @@ run_enscript <- function(){
       "i" = "Highlight an expression in your text editor, then press `ctrl+alt+shift+n`."
     ))
   } else {
-    rstudioapi::sendToConsole(code = paste(text_expr, '|> enscript()'))
+    rstudioapi::sendToConsole(code = paste(text_expr, '|> xlr::enscript()'))
   }
 
 

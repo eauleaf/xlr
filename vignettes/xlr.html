@@ -452,25 +452,25 @@ named lists, without list-nesting when passed a single bare list. That
 is, unlike <code>list()</code>, <code>enlist()</code> removes its own
 embedded list layer if the user passes in a list.</p>
 <p>For instance, compare the structure and naming created by enlist:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">enlist</span>(<span class="fu">enlist</span>(<span class="fu">enlist</span>(letters))) <span class="sc">|&gt;</span> lobstr<span class="sc">::</span><span class="fu">tree</span>()</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; &lt;list&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; └─letters&lt;chr [26]&gt;: &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;, &quot;g&quot;, &quot;h&quot;, &quot;i&quot;, &quot;j&quot;, ...</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">enlist</span>(<span class="fu">enlist</span>(<span class="fu">enlist</span>(letters))) <span class="sc">|&gt;</span> <span class="fu">str</span>()</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; List of 1</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;  $ letters: chr [1:26] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...</span></span></code></pre></div>
 <p>To the structure and naming created by list:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">list</span>(<span class="fu">list</span>(<span class="fu">list</span>(letters))) <span class="sc">|&gt;</span> lobstr<span class="sc">::</span><span class="fu">tree</span>()</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; &lt;list&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; └─&lt;list&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;   └─&lt;list&gt;</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt;     └─&lt;chr [26]&gt;&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;, &quot;g&quot;, &quot;h&quot;, &quot;i&quot;, &quot;j&quot;, ...</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">list</span>(<span class="fu">list</span>(<span class="fu">list</span>(letters))) <span class="sc">|&gt;</span> <span class="fu">str</span>()</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; List of 1</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt;  $ :List of 1</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 1</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt;   .. ..$ : chr [1:26] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...</span></span></code></pre></div>
 <p>The <code>enlist</code> example is one list deep, whereas the
 <code>list</code> example is three lists deep. However, if you send two
 list objects into enlist, as shown in the example below, enlist has no
 choice but to wrap them in a new list.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">enlist</span>(<span class="fu">list</span>(letters), <span class="fu">list</span>(letters)) <span class="sc">|&gt;</span> lobstr<span class="sc">::</span><span class="fu">tree</span>()</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; &lt;list&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; ├─list(letters): &lt;list&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; │ └─&lt;chr [26]&gt;&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;, &quot;g&quot;, &quot;h&quot;, &quot;i&quot;, &quot;j&quot;, ...</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; └─list(letters): &lt;list&gt;</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;   └─&lt;chr [26]&gt;&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;, &quot;g&quot;, &quot;h&quot;, &quot;i&quot;, &quot;j&quot;, ...</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">enlist</span>(<span class="fu">list</span>(letters), <span class="fu">list</span>(letters)) <span class="sc">|&gt;</span> <span class="fu">str</span>()</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; List of 2</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt;  $ list(letters):List of 1</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;   ..$ : chr [1:26] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;  $ list(letters):List of 1</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;   ..$ : chr [1:26] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...</span></span></code></pre></div>
 <div id="a-few-additional-notes-about-enlist" class="section level3">
 <h3>A few additional notes about <code>enlist()</code>:</h3>
 <p>– Naming is permissive, you can have duplicate names in a list, so be
@@ -677,51 +677,51 @@ below and list_iron’s simplification of it:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>rediculous <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">list</span>(<span class="fu">list</span>(<span class="fu">list</span>(<span class="at">flower_data =</span> iris)), <span class="at">car_data =</span> mtcars))</span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co"># Original list depth</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>rediculous <span class="sc">|&gt;</span> lobstr<span class="sc">::</span><span class="fu">tree</span>()</span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; &lt;list&gt;</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; └─&lt;list&gt;</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt;   ├─&lt;list&gt;</span></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt;   │ └─&lt;list&gt;</span></span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt;   │   └─flower_data: S3&lt;data.frame&gt;</span></span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt;   │     ├─Sepal.Length&lt;dbl [150]&gt;: 5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, 4.9, ...</span></span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt;   │     ├─Sepal.Width&lt;dbl [150]&gt;: 3.5, 3, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, ...</span></span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co">#&gt;   │     ├─Petal.Length&lt;dbl [150]&gt;: 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, ...</span></span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt;   │     ├─Petal.Width&lt;dbl [150]&gt;: 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, ...</span></span>
-<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt;   │     └─Species&lt;int [150]&gt;: setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, ...</span></span>
-<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt;   └─car_data: S3&lt;data.frame&gt;</span></span>
-<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt;     ├─mpg&lt;dbl [32]&gt;: 21, 21, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19.2, ...</span></span>
-<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt;     ├─cyl&lt;dbl [32]&gt;: 6, 6, 4, 6, 8, 6, 8, 4, 4, 6, ...</span></span>
-<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co">#&gt;     ├─disp&lt;dbl [32]&gt;: 160, 160, 108, 258, 360, 225, 360, 146.7, 140.8, 167.6, ...</span></span>
-<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="co">#&gt;     ├─hp&lt;dbl [32]&gt;: 110, 110, 93, 110, 175, 105, 245, 62, 95, 123, ...</span></span>
-<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="co">#&gt;     ├─drat&lt;dbl [32]&gt;: 3.9, 3.9, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 3.92, ...</span></span>
-<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a><span class="co">#&gt;     ├─wt&lt;dbl [32]&gt;: 2.62, 2.875, 2.32, 3.215, 3.44, 3.46, 3.57, 3.19, 3.15, 3.44, ...</span></span>
-<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a><span class="co">#&gt;     ├─qsec&lt;dbl [32]&gt;: 16.46, 17.02, 18.61, 19.44, 17.02, 20.22, 15.84, 20, 22.9, 18.3, ...</span></span>
-<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a><span class="co">#&gt;     ├─vs&lt;dbl [32]&gt;: 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, ...</span></span>
-<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a><span class="co">#&gt;     ├─am&lt;dbl [32]&gt;: 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, ...</span></span>
-<span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a><span class="co">#&gt;     ├─gear&lt;dbl [32]&gt;: 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, ...</span></span>
-<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a><span class="co">#&gt;     └─carb&lt;dbl [32]&gt;: 4, 4, 1, 1, 2, 1, 4, 2, 2, 4, ...</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>rediculous <span class="sc">|&gt;</span> <span class="fu">str</span>()</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; List of 1</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt;  $ :List of 2</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt;   ..$         :List of 1</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt;   .. ..$ :List of 1</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ flower_data:&#39;data.frame&#39;:    150 obs. of  5 variables:</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ Sepal.Length: num [1:150] 5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ Sepal.Width : num [1:150] 3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ Petal.Length: num [1:150] 1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ Petal.Width : num [1:150] 0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...</span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ Species     : Factor w/ 3 levels &quot;setosa&quot;,&quot;versicolor&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt;   ..$ car_data:&#39;data.frame&#39;: 32 obs. of  11 variables:</span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt;   .. ..$ mpg : num [1:32] 21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt;   .. ..$ cyl : num [1:32] 6 6 4 6 8 6 8 4 4 6 ...</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co">#&gt;   .. ..$ disp: num [1:32] 160 160 108 258 360 ...</span></span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="co">#&gt;   .. ..$ hp  : num [1:32] 110 110 93 110 175 105 245 62 95 123 ...</span></span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="co">#&gt;   .. ..$ drat: num [1:32] 3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...</span></span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a><span class="co">#&gt;   .. ..$ wt  : num [1:32] 2.62 2.88 2.32 3.21 3.44 ...</span></span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a><span class="co">#&gt;   .. ..$ qsec: num [1:32] 16.5 17 18.6 19.4 17 ...</span></span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a><span class="co">#&gt;   .. ..$ vs  : num [1:32] 0 0 1 1 0 1 0 1 1 1 ...</span></span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a><span class="co">#&gt;   .. ..$ am  : num [1:32] 1 1 1 0 0 0 0 0 0 0 ...</span></span>
+<span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a><span class="co">#&gt;   .. ..$ gear: num [1:32] 4 4 4 3 3 3 3 4 4 4 ...</span></span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a><span class="co">#&gt;   .. ..$ carb: num [1:32] 4 4 1 1 2 1 4 2 2 4 ...</span></span>
 <span id="cb14-27"><a href="#cb14-27" tabindex="-1"></a></span>
 <span id="cb14-28"><a href="#cb14-28" tabindex="-1"></a><span class="co"># Ironed list depth</span></span>
-<span id="cb14-29"><a href="#cb14-29" tabindex="-1"></a>rediculous <span class="sc">|&gt;</span> <span class="fu">list_iron</span>() <span class="sc">|&gt;</span> lobstr<span class="sc">::</span><span class="fu">tree</span>()</span>
-<span id="cb14-30"><a href="#cb14-30" tabindex="-1"></a><span class="co">#&gt; &lt;list&gt;</span></span>
-<span id="cb14-31"><a href="#cb14-31" tabindex="-1"></a><span class="co">#&gt; ├─rediculous|flower_data: S3&lt;data.frame&gt;</span></span>
-<span id="cb14-32"><a href="#cb14-32" tabindex="-1"></a><span class="co">#&gt; │ ├─Sepal.Length&lt;dbl [150]&gt;: 5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, 4.9, ...</span></span>
-<span id="cb14-33"><a href="#cb14-33" tabindex="-1"></a><span class="co">#&gt; │ ├─Sepal.Width&lt;dbl [150]&gt;: 3.5, 3, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, ...</span></span>
-<span id="cb14-34"><a href="#cb14-34" tabindex="-1"></a><span class="co">#&gt; │ ├─Petal.Length&lt;dbl [150]&gt;: 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, ...</span></span>
-<span id="cb14-35"><a href="#cb14-35" tabindex="-1"></a><span class="co">#&gt; │ ├─Petal.Width&lt;dbl [150]&gt;: 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, ...</span></span>
-<span id="cb14-36"><a href="#cb14-36" tabindex="-1"></a><span class="co">#&gt; │ └─Species&lt;int [150]&gt;: setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, ...</span></span>
-<span id="cb14-37"><a href="#cb14-37" tabindex="-1"></a><span class="co">#&gt; └─rediculous|car_data: S3&lt;data.frame&gt;</span></span>
-<span id="cb14-38"><a href="#cb14-38" tabindex="-1"></a><span class="co">#&gt;   ├─mpg&lt;dbl [32]&gt;: 21, 21, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19.2, ...</span></span>
-<span id="cb14-39"><a href="#cb14-39" tabindex="-1"></a><span class="co">#&gt;   ├─cyl&lt;dbl [32]&gt;: 6, 6, 4, 6, 8, 6, 8, 4, 4, 6, ...</span></span>
-<span id="cb14-40"><a href="#cb14-40" tabindex="-1"></a><span class="co">#&gt;   ├─disp&lt;dbl [32]&gt;: 160, 160, 108, 258, 360, 225, 360, 146.7, 140.8, 167.6, ...</span></span>
-<span id="cb14-41"><a href="#cb14-41" tabindex="-1"></a><span class="co">#&gt;   ├─hp&lt;dbl [32]&gt;: 110, 110, 93, 110, 175, 105, 245, 62, 95, 123, ...</span></span>
-<span id="cb14-42"><a href="#cb14-42" tabindex="-1"></a><span class="co">#&gt;   ├─drat&lt;dbl [32]&gt;: 3.9, 3.9, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 3.92, ...</span></span>
-<span id="cb14-43"><a href="#cb14-43" tabindex="-1"></a><span class="co">#&gt;   ├─wt&lt;dbl [32]&gt;: 2.62, 2.875, 2.32, 3.215, 3.44, 3.46, 3.57, 3.19, 3.15, 3.44, ...</span></span>
-<span id="cb14-44"><a href="#cb14-44" tabindex="-1"></a><span class="co">#&gt;   ├─qsec&lt;dbl [32]&gt;: 16.46, 17.02, 18.61, 19.44, 17.02, 20.22, 15.84, 20, 22.9, 18.3, ...</span></span>
-<span id="cb14-45"><a href="#cb14-45" tabindex="-1"></a><span class="co">#&gt;   ├─vs&lt;dbl [32]&gt;: 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, ...</span></span>
-<span id="cb14-46"><a href="#cb14-46" tabindex="-1"></a><span class="co">#&gt;   ├─am&lt;dbl [32]&gt;: 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, ...</span></span>
-<span id="cb14-47"><a href="#cb14-47" tabindex="-1"></a><span class="co">#&gt;   ├─gear&lt;dbl [32]&gt;: 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, ...</span></span>
-<span id="cb14-48"><a href="#cb14-48" tabindex="-1"></a><span class="co">#&gt;   └─carb&lt;dbl [32]&gt;: 4, 4, 1, 1, 2, 1, 4, 2, 2, 4, ...</span></span></code></pre></div>
+<span id="cb14-29"><a href="#cb14-29" tabindex="-1"></a>rediculous <span class="sc">|&gt;</span> <span class="fu">list_iron</span>() <span class="sc">|&gt;</span> <span class="fu">str</span>()</span>
+<span id="cb14-30"><a href="#cb14-30" tabindex="-1"></a><span class="co">#&gt; List of 2</span></span>
+<span id="cb14-31"><a href="#cb14-31" tabindex="-1"></a><span class="co">#&gt;  $ rediculous|flower_data:&#39;data.frame&#39;:  150 obs. of  5 variables:</span></span>
+<span id="cb14-32"><a href="#cb14-32" tabindex="-1"></a><span class="co">#&gt;   ..$ Sepal.Length: num [1:150] 5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...</span></span>
+<span id="cb14-33"><a href="#cb14-33" tabindex="-1"></a><span class="co">#&gt;   ..$ Sepal.Width : num [1:150] 3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...</span></span>
+<span id="cb14-34"><a href="#cb14-34" tabindex="-1"></a><span class="co">#&gt;   ..$ Petal.Length: num [1:150] 1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...</span></span>
+<span id="cb14-35"><a href="#cb14-35" tabindex="-1"></a><span class="co">#&gt;   ..$ Petal.Width : num [1:150] 0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...</span></span>
+<span id="cb14-36"><a href="#cb14-36" tabindex="-1"></a><span class="co">#&gt;   ..$ Species     : Factor w/ 3 levels &quot;setosa&quot;,&quot;versicolor&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span id="cb14-37"><a href="#cb14-37" tabindex="-1"></a><span class="co">#&gt;  $ rediculous|car_data   :&#39;data.frame&#39;:  32 obs. of  11 variables:</span></span>
+<span id="cb14-38"><a href="#cb14-38" tabindex="-1"></a><span class="co">#&gt;   ..$ mpg : num [1:32] 21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...</span></span>
+<span id="cb14-39"><a href="#cb14-39" tabindex="-1"></a><span class="co">#&gt;   ..$ cyl : num [1:32] 6 6 4 6 8 6 8 4 4 6 ...</span></span>
+<span id="cb14-40"><a href="#cb14-40" tabindex="-1"></a><span class="co">#&gt;   ..$ disp: num [1:32] 160 160 108 258 360 ...</span></span>
+<span id="cb14-41"><a href="#cb14-41" tabindex="-1"></a><span class="co">#&gt;   ..$ hp  : num [1:32] 110 110 93 110 175 105 245 62 95 123 ...</span></span>
+<span id="cb14-42"><a href="#cb14-42" tabindex="-1"></a><span class="co">#&gt;   ..$ drat: num [1:32] 3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...</span></span>
+<span id="cb14-43"><a href="#cb14-43" tabindex="-1"></a><span class="co">#&gt;   ..$ wt  : num [1:32] 2.62 2.88 2.32 3.21 3.44 ...</span></span>
+<span id="cb14-44"><a href="#cb14-44" tabindex="-1"></a><span class="co">#&gt;   ..$ qsec: num [1:32] 16.5 17 18.6 19.4 17 ...</span></span>
+<span id="cb14-45"><a href="#cb14-45" tabindex="-1"></a><span class="co">#&gt;   ..$ vs  : num [1:32] 0 0 1 1 0 1 0 1 1 1 ...</span></span>
+<span id="cb14-46"><a href="#cb14-46" tabindex="-1"></a><span class="co">#&gt;   ..$ am  : num [1:32] 1 1 1 0 0 0 0 0 0 0 ...</span></span>
+<span id="cb14-47"><a href="#cb14-47" tabindex="-1"></a><span class="co">#&gt;   ..$ gear: num [1:32] 4 4 4 3 3 3 3 4 4 4 ...</span></span>
+<span id="cb14-48"><a href="#cb14-48" tabindex="-1"></a><span class="co">#&gt;   ..$ carb: num [1:32] 4 4 1 1 2 1 4 2 2 4 ...</span></span></code></pre></div>
 <p>Notice the auto-naming of the list items above, i.e.
 <em>‘rediculous|flower_data’</em>; you can control that naming. You can
 also apply a function while flattening all of the leaves in the lists

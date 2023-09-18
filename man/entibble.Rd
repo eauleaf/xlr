@@ -69,7 +69,7 @@ entibble(example_data, !!!letters) # ragged data
 entibble(!!!letters)
 tibble::tibble(!!!letters)
 entibble(example_data, example_data)
-tibble::tibble(example_data, example_data)
+# tibble::tibble(example_data, example_data)
 
 letters |> purrr::set_names(LETTERS) |> as.list() |> tibble::tibble()
 letters |> purrr::set_names(LETTERS) |> as.list() |> entibble()
@@ -77,26 +77,27 @@ letters |> purrr::set_names(LETTERS) |> as.list() |> entibble()
 
 enlist(head(iris), tail(mtcars)) |> tibble::tibble()
 enlist(head(iris), tail(mtcars)) |> entibble()
+
 enlist(head(iris), head(mtcars)) |> entibble()
 entibble(head(iris), head(mtcars))
 tibble::tibble(head(iris), head(mtcars))
 entibble(head(iris), head(mtcars, 11))
-tibble::tibble(head(iris), head(mtcars,11))
+# tibble::tibble(head(iris), head(mtcars,11))
 
 
 tibble::tibble(y = 1:3,x = 11:13)
 entibble(y = c(1, 2, 3),x = c(11, 12, 13))
-tibble::tibble(x = 1:3,x = 11:13)
+# tibble::tibble(x = 1:3,x = 11:13)
 entibble(x = 1:3, x = 11:13)
 entibble(x = 1:3,x = 10:14, .name_repair = 'minimal')
-tibble::tibble(x = 1:3,x = 10:14, .name_repair = 'minimal')
+# tibble::tibble(x = 1:3,x = 10:14, .name_repair = 'minimal')
 tibble::tibble(x = 1:3,x = 11:13, .name_repair = 'unique')
 entibble(x = 1:3,x = 11:13, .name_repair = 'unique')
 entibble(x = 1:3,x = 11:13, .name_repair = 'unique_quiet')
-entibble(x = 1:3,x = 11:13, .name_repair = ~scrub_tabnames(., sep = ' <-- ', quiet = T))
+entibble(x = 1:3,x = 11:13, .name_repair = ~scrub_tabnames(., sep = ' <-- ', quiet = TRUE))
 enlist(head(iris), head(mtcars))
 
-tibble::tibble(x = 1:3,x = 11:13, .name_repair = ~scrub_tabnames(., sep = ' <-- ', quiet = T))
+tibble::tibble(x = 1:3,x = 11:13, .name_repair = ~scrub_tabnames(., sep = ' <-- ', quiet = TRUE))
 
 as.matrix(1:10) |> rownames()
 as.matrix(1:10) |> entibble()
@@ -130,7 +131,7 @@ letters |> purrr::set_names(LETTERS) |> entibble()
 letters |> purrr::set_names(LETTERS) |> tibble::enframe( name = 'row', value = 'blue')
 
 # If rowname is specified, but the dataframe has no rownames, rowname is ignored.
-entibble(iris, , .rowname = 'flower_name')
+entibble(iris, .rowname = 'flower_name')
 letters |> as.list() |> tibble::tibble()
 letters |> as.list() |> entibble(.rowname = 'a-z')
 letters |> list() |> tibble::tibble()
@@ -140,8 +141,8 @@ letters |> enlist() |> entibble(.rowname = 'a-z')
 colours() |> rlang::set_names() |> entibble() |> entibble(another_col = colours())
 colours() |> rlang::set_names() |> entibble(another_col = colours())
 letters |> as.list() |> enlist() |> entibble()
-dplyr::bind_cols(letters, LETTERS) |> copy_for_xl()
-letters |> rlang::set_names(LETTERS) |> copy_for_xl()
+# dplyr::bind_cols(letters, LETTERS) |> copy_for_xl()
+# letters |> rlang::set_names(LETTERS) |> copy_for_xl()
 
 entibble(1:10,11:20)
 entibble(c(1:10,11:20))
@@ -160,11 +161,6 @@ entibble(enlist(1:10),enlist(11:20), .rowname = 'a column name', .name_repair = 
 entibble(enlist(1:10),enlist(11:20), .rowname = 'a column name', .name_repair = 'universal_quiet')
 entibble(enlist(list(1:10),list(11:20)))
 entibble(enlist((1:10),(11:20)))
-
-# test
-as.matrix(warpbreaks[1:10, ]) |> asplit(2) |> entibble()
-lattice::Rows()
-entibble |> entibble()
 
 }
 \seealso{

@@ -48,12 +48,11 @@ Clipboard memory is limited; if you're copying a lot of data from a
 spreadsheet, try reading it in instead with \code{\link[readxl:read_excel]{readxl::read_excel()}}.
 }
 \examples{
-(All examples require the user to interactively select data.)
-
 \dontrun{
-Copy data from a spreadsheet into working memory with 'ctrl + c' or by
-right-clicking with the mouse and selecting 'copy', then type into the R
-console:
+# (All examples require the user to interactively select data.)
+# Copy data from a spreadsheet into working memory with 'ctrl + c' or by
+# right-clicking with the mouse and selecting 'copy', then type into the R
+# console:
 
 (my_data <- paste_from_xl())
 (my_data <- paste_from_xl(T))

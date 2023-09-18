@@ -89,7 +89,7 @@ enlist <- function(..., .label =  NULL){
 #' @return named list where names have no double-quotes
 #'
 #' @examples
-#' tibble::tibble(!!!letters) |> as.list() |> .remove_doublequotes()
+#' tibble::tibble(!!!letters) |> as.list() |> xlr:::.remove_doublequotes()
 .remove_doublequotes <- function(named_list = NULL){
   # remove external-quotes from list with names
   double_quoted <- names(named_list) |> stringr::str_detect('^".*"$')

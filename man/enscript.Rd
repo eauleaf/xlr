@@ -31,6 +31,7 @@ to the console.
 Copying formatted output to the clipboard requires package \link{clipr}.
 
 To set up the key-chord \code{ctrl+alt+shift+n} in RStudio. Run \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
+The \code{enscript} key-chord is very helpful when making tests for a function's test file.
 
 If using Linux, make sure to install a clipboard tool:
 apt-get install xclip
@@ -43,7 +44,6 @@ a letter as key chord.)
 }
 \examples{
 \dontrun{
-
 
 enscript(letters)
 # [letters] is copied to clipboard; press `ctrl + v` to paste the output

@@ -18,7 +18,11 @@ a string with embedded '/n' line breaks
 Adds breaks to the text of a deparsed data structure script
 }
 \examples{
-
-TODO:
+\dontrun{
+# list(head(mtcars)) |> deparse1(backtick = TRUE) |> xlr:::.format_script()
+# TODO: # fix formatting script for these:
+# head(dplyr::starwars) |> enlist() |> deparse(backtick = TRUE) |> glue::glue_collapse() |> stringr::str_squish() |> xlr:::.format_script() |> cat()
+# enlist(head(iris), "`quick_text`='hello'`", tail(dplyr::starwars)) |> deparse(backtick = T) |> glue::glue_collapse() |> stringr::str_squish() |> stringr::str_extract_all('(?<=\\(|, )`.+?` = ')
+}
 
 }

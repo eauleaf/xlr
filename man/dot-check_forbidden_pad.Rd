@@ -20,14 +20,14 @@ a single character; throws an error if input is any of these characters \/:?*'[]
 Throw error for prohibited padding options or more than 1 char.
 }
 \examples{
-.check_forbidden_pad('.')
-.check_forbidden_pad('-')
+xlr:::.check_forbidden_pad('.')
+xlr:::.check_forbidden_pad('-')
 \dontrun{ # expect error if any of these: \/:?*'[]
-.check_forbidden_pad(':')
-.check_forbidden_pad('')
-.check_forbidden_pad(NA)
-.check_forbidden_pad(NULL)
-.check_forbidden_pad("\\\\")
+xlr:::.check_forbidden_pad(':')
+xlr:::.check_forbidden_pad('')
+xlr:::.check_forbidden_pad(NA)
+xlr:::.check_forbidden_pad(NULL)
+xlr:::.check_forbidden_pad("\\\\")
 }
 
 }

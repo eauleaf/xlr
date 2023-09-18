@@ -22,7 +22,7 @@ a vector of glued tabnames
 Paste name components together in order specified by paste_side
 }
 \examples{
-.paste_names('--1', c('hello','goodbye'))
-.paste_names('..1', c('hello','goodbye'), '->', 'left')
-.paste_names(NA, c('hello','goodbye'), '->', 'left')
+xlr:::.paste_names('--1', c('hello','goodbye'))
+xlr:::.paste_names('..1', c('hello','goodbye'), '->', 'left')
+xlr:::.paste_names(NA, c('hello','goodbye'), '->', 'left')
 }
