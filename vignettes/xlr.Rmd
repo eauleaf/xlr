@@ -29,10 +29,12 @@ library(xlr)
 ## ***R + Spreadsheets***
 
 
+
+
 <br>
 
 
-*Package is currently beta.*
+*Package is currently somewhere between dev/beta.*
 
 ##### Install: 
 ```{r download-xlr, eval = F}

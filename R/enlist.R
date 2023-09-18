@@ -1,4 +1,4 @@
-#' Create a list with auto-named list elements.
+#' Create a list with auto-named list elements
 #'
 #'
 #' @description

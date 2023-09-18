@@ -75,7 +75,7 @@ xl <- function(...
                ,.sheet_titles = stringr::str_to_title
                ,.dataframe_spec = NULL
                ,.tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}") # arguments passed to scrub tabnames, see [scrub_tabnames] for options; # collapse description for list-embedded tabnames grouped, passed to purrr::list_flatten @importParam
-               ,.workbook_spec = list(asTable = TRUE, orientation = 'landscape', zoom = 70) # @seealso [opensxlsx::buildWorkbook] args as a named list
+               ,.workbook_spec = list(asTable = TRUE, orientation = 'landscape', zoom = 85) # @seealso [opensxlsx::buildWorkbook] args as a named list
                ,.return = list(NULL, 'savepath', 'tibbles', 'workbook')
 ){
 
@@ -196,8 +196,8 @@ xl <- function(...
     openxlsx::freezePane(wb, sheet = sheet_nm, firstRow = TRUE)
     openxlsx::freezePane(wb, sheet = sheet_nm, firstActiveRow = start_row+1)
     openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 'auto', cols = 1:ncol(df_nm))
-    openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 18, cols = px_cols)
-    openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 10, cols = dt_cols)
+    openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 20, cols = px_cols)
+    openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 12, cols = dt_cols)
     openxlsx::addStyle(wb, sheet = sheet_nm, style = header_style, rows = 1, cols = 1, stack = TRUE)
     if(!no_titles){openxlsx::writeData(wb, sheet = sheet_nm, x = sheet_titles[[df_name]], startCol = 1, startRow = 1, name = NULL, colNames = FALSE)}
   }

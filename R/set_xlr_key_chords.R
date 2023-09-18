@@ -39,7 +39,7 @@ set_xlr_key_chords <- function(){
   # rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+N" = "xlr::run_enscript" )
   # rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+>" = "xlr::run_xl" )
   rstudio.prefs::use_rstudio_keyboard_shortcut(
-    "Ctrl+Alt+Shift+L" = "xlr::run_xl",
+    "Ctrl+Alt+Shift+O" = "xlr::run_xl",
     "Ctrl+Alt+Shift+V" = "xlr::run_paste_from_xl",
     "Ctrl+Alt+Shift+C" = "xlr::run_copy_for_xl",
     "Ctrl+Alt+Shift+N" = "xlr::run_enscript"

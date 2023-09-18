@@ -12,7 +12,7 @@ xl(
   .sheet_titles = stringr::str_to_title,
   .dataframe_spec = NULL,
   .tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}"),
-  .workbook_spec = list(asTable = TRUE, orientation = "landscape", zoom = 70),
+  .workbook_spec = list(asTable = TRUE, orientation = "landscape", zoom = 85),
   .return = list(NULL, "savepath", "tibbles", "workbook")
 )
 }

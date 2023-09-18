@@ -2,7 +2,7 @@
 % Please edit documentation in R/enlist.R
 \name{enlist}
 \alias{enlist}
-\title{Create a list with auto-named list elements.}
+\title{Create a list with auto-named list elements}
 \usage{
 enlist(..., .label = NULL)
 }
