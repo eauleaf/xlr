@@ -241,12 +241,10 @@ entibble <- function(
 #'
 .vector_2_tibble <- function(.in_vec, .rowname = 'rowname', .vec_name = ''){
 
-  # cat(.vec_name)
-  # cat(.rowname)
   if (!is.null(names( .in_vec ))) {
     out <- .in_vec |> tibble::enframe( name = .rowname, value = .vec_name )
   } else {
-    out <- .in_vec |> tibble::tibble( .name_repair = ~.vec_name )
+    out <- .in_vec |> tibble::tibble( .name_repair = ~as.character(.vec_name) )
     # out <- .in_vec |> tibble::tibble( .name_repair = .vec_name )
   }
 

@@ -16,7 +16,8 @@ sys_open(...)
 character vector of named paths
 }
 \description{
-Open files or folders through the operating system default launch application
+Open files or folders through the operating system default launch application.
+Also open URLs.
 }
 \details{
 If you aren't able to open a file with \code{sys_open()}, right-click on
@@ -41,6 +42,11 @@ sys_open('/')
 
 # open the first 3 files or folders in the current directory
 list.files(here::here())[1:3] |> sys_open()
+
+# also opens a browser window if sent a path that begins with 'https://'
+# or 'http://' (or contains '.com/','.org/', etc. or ends in '.com' or '.org')
+sys_open('google.org', here::here())
+
 }
 
 }

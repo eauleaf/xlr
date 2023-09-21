@@ -50,8 +50,7 @@ list_iron <- function(...,
 
   checkmate::assert_string(name_spec, null.ok = FALSE, na.ok = FALSE)
 
-  # out <- rlang::dots_list(..., .named = TRUE) |>
-  out <- enlist(...) |>
+  out <- rlang::dots_list(..., .named = TRUE) |>
     purrr::modify_tree(leaf = rlang::as_function(.f), post = ~purrr::list_flatten(., name_spec = name_spec, name_repair = name_repair)) |>
     suppressMessages()
 

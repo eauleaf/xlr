@@ -8,10 +8,12 @@
 #' of the copied spreadsheet data.
 #'
 #' 2) If pasting to the text editor window, 'ctrl+alt+shift+v' will insert an
-#' expression to produce the tibble.
+#' expression to produce the spreadsheet data
 #'
-#' Will also paste folder and file paths if user pressed 'ctrl + c' on the file
-#' icons in a browser window.
+#' Notes:
+#' If pasting multiple spreadsheet rows, the data is imports as a tibble.
+#' If pasting single spreadsheet row, the data is imports as a vector.
+#' If pasting folder and file paths from an OS navigation window, the data is imports as a vector.
 #'
 #' To set the quick keys.
 #' @seealso [set_xlr_key_chords()]
@@ -205,9 +207,7 @@ run_paste_from_xl <- function(){
 #'
 #' @return user assigned name as a string
 #'
-#' @examples if (interactive()){
-#' .check_assigned_input(' 1 bad name')
-#' }
+#' @examples \dontrun{ .check_assigned_input(' 1 bad name') }
 #'
 .check_assigned_input <- function(input_name){
   # input_name <- svDialogs::dlg_list(choices = preselect)

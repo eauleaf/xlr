@@ -10,13 +10,15 @@
 #'
 #' -- If no list exists, `enlist` places its arguments into a list, e.g. `enlist(c('hi', 'hello'))`.
 #'
-#' -- If passed a single bare list, `enlist` does not add an additional list layer. That is, enlist() doesn't stack lists for structure's sake alone, e.g. `enlist(enlist(letters))`.
+#' -- If passed a single bare list, `enlist` does not add an additional list layer.
+#' That is, enlist() doesn't stack lists for structure's sake alone, e.g. `enlist(enlist(letters))`.
+#' In this dis-embedding case, a user provided name passed with ` = `, like `enlist(some_name = list('hi'))`, may be discarded.
 #'
-#' -- `enlist` takes dots, splicing, and injection, and is okay to use in non-standard evaluation or meta-programming, e.g. enlist(!!!letters).
+#' -- `enlist` takes dots, splicing, and injection, e.g. enlist(!!!letters).
 #'
 #' -- `enlist` ignores input argument separator commas, e.g. enlist(,,,,,).
 #'
-#' -- Naming can be performed by function through the parameter `.label`, e.g. enlist('me', .label = ~paste0('name_',.))
+#' -- Naming the output can be performed by function through the parameter `.label`, e.g. enlist('me', .label = ~paste0('name_',.))
 #'
 #'
 #' @param ... data objects; if unnamed, enlist() forces names by input expression
@@ -55,19 +57,46 @@
 #' candy <- list('lollipops','gum')
 #' enlist(candy, !!!candy)
 #'
+#' # to think about
+#' list(letters, b = enlist(a = letters, 'blue')) |> enlist()
+#' list(letters, b = enlist(a = letters, 'blue'))
+#' list(letters, b = list(a = letters, 'blue'))
+#' list(letters, b = list(a = letters, 'blue')) |> enlist()
+#' list((a = list(LETTERS, letters))) |> enlist()
+#' enlist((a = list(LETTERS, letters))) # no autoname; just dis-embed
+#' enlist((list(LETTERS, letters))) # no autoname; just dis-embed
+#' enlist(a = list(LETTERS, letters)) # auto-naming
+#'
 enlist <- function(..., .label =  NULL){
+  .quos <- rlang::quos(...)
+  .quos <- .quos[names(rlang::exprs_auto_name(.quos)) != "<empty>"]
+  orig_quo_names <- names(.quos)
+  .quos <- .quos |> rlang::exprs_auto_name()
+  one_expr <- length(.quos) == 1
+  # if a single list expression; dis-embed and auto-name
+  # if(one_expr && stringr::str_detect(names(.quos), '^list\\(|base::list\\(')){
+  if( one_expr &&
+      stringr::str_detect(rlang::expr_deparse(rlang::quo_get_expr(.quos[[1]])), '^list\\(|base::list\\(')[1]
+      ){
+    rewritten_expr <- .quos[[1]] |> rlang::quo_get_expr() |> rlang::expr_deparse() |>
+      stringr::str_replace('^list\\(|base::list\\(', replacement = 'enlist(')
+    .quos[[1]] <- rlang::quo_set_expr(.quos[[1]], rlang::parse_expr(rewritten_expr))
+  }
 
-  .quos <- rlang::quos(...) |> rlang::exprs_auto_name()
-  .quos <- .quos[names(.quos) != "<empty>"]
   evaled_list <- .quos |>  purrr::map(rlang::eval_tidy)
 
+
   # dis-embed list if user passed just a single expression that evals to a bare list
-  if( length(.quos) == 1 && rlang::is_bare_list(evaled_list[[1]]) ){
+  if( one_expr && rlang::is_bare_list(evaled_list[[1]]) ){
     evaled_list <- evaled_list[[1]]
+    # evaled_list <- evaled_list |> rlang::set_names(nm = glue::glue(orig_quo_names, names(evaled_list),.sep = '-'))
     # keep embedded list names if they exist, otherwise overwrite with outer-list name
-    if( identical(names(evaled_list),NULL) ){
+    if( length(evaled_list) <= 1 && !identical(orig_quo_names,NULL) ){
       evaled_list <- evaled_list |> rlang::set_names(nm = names(.quos))
     }
+    # if( identical(names(evaled_list),NULL) ){
+    #   evaled_list <- evaled_list |> rlang::set_names(nm = names(.quos))
+    # }
   }
 
   out <- evaled_list |> .remove_doublequotes()

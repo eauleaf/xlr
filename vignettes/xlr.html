@@ -346,7 +346,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="r-spreadsheets" class="section level2">
 <h2><strong><em>R + Spreadsheets</em></strong></h2>
 <p><br></p>
-<p><em>Package is currently beta.</em></p>
+<p><em>Package is currently somewhere between dev/beta.</em></p>
 <div id="install" class="section level5">
 <h5>Install:</h5>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&#39;eauleaf/xlr&#39;</span>)</span>
@@ -454,7 +454,7 @@ embedded list layer if the user passes in a list.</p>
 <p>For instance, compare the structure and naming created by enlist:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">enlist</span>(<span class="fu">enlist</span>(<span class="fu">enlist</span>(letters))) <span class="sc">|&gt;</span> <span class="fu">str</span>()</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; List of 1</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;  $ letters: chr [1:26] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...</span></span></code></pre></div>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;  $ enlist(enlist(letters)): chr [1:26] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...</span></span></code></pre></div>
 <p>To the structure and naming created by list:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">list</span>(<span class="fu">list</span>(<span class="fu">list</span>(letters))) <span class="sc">|&gt;</span> <span class="fu">str</span>()</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; List of 1</span></span>
@@ -765,11 +765,11 @@ list of data inputs equivalent to comma-separated data inputs.</p>
 <span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co"># lists passed to entibble are dumped and their objects joined like any other </span></span>
 <span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co"># input if the listed objects have compatible row dimensions</span></span>
 <span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="fu">entibble</span>(<span class="fu">list</span>(alpha), LETTERS) <span class="sc">|&gt;</span> <span class="fu">tail</span>(<span class="dv">2</span>)</span>
-<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 3</span></span>
-<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="co">#&gt;   rowname `list(alpha)` LETTERS</span></span>
-<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;         &lt;chr&gt;  </span></span>
-<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="co">#&gt; 1 y       y             Y      </span></span>
-<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="co">#&gt; 2 z       z             Z</span></span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 2</span></span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="co">#&gt;   rowname     `list(ragged_elements)`</span></span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;list&gt;                 </span></span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="co">#&gt; 1 list(alpha) &lt;tibble [1 × 1]&gt;       </span></span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="co">#&gt; 2 LETTERS     &lt;tibble [26 × 1]&gt;</span></span>
 <span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="fu">list</span>(alpha), LETTERS) <span class="sc">|&gt;</span> <span class="fu">tail</span>(<span class="dv">2</span>)</span>
 <span id="cb16-26"><a href="#cb16-26" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 2</span></span>
 <span id="cb16-27"><a href="#cb16-27" tabindex="-1"></a><span class="co">#&gt;   `list(alpha)` LETTERS</span></span>

@@ -51,7 +51,7 @@ The side-effect, a workbook of spreadsheets, is the primary output of this funct
 The direct-return output is TRUE or FALSE (default) denoting whether the
 xlsx workbook file wrote out properly. However, if the parameter \code{.return} is
 specified by the user, the function will instead return the list of inputs as
-tibbles, the \code{openxlsx} workbook-object, or the save path. All direct outputs
+tibbles, the \code{openxlsx} workbook-object, or the save path. Direct outputs
 are returned invisibly.
 }
 \description{

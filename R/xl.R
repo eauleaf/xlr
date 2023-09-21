@@ -36,7 +36,7 @@
 #' The direct-return output is TRUE or FALSE (default) denoting whether the
 #' xlsx workbook file wrote out properly. However, if the parameter `.return` is
 #' specified by the user, the function will instead return the list of inputs as
-#' tibbles, the `openxlsx` workbook-object, or the save path. All direct outputs
+#' tibbles, the `openxlsx` workbook-object, or the save path. Direct outputs
 #' are returned invisibly.
 #'
 #' @export

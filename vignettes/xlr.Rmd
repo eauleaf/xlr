@@ -34,7 +34,7 @@ library(xlr)
 <br>
 
 
-*Package is currently somewhere between dev/beta.*
+*Package is currently somewhere between dev and beta.*
 
 ##### Install: 
 ```{r download-xlr, eval = F}
@@ -55,9 +55,10 @@ library(xlr)
 Spreadsheets are an excellent tool for presenting 2-dimensional data in a
 reader-friendly format and are the workhorse of the business community, but
 spreadsheets don't have the flexibility or power of R, so its common for 
-data professionals to work in both. However, working in both can be 
-frustrating since it's time expensive to move data back forth between the
-two. **xlr** is an effort to reduce the friction that comes from working in both 
+data professionals to work in both spreadsheets and R. However, working in both can be 
+frustrating. It's time expensive to read data back forth between the
+two, and 95% of the time, I just want to send decent-looking tables out to a spreadsheet.
+**xlr** is an effort to reduce the friction that comes from having to work in both 
 spreadsheets and R.
 
 
@@ -94,7 +95,7 @@ The function is somewhat similar to `View()` from the `utils` package in
 that `xl()` is for quickly viewing datasets. 
 
 It's easiest to see what `xl()` does by passing it some example data;
-try sending it some preloaded datasets, like:
+try sending it some pre-loaded datasets, like:
 
 ```{r xlr-example1, eval = F}
 xl(mtcars, iris, letters, Titanic, AirPassengers)
@@ -130,7 +131,7 @@ iris |> split(f = iris$Species) |> xl()
 
 `xl()` writes the workbook in a temp directory and, to keep workbooks
 from building up, uses `later::later()` to remove the savefile 5 minutes
-after write time. Temp directories also delete themselves when you
+after your write time. Temp directories also delete themselves when you
 close R. If, however, you want to save a workbook, specify a path or
 just a save name in the `xl()` input parameter `.path`. Specifying a
 savename signals to `xl()` not to mark the file for cleanup. (Note that
@@ -138,8 +139,8 @@ parameter `.path` uses `here::here()` internally.)
 
 `xl()` creates tibbles of all datasets you pass in, and if specified by
 the user parameter `.return`, will optionally return (invisibly) the
-data objects in a list, the `openxlsx` workbook object in case you want to change 
-the workbook, or the workbook savepath as a string.
+data objects in a list, or the `openxlsx` workbook object in case you want to change 
+things in the workbook, or the workbook savepath as a string.
 
 
 <br>
@@ -155,13 +156,13 @@ the user passes in a list.
 For instance, compare the structure and naming created by enlist:
 
 ```{r enlist-example1, eval = T}
-enlist(enlist(enlist(letters))) |> str()
+enlist(enlist(enlist('hello'))) |> str()
 ```
 
 To the structure and naming created by list:
 
 ```{r enlist-example2, eval = T}
-list(list(list(letters))) |> str()
+list(list(list('hello'))) |> str()
 ```
 
 The `enlist` example is one list deep, whereas the `list` example is

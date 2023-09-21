@@ -29,11 +29,13 @@ formatted in 1 of 2 ways.
 \item If pasting to the console window, 'ctrl+alt+shift+v' will insert a tibble
 of the copied spreadsheet data.
 \item If pasting to the text editor window, 'ctrl+alt+shift+v' will insert an
-expression to produce the tibble.
+expression to produce the spreadsheet data
 }
 
-Will also paste folder and file paths if user pressed 'ctrl + c' on the file
-icons in a browser window.
+Notes:
+If pasting multiple spreadsheet rows, the data is imports as a tibble.
+If pasting single spreadsheet row, the data is imports as a vector.
+If pasting folder and file paths from an OS navigation window, the data is imports as a vector.
 
 To set the quick keys.
 }
