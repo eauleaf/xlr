@@ -11,11 +11,14 @@ editor_options:
     wrap: 72
 ---
 
+
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+# install(build_vignettes = TRUE)
 ```
 
 ```{r install-xlr, eval = T, include = FALSE}
@@ -23,18 +26,16 @@ library(xlr)
 ```
 
 
-<br>
 
+
+![](www/xlr.png){width=120} 
 
 ## ***R + Spreadsheets***
 
 
-
-
 <br>
-
-
-*Package is currently somewhere between dev and beta.*
+*Package is somewhere between dev and beta.*
+<br>
 
 ##### Install: 
 ```{r download-xlr, eval = F}
@@ -52,12 +53,12 @@ library(xlr)
 
 <br>
 
-Spreadsheets are an excellent tool for presenting 2-dimensional data in a
-reader-friendly format and are the workhorse of the business community, but
+Spreadsheets are a great tool for presenting 2-dimensional data in a
+reader-friendly format and still the workhorse of the business community, but
 spreadsheets don't have the flexibility or power of R, so its common for 
 data professionals to work in both spreadsheets and R. However, working in both can be 
 frustrating. It's time expensive to read data back forth between the
-two, and 95% of the time, I just want to send decent-looking tables out to a spreadsheet.
+two, and most of the time, I just want a series of decent-looking tables pushed to a workbook.
 **xlr** is an effort to reduce the friction that comes from having to work in both 
 spreadsheets and R.
 
