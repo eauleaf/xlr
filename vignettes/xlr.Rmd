@@ -372,9 +372,14 @@ mtcars |> dplyr::filter(repeated(hp) | repeated(disp))
 
 # `sys_open()`
 
-`sys_open()` opens .xlsx files, but also any file or folder. This function passes a
-path string (or many, if you like) to your operating system's command line
-interface, asking it to open up the location using the default application.
+`sys_open()` opens .xlsx files, but also any file or folder since it requests 
+the operating system open it via the OS commmand line interface. This function passes a
+path string (or many, if you like) to your OS, asking it to open up the location 
+using the default application. The reason I use it instead of other functions is 
+because I've had better luck getting things opened up when asking the system to 
+make the decisions about how and with up to open the file. The function also 
+opens URLs.
+
 
 If you aren't able to open a file with `sys_open()`, using your operating system's 
 navigation window, right-click on the file to make sure your operating system
