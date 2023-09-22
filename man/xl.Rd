@@ -13,7 +13,7 @@ xl(
   .dataframe_spec = NULL,
   .tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}"),
   .workbook_spec = list(asTable = TRUE, orientation = "landscape", zoom = 85),
-  .return = list(NULL, "savepath", "tibbles", "workbook")
+  .return = list("workbook", "savepath", "tibbles", NULL)
 )
 }
 \arguments{

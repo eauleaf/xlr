@@ -30,18 +30,29 @@
 the input vector with forbidden characters replaced/removed
 }
 \description{
-Replace forbidden characters in sheet/tab or file names with a warning
+This is a non-exported function called in \code{\link[=scrub_tabnames]{scrub_tabnames()}} to alter
+spreadsheet sheet names.
 }
 \examples{
-# for tests: tab_names <- c(NA, "''''''", "[]hi];", "'HI'", "'hist''", "[:/]", "?/a\\\\", "'?,*?*'", "'[history coursework]'", "'HISTORIC'AL''''")
-tab_names <- c("c(list(1-5), list(5-1))|1", "c(list(1-5), list(5-1))|2", "letters")
-tab_names |> xlr:::.forbidden_chars_replace(pattern = '[\\\\\\\\/:]', replacement = '-', pattern_text = '\\\\, /, or :')
-tab_names |> xlr:::.forbidden_chars_replace(pattern = '[?*]', replacement = '#', pattern_text = '? or *')
-tab_names |> xlr:::.forbidden_chars_replace(pattern = '(?i)(hist)ory', replacement = '\\\\1', pattern_text = 'history', repl_text = 'hist')
-tab_names |> xlr:::.forbidden_chars_replace(pattern = '\\\\[', replacement = '{', pattern_text = '[brackets]', repl_text = '{curly braces}')
-tab_names |> xlr:::.forbidden_chars_replace(pattern = ']', replacement = '}', quiet = TRUE)
-tab_names |> xlr:::.forbidden_chars_replace(pattern = "^'+", replacement = '`', pattern_text = "single quotes '' at tabname start or end", repl_text = "the empty string ''")
-tab_names |> xlr:::.forbidden_chars_replace(pattern = "'+$", replacement = '', quiet = TRUE)
+# for tests:
+tab_names <- c(NA, "''''''", "[]hi];", "'HI'", "'hist''", "[:/]", "?/a\\\\\\\\",
+"'?,*?*'", "'[history coursework]'", "'HISTORIC'AL''''")
+xlr:::.forbidden_chars_replace(tab_names, pattern = '[\\\\\\\\/:]', replacement = '-',
+                               pattern_text = '\\\\, /, or :')
+xlr:::.forbidden_chars_replace(tab_names, pattern = '[?*]', replacement = '#',
+                               pattern_text = '? or *')
+xlr:::.forbidden_chars_replace(tab_names, pattern = '(?i)(hist)ory',
+                               replacement = '\\\\1', pattern_text = 'history',
+                               repl_text = 'hist')
+xlr:::.forbidden_chars_replace(tab_names, pattern = '\\\\[', replacement = '{',
+                               pattern_text = '[brackets]', repl_text = '{curly braces}')
+xlr:::.forbidden_chars_replace(tab_names, pattern = ']', replacement = '}', quiet = TRUE)
+xlr:::.forbidden_chars_replace(tab_names, pattern = "^'+", replacement = '`',
+                               pattern_text = "single quotes '' at tabname start or end",
+                               repl_text = "the empty string ''")
+xlr:::.forbidden_chars_replace(tab_names, pattern = "'+$", replacement = '', quiet = TRUE)
+
+
 }
 \seealso{
 \code{\link[=.fix_forbidden_tabnames]{.fix_forbidden_tabnames()}}

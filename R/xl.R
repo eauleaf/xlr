@@ -6,6 +6,7 @@
 #'
 #' Auto-corrects forbidden sheetnames
 #' Flattens embedded lists with preserved name structure
+# If passed a completely empty dataframe, such as `xl(tibble::tibble())`
 #'
 #'
 #' @param ... A dataframe, list of dataframes, or inputs coerceable to one
@@ -76,7 +77,7 @@ xl <- function(...
                ,.dataframe_spec = NULL
                ,.tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}") # arguments passed to scrub tabnames, see [scrub_tabnames] for options; # collapse description for list-embedded tabnames grouped, passed to purrr::list_flatten @importParam
                ,.workbook_spec = list(asTable = TRUE, orientation = 'landscape', zoom = 85) # @seealso [opensxlsx::buildWorkbook] args as a named list
-               ,.return = list(NULL, 'savepath', 'tibbles', 'workbook')
+               ,.return = list('workbook', 'savepath', 'tibbles', NULL)
 ){
 
 
@@ -96,8 +97,11 @@ xl <- function(...
 
 # build list of tibbles --------------------------------------------------------
   df_list <- list_iron( ... , name_spec = .tabname_spec[['name_spec']], .f = entibble) |>
-    purrr::discard( \(.x) identical(.x, entibble()) )
-  df_list <- df_list[names(df_list) != '']
+    purrr::map_if(.p = \(.x) identical(.x, tibble::tibble()), .f = \(.x) entibble(`NULL` = "NULL"))
+  # return(df_list)
+  # do not use; confusing because it removes empty dataframes in a list
+    # df_list <- purrr::discard( \(.x) identical(.x, entibble()) )
+  # df_list <- df_list[names(df_list) != '']
 
 # some more input checks -------------------------------------------------------
   checkmate::assert(
@@ -108,8 +112,10 @@ xl <- function(...
   )
 
   if( length(df_list)==0 ){
-    cli::cli_alert_danger('Insufficient data provided to create a workbook.')
-    return(invisible(NULL))
+    # df_list <- list(`NULL` = entibble(`NULL` = "NULL"))
+    # cli::cli_alert_danger('Insufficient data provided to create a workbook.')
+    # return(invisible(NULL))
+    cli::cli_abort('Insufficient data provided to create a workbook.')
   }
 
 
@@ -120,7 +126,7 @@ xl <- function(...
   if (mk_tempfile){
     wb_name_tmp <- rlang::quos( ... ) |> rlang::exprs_auto_name() |>
       names() |> purrr::pluck(1) |> fs::path_sanitize(replacement = "#") |>
-      stringr::str_sub(start = 1, end = 20)
+      stringr::str_squish() |> stringr::str_sub(start = 1, end = 20)
     wb_name_tmp <- paste0(
       wb_name_tmp, '_',
       stringr::str_replace(format(Sys.time(), "%Y%m%d_%H%M-%OS3"),'\\.',''), '.xlsx')

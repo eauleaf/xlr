@@ -75,7 +75,7 @@ sys_open <- function( ... ){
     results <- sys_paths |> purrr::map(shell.exec)
     # return(result)
   } else if(.Platform$OS.type == "unix") {
-    results <- sys_paths |> purrr::map(\(path) system2('open', glue::glue("'{path}'"), stdout = NULL, stderr = NULL, timeout = 10))
+    results <- sys_paths |> purrr::map(\(path) system2('open', glue::glue("\"{path}\""), stdout = "", stderr = "", timeout = 10))
     # return(result)
   } else if( .Platform$OS.type == "FreeBSD" ){
     # freebsd not tested...

@@ -50,13 +50,13 @@ permissible characters
 }
 \details{
 Replacement characters: scrub_tabnames() replaces characters '/\:'
-with '-', replace characters '?*' with '#', and replaces characters '[]' with
-'{}'. If the word history is in a tabname, it is truncated to 'hist' while
+with '-', replace characters '?*&' with '#', and replaces characters '[]<>' with
+'()', and . If the word history is in a tabname, it is truncated to 'hist' while
 preserving capitalization. Also, tabnames beginning or ending with single
-quotes ' , have those characters removed without replacement. Names greater
+quotes ' , have those characters removed and replaced with '`'. Names greater
 than 31 characters are truncated. If two or more sheets have the same name,
-those sheetnames are grouped and numbered to make each name in that group
-unique.
+those those sheetnames are grouped and numbered to make each name in that group
+unique. The function calls itself, if needed, to ensure unique tabnames.
 }
 \examples{
 scrub_tabnames(1:5)
@@ -84,20 +84,20 @@ dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dply
 dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0,truncate_side = 'center')
 }
 \references{
-https://support.microsoft.com/en-us/office/rename-a-worksheet-3f1f7148-ee83-404d-8ef0-9ff99fbad1f9
+.url{https://support.microsoft.com/en-us/office/rename-a-worksheet-3f1f7148-ee83-404d-8ef0-9ff99fbad1f9}
 Worksheet names cannot: Be blank or have the same name, regardless of upper
 or lowercase Contain more than 31 characters Contain any of the following
 characters: / \ ? * : [ ] Begin or end with an apostrophe ('), but
 apostrophe's can be used in between text or numbers in a name. Be named
 'History' in either lower or uppercase. This is a reserved word that Excel
 uses internally.
-https://help.libreoffice.org/latest/he/text/scalc/guide/rename_table.html The
-document can contain up to 10,000 individual sheets, which must have
+.url{https://help.libreoffice.org/latest/he/text/scalc/guide/rename_table.html}
+The document can contain up to 10,000 individual sheets, which must have
 different names. Sheet names cannot contain the following characters: colon :
 back slash \ forward slash / question mark ?  asterisk * left square bracket
 "[ right square bracket ]" apostrophe/single-quote ' (Unicode U+0027) as the
 first or last character of the name.
-https://colinfay.me/writing-r-extensions/creating-r-packages.html
+.url{https://colinfay.me/writing-r-extensions/creating-r-packages.html}
 To ensure that file names are valid across file systems and supported
 operating systems, the ASCII control characters as well as the characters
 ‘“’, ‘*’, ‘:’, ‘/’, ‘<’, ‘>’, ‘?’, ‘\’, and ‘|’ are not allowed in file

@@ -51,11 +51,10 @@ library(xlr)
 
 **xlr** makes it easier to move information between **spreadsheets** and **R**.
 
-<br>
 
 Spreadsheets are a great tool for presenting 2-dimensional data in a
 reader-friendly format and still the workhorse of the business community, but
-spreadsheets don't have the flexibility or power of R, so its common for 
+spreadsheets don't have the data processing power of R, so its common for 
 data professionals to work in both spreadsheets and R. However, working in both can be 
 frustrating. It's time expensive to read data back forth between the
 two, and most of the time, I just want a series of decent-looking tables pushed to a workbook.
@@ -347,9 +346,8 @@ quick keys do not interpret anything highlighted in the console.
 
 # `repeated()`
 
-I use `repeated()` all the time and wish it were in `dplyr`. When I
-filter a dataframe, I often need to quickly see all the observations
-that show up more than once, like:
+`repeated()` should be in dplyr. I use `repeated()` when filtering 
+a dataframe for identical observations, like:
 
 ```{r repeated-example, eval = T}
 mtcars |> dplyr::filter(repeated(disp))
