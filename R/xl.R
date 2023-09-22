@@ -76,7 +76,7 @@ xl <- function(...
                ,.sheet_titles = stringr::str_to_title
                ,.dataframe_spec = NULL
                ,.tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}") # arguments passed to scrub tabnames, see [scrub_tabnames] for options; # collapse description for list-embedded tabnames grouped, passed to purrr::list_flatten @importParam
-               ,.workbook_spec = list(asTable = TRUE, orientation = 'landscape', zoom = 85) # @seealso [opensxlsx::buildWorkbook] args as a named list
+               ,.workbook_spec = list(asTable = TRUE, orientation = 'landscape', zoom = 85, name = NULL) # @seealso [opensxlsx::buildWorkbook] args as a named list
                ,.return = list('workbook', 'savepath', 'tibbles', NULL)
 ){
 
@@ -125,11 +125,12 @@ xl <- function(...
 
   if (mk_tempfile){
     wb_name_tmp <- rlang::quos( ... ) |> rlang::exprs_auto_name() |>
-      names() |> purrr::pluck(1) |> fs::path_sanitize(replacement = "#") |>
+      names() |> purrr::pluck(1)
+    wb_name_tmp <- paste0('xlr-', wb_name_tmp) |> fs::path_sanitize(replacement = "#") |>
       stringr::str_squish() |> stringr::str_sub(start = 1, end = 20)
     wb_name_tmp <- paste0(
       wb_name_tmp, '_',
-      stringr::str_replace(format(Sys.time(), "%Y%m%d_%H%M-%OS3"),'\\.',''), '.xlsx')
+      stringr::str_replace(format(Sys.time(), "%Y%m%d_%H%M_%OS3"),'\\.',''), '.xlsx')
     .path <- file.path(tempdir(), wb_name_tmp)
   } else if (!stringr::str_detect(.path, '(?i)\\.xlsx$')) {
     .path <- paste0(here::here(.path),'.xlsx')
@@ -164,9 +165,13 @@ xl <- function(...
   }
 
 
-# some spreadsheet formatting --------------------------------------------------
+# spreadsheet formatting options --------------------------------------------------
+  prior_maxWidth <- dplyr::coalesce(getOption("openxlsx.maxWidth"),45)
+  prior_minWidth <- dplyr::coalesce(getOption("openxlsx.minWidth", 5))
+  prior_dateFormat <- dplyr::coalesce(getOption("openxlsx.dateFormat"), "yyyy-mm-dd")
   options("openxlsx.maxWidth" = 45)
-  options(openxlsx.dateFormat = "yyyy-mm-dd")
+  options("openxlsx.minWidth" = 5)
+  options("openxlsx.dateFormat" = "yyyy-mm-dd")
   date_style <- openxlsx::createStyle(numFmt = 'DATE')
   fieldname_style <- openxlsx::createStyle(
     textDecoration = "Bold", fontColour = '#ffffff', bgFill = '#aaaaaa',
@@ -179,7 +184,7 @@ xl <- function(...
   for_buildWorkbook <- list(
     x = df_list,
     asTable = TRUE,
-    name = NULL,
+    # name = NULL,
     startRow = start_row ) |>
     purrr::list_assign(rlang::splice(.workbook_spec))
   wb <- rlang::call2(openxlsx::buildWorkbook, rlang::splice(for_buildWorkbook)) |> rlang::eval_tidy()
@@ -190,6 +195,10 @@ xl <- function(...
 
   # allows user to overwrite 'start_row' if provided in 'for_buildWorkbook'
   start_row <- for_buildWorkbook$startRow
+
+  # TODO: automatic colwidths
+  # tmp <- df_list |> purrr::map(~purrr::map_int(., ~max(nchar(.), na.rm = TRUE)))
+  # print(tmp)
 
 # apply formatting workbook ----------------------------------------------------
   for(df_name in names(df_list)){
@@ -205,7 +214,7 @@ xl <- function(...
     openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 20, cols = px_cols)
     openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 12, cols = dt_cols)
     openxlsx::addStyle(wb, sheet = sheet_nm, style = header_style, rows = 1, cols = 1, stack = TRUE)
-    if(!no_titles){openxlsx::writeData(wb, sheet = sheet_nm, x = sheet_titles[[df_name]], startCol = 1, startRow = 1, name = NULL, colNames = FALSE)}
+    if(!no_titles){openxlsx::writeData(wb, sheet = sheet_nm, x = sheet_titles[[df_name]], startCol = 1, startRow = 1, colNames = FALSE)}
   }
   # return(enlist(names(wb), names(df_list), sheet_names, sheet_titles))
 
@@ -214,6 +223,11 @@ xl <- function(...
 out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = TRUE)
 
 
+# reset users options -----------------------------------------------------
+  options("openxlsx.maxWidth" = prior_maxWidth)
+  options("openxlsx.minWidth" = prior_minWidth)
+  options("openxlsx.dateFormat" = prior_dateFormat)
+
 
 # open and unlink wb after ~5 min ----------------------------------------------
   if( .open ){ sys_open(.path) }
@@ -221,16 +235,16 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
 
 
 # prep user-specified direct output --------------------------------------------
+
   .return = match.arg(.return[[1]], .return, several.ok = FALSE)
   if(!is.null(.return)){
     out <- switch(
-      EXPR = .return,
+      EXPR = .return[[1]],
       savepath = .path,
       tibbles = df_list,
       workbook = wb
       )
   }
-
 
 # report -----------------------------------------------------------------------
   cli::cat_line()
@@ -261,7 +275,7 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
 #'
 #'
 #' @examples \dontrun{
-#' # Highlight each item below and press key-chord `ctrl + alt + shift + >`.
+#' # Highlight each item below and press key-chord `ctrl + alt + shift + o`.
 #' # To implement the quick-keys. Run {.fn set_xlr_key_chords}.
 #'
 #' mtcars
