@@ -1,8 +1,8 @@
-#' Copies data that you intend to paste into a
-#' spreadsheet from R to your clipboard.
-#'
+#' Copies R data to your clipboard
 #'
 #' @description
+#' The format of the copied data is tab-delimeted for pasting to a spreadsheet.
+#'
 #' There are 2 ways to pass data into the function:
 #' 1) Type it out the same as any other function.
 #' 2) Highlight a data object in your RStudio text editor and then press
@@ -14,7 +14,7 @@
 #' @details
 #' To set up the key-chord in RStudio. Run [set_xlr_key_chords()].
 #'
-#' Copying formatted output to the clipboard requires package [clipr].
+#' Copying formatted output to the clipboard requires package `clipr`.
 #'
 #' If using Linux, make sure to install a clipboard tool:
 #' apt-get install xclip
@@ -106,7 +106,7 @@ copy_for_xl <- function(. = NULL){
 #' For interactive use in RStudio.
 #'
 #'
-#' @return void
+#' @return NULL
 #' @export
 #'
 #'
