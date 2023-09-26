@@ -4,7 +4,7 @@
 \alias{sys_open}
 \title{Open a file or folder with the OS default app}
 \usage{
-sys_open(...)
+sys_open(..., .quiet = TRUE)
 }
 \arguments{
 \item{...}{path strings to the files or folder you want to open
@@ -30,6 +30,7 @@ default application.
 # open current working directory
 sys_open('.')
 sys_open(here::here())
+sys_open()
 
 # open parent of current working directory
 sys_open('..')
@@ -43,9 +44,15 @@ sys_open('/')
 # open the first 3 files or folders in the current directory
 list.files(here::here())[1:3] |> sys_open()
 
-# also opens a browser window if sent a path that begins with 'https://'
-# or 'http://' (or contains '.com/','.org/', etc. or ends in '.com' or '.org')
-sys_open('google.org', here::here())
+# open the current temp directory
+sys_open(tempdir())
+
+# also opens a browser if sent a path that begins with 'https://'
+# or 'http://' (or contains '.com/','.org/', etc. or ends in them but without forward slash)
+sys_open('google.org')
+
+# last value can be empty, which will open the working directory
+sys_open('google.org', )
 
 }
 

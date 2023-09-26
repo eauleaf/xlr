@@ -15,7 +15,7 @@ Requires RStudio
 }
 \examples{
 \dontrun{
-# Highlight each item below and press key-chord `ctrl + alt + shift + >`.
+# Highlight each item below and press key-chord `ctrl + alt + shift + o`.
 # To implement the quick-keys. Run {.fn set_xlr_key_chords}.
 
 mtcars

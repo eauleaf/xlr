@@ -6,9 +6,6 @@
 \usage{
 run_copy_for_xl()
 }
-\value{
-void
-}
 \description{
 For interactive use in RStudio.
 }

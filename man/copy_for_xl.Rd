@@ -2,8 +2,7 @@
 % Please edit documentation in R/copy_for_xl.R
 \name{copy_for_xl}
 \alias{copy_for_xl}
-\title{Copies data that you intend to paste into a
-spreadsheet from R to your clipboard.}
+\title{Copies R data to your clipboard}
 \usage{
 copy_for_xl(. = NULL)
 }
@@ -14,6 +13,8 @@ copy_for_xl(. = NULL)
 the data provided coerced to a tibble; clipboard data as side-effect
 }
 \description{
+The format of the copied data is tab-delimeted for pasting to a spreadsheet.
+
 There are 2 ways to pass data into the function:
 \enumerate{
 \item Type it out the same as any other function.
@@ -26,7 +27,7 @@ plus the 'c'.
 \details{
 To set up the key-chord in RStudio. Run \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
 
-Copying formatted output to the clipboard requires package \link{clipr}.
+Copying formatted output to the clipboard requires package \code{clipr}.
 
 If using Linux, make sure to install a clipboard tool:
 apt-get install xclip
