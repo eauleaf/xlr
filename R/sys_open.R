@@ -48,7 +48,7 @@
 #'
 #' }
 #'
-sys_open <- function( ... ){
+sys_open <- function( ... , .quiet = TRUE){
 
   if( ...length()==0 ){
     paths <- sys_paths <- here::here()
@@ -59,37 +59,41 @@ sys_open <- function( ... ){
 
     # run input checks
     checkmate::assert_character(paths, any.missing = FALSE, null.ok = FALSE)
+    checkmate::assert_flag(.quiet)
+    return_errors <- if(.quiet){ NULL } else {''}
 
     paths <- rlang::set_names(paths) |> stringr::str_trim()
 
-    # collect URLs & correct strings ending in '.org' and '.com' with 'https://'
-    url_bools <- stringr::str_detect(paths, '^(?i)(?:https?://)')
-    incomplete_url_bools <- stringr::str_detect(paths, '(?i)\\.(?:com/|org/|gov/|net/|edu/|mil/|com$|org$|gov$|net$|edu$|mil$)') & !url_bools
-    paths[incomplete_url_bools] <- paste0('https://',paths[incomplete_url_bools])
-    url_bools <- stringr::str_detect(paths, '^(?i)(?:https?://)')
 
-    # open any URLs
-    if(any(url_bools)){
-      url_paths <- paths[url_bools]
-      results <- purrr::map(url_paths, .f = utils::browseURL)
-      if(all(url_bools)){ return(url_paths) }
-    }
+    # collect URLs & prefix strings ending in '.org' and '.com' with 'https://' if no known scheme exists
+    scheme_regex <- '^(?i)(?:https?|file|mailto|ftp|data|irc)://'
+    url_bools <- stringr::str_detect(paths, scheme_regex)
+    incomplete_url_bools <- !url_bools & stringr::str_detect(paths, '(?i)\\.(?:com/|org/|gov/|net/|edu/|mil/|com$|org$|gov$|net$|edu$|mil$)')
+    paths[incomplete_url_bools] <- paste0('https://',paths[incomplete_url_bools])
+    url_bools <- stringr::str_detect(paths, scheme_regex)
+
+    # # open any URLs
+    # if(any(url_bools)){
+    #   url_paths <- paths[url_bools]
+    #   results <- purrr::map(url_paths, .f = utils::browseURL)
+    #   if(all(url_bools)){ return(url_paths) }
+    # }
 
     sys_paths <- paths[!url_bools]
-    paths[!url_bools] <- sys_paths <- normalizePath(sys_paths, mustWork = TRUE)
+    paths[!url_bools] <- normalizePath(sys_paths, mustWork = TRUE)
 
   }
 
 
   if(( .Platform$OS.type == "windows" )) {
-    results <- sys_paths |> purrr::map(shell.exec)
+    results <- paths |> purrr::map(shell.exec)
     # return(result)
   } else if(.Platform$OS.type == "unix") {
-    results <- sys_paths |> purrr::map(\(path) system2('open', glue::glue("\"{path}\""), stdout = "", stderr = "", timeout = 10))
+    results <- paths |> purrr::map(\(path) system2('open', glue::glue("\"{path}\""), stdout = return_errors, stderr = return_errors, timeout = 10))
     # return(result)
   } else if( .Platform$OS.type == "FreeBSD" ){
     # freebsd not tested...
-    results <- sys_paths |> purrr::map(\(path) system2('handlr', glue::glue("open {path}"), stdout = NULL, stderr = NULL, timeout = 10))
+    results <- paths |> purrr::map(\(path) system2('handlr', glue::glue("open {path}"), stdout = return_errors, stderr = return_errors, timeout = 10))
     # return(result)
   } else {
     cli::cli_alert_danger('Unable to recognize your OS and so cannot open your system paths.

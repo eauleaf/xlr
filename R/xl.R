@@ -127,7 +127,9 @@ xl <- function(...
     wb_name_tmp <- rlang::quos( ... ) |> rlang::exprs_auto_name() |>
       names() |> purrr::pluck(1)
     wb_name_tmp <- paste0('xlr-', wb_name_tmp) |> fs::path_sanitize(replacement = "#") |>
-      stringr::str_squish() |> stringr::str_sub(start = 1, end = 20)
+      stringr::str_replace_all('\\$','#') |> # 'gio open' incorrectly handles '$'
+      stringr::str_squish() |>
+      stringr::str_sub(start = 1, end = 20)
     wb_name_tmp <- paste0(
       wb_name_tmp, '_',
       stringr::str_replace(format(Sys.time(), "%Y%m%d_%H%M_%OS3"),'\\.',''), '.xlsx')
