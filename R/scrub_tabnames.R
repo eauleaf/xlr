@@ -419,8 +419,9 @@ scrub_tabnames <- function(tabnames,
 #' @return vector or unique tabnames
 #'
 #' @examples
-#' xlr:::.uniquify_tabnames(tabnames = c(NULL, NULL, NA, NA, 'a', 'a', 'a', 'b', 'b', 'c', rep('d',11)) )
-#' xlr:::.uniquify_tabnames(tabnames = c(NULL, NULL, NA, NA, 'a', 'a', 'a', 'b', 'b', 'c', rep('d',11)), paste_side = 'left' , sep = '|')
+#' tabnames = c('', NULL, NULL, NA, NA, 'a', 'a', 'a', 'b', 'b', 'c', rep('d',11))
+#' xlr:::.uniquify_tabnames(tabnames)
+#' xlr:::.uniquify_tabnames(tabnames = tabnames, paste_side = 'left' , sep = '|')
 #' xlr:::.uniquify_tabnames('supercalifragalisticexpealidocious')
 #' xlr:::.uniquify_tabnames(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'), width = 10,  truncate_side = 'center', ellipsis = '~')
 #' xlr:::.uniquify_tabnames(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'),truncate_side = 'center', ellipsis = '~', paste_side='left')
@@ -440,11 +441,11 @@ scrub_tabnames <- function(tabnames,
     stringr::str_trunc(width = width, side = truncate_side, ellipsis = ellipsis) |>
     .fix_forbidden_tabnames(quiet = quiet)
 
-  is_repeated <- repeated(tolower(tabnames))
+  is_repeated <- repeated(tolower(tabnames)) | tabnames == ""
   if( any(is_repeated) ){
 
     if( !quiet ){
-      cli::cli_alert_warning("Duplicate tab/sheet names exist. Numbering within each group ...")
+      cli::cli_alert_warning("Duplicate or empty tab/sheet names exist. Numbering within each group ...")
     }
 
     # make tibble to update names by group
