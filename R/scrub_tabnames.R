@@ -445,7 +445,7 @@ scrub_tabnames <- function(tabnames,
   if( any(is_repeated) ){
 
     if( !quiet ){
-      cli::cli_alert_warning("Duplicate or empty tab/sheet names exist. Numbering within each group ...")
+      cli::cli_alert_warning("Duplicate or empty tab/sheet names exist. Numbering within each group ... ")
     }
 
     # make tibble to update names by group

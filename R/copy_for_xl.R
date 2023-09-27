@@ -83,8 +83,8 @@ copy_for_xl <- function(. = NULL){
   if( any(purrr::map_lgl(.out, is.list)) ) {
     nested_cols <- purrr::map_lgl(.out, is.list)
     cli::cat_line()
-    cli::cli_alert_danger('Data contains nested lists. Omitted {sum(nested_cols)} columns. ')
-    cli::cat_line('For complete data, consider running:  ')
+    cli::cli_alert_danger('Data contains nested lists. Omitted {sum(nested_cols)} nested columns.')
+    cli::cat_line('For more complete output, consider running:  ')
     cli::cli_alert('  xl({r_label})')
     cli::cat_line()
     .out <- .out[!nested_cols]

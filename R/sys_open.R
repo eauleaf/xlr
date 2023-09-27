@@ -50,6 +50,9 @@
 #'
 sys_open <- function( ... , .quiet = TRUE){
 
+  checkmate::assert_flag(.quiet)
+  return_errors <- if(.quiet){ NULL } else {''}
+
   if( ...length()==0 ){
     paths <- sys_paths <- here::here()
   } else {
@@ -59,8 +62,6 @@ sys_open <- function( ... , .quiet = TRUE){
 
     # run input checks
     checkmate::assert_character(paths, any.missing = FALSE, null.ok = FALSE)
-    checkmate::assert_flag(.quiet)
-    return_errors <- if(.quiet){ NULL } else {''}
 
     paths <- rlang::set_names(paths) |> stringr::str_trim()
 
