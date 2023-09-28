@@ -46,7 +46,3 @@ repeated <- function(x) {
   x %in% x[duplicated(x)]
 
 }
-#'
-#' Once released, note repeated here:
-#' https://stackoverflow.com/questions/28244123/find-duplicated-elements-with-dplyr
-#'

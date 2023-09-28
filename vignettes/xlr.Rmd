@@ -172,11 +172,11 @@ enlist(list(letters), list(letters)) |> str()
 
 -   Naming is permissive, you can have duplicate names in a list, so be
     careful about indexing by name since R returns only the first
-    observation it finds in the list.
+    equivalently named observation it finds in the list.
 
 -   `enlist()` has input parameter `.label`, that takes a naming
     function. Internally, `.label` is passed to `nm` in
-    `rlang::set_names()` and so takes the same inputs. For example, run:
+    `rlang::set_names()` and so takes the same inputs. For example:
     `enlist('hi','hello', .label = ~paste0(.,'_',1:2))`.
 
 -   `enlist()` supports non-standard evaluation.
@@ -203,7 +203,7 @@ like:
 copy_for_xl(mtcars)
 ```
 
-### `copy_for_xl()` key-chord
+### The `copy_for_xl()` key-chord:
 
 However, a copying method that is way, way better is to use the quick
 keys `ctrl + alt + shift + c`. To use these quick keys, run the
@@ -246,7 +246,7 @@ function guessed wrong, you can specify with the parameter
 my_data <- paste_from_xl(has_fieldnames = TRUE)
 ```
 
-### `paste_from_xl()` key-chord
+### The `paste_from_xl()` key-chord:
 
 However, a pasting method that is way, way better is to use the quick
 keys `ctrl + alt + shift + v`. To use this key-chord, run the function,
@@ -268,7 +268,13 @@ the console, you also get formatted code written into the editor window
 that recreates the data object from script. The script is a formatted
 version of R's deparsed internal data representation.
 
-### `paste_from_xl()` copy workbook paths
+The video below is an example of copying spreadsheet data and then using
+key-chord `ctrl + alt + shift + v` in RStudio.
+
+![ctrl + alt + shift +
+v](www/Screencast-paste_from_xl.webm){alt="ctrl + alt + shift + v"}
+
+### Copy paths using `paste_from_xl()`:
 
 In addition to spreadsheet data, you can copy file paths with
 `paste_from_xl()`. Open a file navigation window in your operating
@@ -276,11 +282,6 @@ system, highlight a few files or folders, and press `ctrl + c`; then go
 back to RStudio, click on an editor window, and press the key-chord
 `ctrl + alt + shift + v`, you get an enscripted vector of file paths
 pasted into your text editor.
-
-The video below is an example of copying spreadsheet data and then using
-key-chord `ctrl + alt + shift + v` in RStudio.
-
-![ctrl + alt + shift + v](www/Screencast-paste_from_xl.webm)
 
 <br>
 
@@ -316,7 +317,7 @@ of anything, like:
 iris |> split(f = iris$Species) |> purrr::map(head, 3) |> enscript()
 ```
 
-### `enscript()` key-chord
+### The `enscript()` key-chord:
 
 It's also convenient to use the quick keys for `enscript()`, which are
 `ctrl + alt + shift + n`. (I remember the key-chord as all three control
@@ -401,8 +402,8 @@ Because an '.xlsx' workbook can only make spreadsheets out of a simple,
 flat list of data objects, `list_iron()` recursively smooshes any
 additional list structure out of the input. `list_iron()` also has a few
 convenience features for naming the list objects and applying a function
-to each. For example, consider the ridiculous list structure below and
-list_iron's simplification of it:
+to each. For example, consider the ridiculously embedded list structure
+below and list_iron's simplification of it:
 
 ```{r list_iron-example, eval = T}
 rediculous <- list(list(list(list(flower_data = iris)), car_data = mtcars))
@@ -438,7 +439,7 @@ data inputs.
 For example, compare the tibbled and entibbled data below.
 
 ```{r entibble-example, eval = T}
-alpha <- rlang::set_names(letters)
+alpha <- rlang::set_names(letters, LETTERS)
 
 # rownames are forced in so they show up in spreadsheets
 entibble(alpha) |> head(2)
@@ -449,4 +450,3 @@ tibble::tibble(alpha) |> head(2)
 entibble(list(alpha), LETTERS) |> tail(2)
 tibble::tibble(list(alpha), LETTERS) |> tail(2)
 ```
-

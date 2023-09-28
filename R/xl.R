@@ -98,10 +98,6 @@ xl <- function(...
 # build list of tibbles --------------------------------------------------------
   df_list <- list_iron( ... , name_spec = .tabname_spec[['name_spec']], .f = entibble) |>
     purrr::map_if(.p = \(.x) identical(.x, tibble::tibble()), .f = \(.x) entibble(`NULL` = "NULL"))
-  # return(df_list)
-  # do not use; confusing because it removes empty dataframes in a list
-    # df_list <- purrr::discard( \(.x) identical(.x, entibble()) )
-  # df_list <- df_list[names(df_list) != '']
 
 # some more input checks -------------------------------------------------------
   checkmate::assert(
@@ -112,9 +108,6 @@ xl <- function(...
   )
 
   if( length(df_list)==0 ){
-    # df_list <- list(`NULL` = entibble(`NULL` = "NULL"))
-    # cli::cli_alert_danger('Insufficient data provided to create a workbook.')
-    # return(invisible(NULL))
     cli::cli_abort('Insufficient data provided to create a workbook.')
   }
 
@@ -127,7 +120,7 @@ xl <- function(...
     wb_name_tmp <- rlang::quos( ... ) |> rlang::exprs_auto_name() |>
       names() |> purrr::pluck(1)
     wb_name_tmp <- paste0('xlr-', wb_name_tmp) |> fs::path_sanitize(replacement = "#") |>
-      stringr::str_replace_all('\\$','#') |> # 'gio open' incorrectly handles '$' filenames. E.g. '$' |> xl()
+      stringr::str_replace_all('\\$','#') |> # currently, 'gio open' incorrectly handles '$' filenames. E.g. '$' |> xl() fails in Ubuntu
       stringr::str_squish() |>
       stringr::str_sub(start = 1, end = 20)
     wb_name_tmp <- paste0(
@@ -198,7 +191,7 @@ xl <- function(...
   # allows user to overwrite 'start_row' if provided in 'for_buildWorkbook'
   start_row <- for_buildWorkbook$startRow
 
-  # TODO: automatic colwidths
+  # TODO: build better control of automatic colwidths
   # tmp <- df_list |> purrr::map(~purrr::map_int(., ~max(nchar(.), na.rm = TRUE)))
   # print(tmp)
 
