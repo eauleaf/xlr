@@ -1,6 +1,5 @@
 ---
 title: "xlr"
-author: "Eauleaf"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{xlr}
@@ -23,12 +22,12 @@ knitr::opts_chunk$set(
 library(xlr)
 ```
 
-![](www/xlr.png){width="120"}
+![](www/xlr.svg){}
 
 ## ***R + Spreadsheets***
 
-**xlr** makes it easier to move information between **spreadsheets** and
-**R**.
+
+**xlr** makes it easier to move information between **spreadsheets** and **R**.
 
 <br>
 
@@ -59,6 +58,8 @@ want a series of decent-looking tables pushed to a workbook. **xlr** is
 an effort to reduce the friction that comes from having to work in both
 spreadsheets and R.
 
+<br>
+
 ## Functions:
 
 -   **`xl()`** -- quickly output a list of datasets as spreadsheets in a
@@ -69,7 +70,7 @@ spreadsheets and R.
 -   **`paste_from_xl()`** -- copy spreadsheet data to clipboard memory,
     formatted for pasting to R
 -   **`enscript()`** -- produce the code to re-create an R object
--   **`repeated()`** -- flag all repeats in a vector
+-   **`repeated()`** -- flag all repeated observations in a vector
 -   **`sys_open()`** -- request the OS open files or folders from paths
 -   **`list_iron()`** -- flatten lists of embedded lists to a named,
     single-file list
@@ -77,9 +78,7 @@ spreadsheets and R.
     spreadsheets
 
 <br>
-
-## How to use 'xlr':
-
+<hr>
 <br>
 
 # `xl()`

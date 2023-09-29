@@ -38,15 +38,11 @@
 #'
 #' copy_for_xl(iris)
 #' copy_for_xl(letters)
-#' copy_for_xl(letters)
 #' colours() |> copy_for_xl()
 #' head(mtcars) |> copy_for_xl()
 #' colours() |> rlang::set_names() |> entibble(another_col = colours()) |> copy_for_xl()
 #' dplyr::bind_cols(letters, LETTERS) |> head() |> copy_for_xl()
-#' letters |> rlang::set_names(LETTERS) |> copy_for_xl()
-#'
-#'
-#' enlist(head(iris),head(mtcars)) |> copy_for_xl()
+#' rlang::set_names(letters, LETTERS) |> copy_for_xl()
 #'
 #' # To use quick keys. Run {.fn set_xlr_key_chords}.
 #' # Then highlight the word 'letters' below and press key-chord `ctrl + alt + shift + c`.
@@ -106,6 +102,7 @@ copy_for_xl <- function(. = NULL){
 #'
 #'
 #' @return NULL
+#'
 #' @export
 #'
 #'

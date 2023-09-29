@@ -1,12 +1,11 @@
 Package: xlr
 Type: Package
 Title: Tools for working interactively between Excel/Libreoffice and R
-Version: 0.0.0.9033
+Version: 0.0.0.9034
 Author: Eauleaf
 Maintainer: <eauleaf@gmail.com>
-Description: 'xlr' is a group of functions for data scientists who 
-  use both spreadsheets and R. 'xlr' makes moving data back and forth between 
-  spreadsheets and R easier. 
+Description: 
+  Move data quickly between spreadsheets and R. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -40,3 +39,4 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 Language: en-US
+URL: https://eauleaf.github.io/xlr/
