@@ -444,8 +444,8 @@ alpha <- rlang::set_names(letters, LETTERS)
 entibble(alpha) |> head(2)
 tibble::tibble(alpha) |> head(2)
 
-# lists passed to entibble are dumped and their objects joined like any other 
-# input if the listed objects have compatible row dimensions
-entibble(list(alpha), LETTERS) |> tail(2)
-tibble::tibble(list(alpha), LETTERS) |> tail(2)
+# lists passed to entibble are dumped and their objects joined like comma-separated 
+# inputs if the listed objects have compatible row dimensions
+entibble(list(alpha, letters)) |> tail(2)
+tibble::tibble(list(alpha, letters)) |> tail(2)
 ```
