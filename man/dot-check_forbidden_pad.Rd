@@ -10,8 +10,8 @@
 \item{pad}{char: if pasting characters to a tab name, what character do you
 want to use to pad so numbers align, (e.g. '0' for '001' or '.' for '..1'
 if 3 digits of differentiation are necessary). Must be at least 1 character
-but no longer. Can be a space ' ', but cannot be any of these characters:
-\/:?*'[]}
+but no longer. Can be a space ' ', but cannot be any of the forbidden characters
+described in \code{details}}
 }
 \value{
 a single character; throws an error if input is any of these characters \/:?*'[]

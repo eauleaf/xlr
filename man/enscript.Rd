@@ -2,7 +2,7 @@
 % Please edit documentation in R/enscript.R
 \name{enscript}
 \alias{enscript}
-\title{Writes the script to produce an input}
+\title{Writes the script to reproduce the input}
 \usage{
 enscript(. = NULL, to_clipboard = TRUE, quiet = FALSE)
 }
@@ -19,28 +19,26 @@ The formatted deparsed expression, invisibly if to_clipboard = TRUE.
 The object's internal expression written to clipboard memory as side-effect.
 }
 \description{
-A convenience function for interactive use. \code{enscript()} obtains R's
+For interactive use. \code{enscript()} obtains R's
 deparsed internal representation of the input data object and prepares that
 object to be input from a script. The function's purpose is to save the user
 the inconvenience of reformatting console output data as input code.
 }
 \details{
-Copies a formatted script to the clipboard and prints unformatted output
-to the console.
-
 Copying formatted output to the clipboard requires package \link{clipr}.
 
-To set up the key-chord \code{ctrl+alt+shift+n} in RStudio. Run \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
-The \code{enscript} key-chord is very helpful when making tests for a function's test file.
+To set up the key-chord \code{ctrl+alt+shift+n} in RStudio, use \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
 
-If using Linux, make sure to install a clipboard tool:
+The \code{enscript} key-chord is helpful when making tests for a function's test file.
+
+If using Linux, make sure to install a clipboard tool, e.g.
 apt-get install xclip
 or
 apt-get install xsel
 }
 \note{
 All quick-keys in {.pkg xlr} use all 3 control keys \code{ctrl + alt + shift} plus
-a letter as key chord.)
+a letter.
 }
 \examples{
 \dontrun{

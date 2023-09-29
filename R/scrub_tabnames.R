@@ -1,52 +1,25 @@
-#' Conform tab/sheet names to spreadsheet workbook standards
+#' Conform names to spreadsheet workbook standards
 #'
-#' The general idea with scrub_tabnames is to preserve as much of the original
-#' tabnames as possible while ensuring each tabname is unique and contains
-#' permissible characters
+#' `scrub_tabnames()` preserves as much of the original
+#' tabnames as possible while ensuring each tabname is unique and contains only
+#' characters permissible as spreadsheet tab names
 #'
-#' @details Replacement characters: scrub_tabnames() replaces characters '/\:'
-#' with '-', replace characters '?*&' with '#', and replaces characters '[]<>' with
-#' '()', and . If the word history is in a tabname, it is truncated to 'hist' while
-#' preserving capitalization. Also, tabnames beginning or ending with single
-#' quotes ' , have those characters removed and replaced with '`'. Names greater
-#' than 31 characters are truncated. If two or more sheets have the same name,
-#' those those sheetnames are grouped and numbered to make each name in that group
-#' unique. The function calls itself, if needed, to ensure unique tabnames.
+#' @details
+#' Replaces:
 #'
+#' - characters: /\: with: -
+#' - characters: ?*&$ with: #
+#' - characters: \[< with: (
+#' - characters: \]> with: )
+#' - tabnames with the single quote or double quote: ' or " with a backtick `
+#' - the word 'history' in a tabname, with 'hist' while preserving capitalization
+#' - names greater than 31 characters with a truncated characters
+#' - duplicate sheetnames with numbered versions of the name to make each name within that group unique
 #'
 #' @references
-#' .url{https://support.microsoft.com/en-us/office/rename-a-worksheet-3f1f7148-ee83-404d-8ef0-9ff99fbad1f9}
-#' Worksheet names cannot: Be blank or have the same name, regardless of upper
-#' or lowercase Contain more than 31 characters Contain any of the following
-#' characters: / \ ? * : [ ] Begin or end with an apostrophe ('), but
-#' apostrophe's can be used in between text or numbers in a name. Be named
-#' 'History' in either lower or uppercase. This is a reserved word that Excel
-#' uses internally.
-#' .url{https://help.libreoffice.org/latest/he/text/scalc/guide/rename_table.html}
-#' The document can contain up to 10,000 individual sheets, which must have
-#' different names. Sheet names cannot contain the following characters: colon :
-#' back slash \ forward slash / question mark ?  asterisk * left square bracket
-#' "[ right square bracket ]" apostrophe/single-quote ' (Unicode U+0027) as the
-#' first or last character of the name.
-#' .url{https://colinfay.me/writing-r-extensions/creating-r-packages.html}
-#' To ensure that file names are valid across file systems and supported
-#' operating systems, the ASCII control characters as well as the characters
-#' ‘“’, ‘*’, ‘:’, ‘/’, ‘<’, ‘>’, ‘?’, ‘\’, and ‘|’ are not allowed in file
-#' names. In addition, files with names ‘con’, ‘prn’, ‘aux’, ‘clock$’, ‘nul’,
-#' ‘com1’ to ‘com9’, and ‘lpt1’ to ‘lpt9’ after conversion to lower case and
-#' stripping possible “extensions” (e.g., ‘lpt5.foo.bar’), are disallowed. Also,
-#' file names in the same directory must not differ only by case (see the
-#' previous paragraph). In addition, the basenames of ‘.Rd’ files may be used in
-#' URLs and so must be ASCII and not contain %. For maximal portability
-#' filenames should only contain only ASCII characters not excluded already
-#' (that is A-Za-z0-9._!#$%&+,;=@^(){}‘[] — we exclude space as many utilities
-#' do not accept spaces in file paths): non-English alphabetic characters cannot
-#' be guaranteed to be supported in all locales. It would be good practice to
-#' avoid the shell metacharacters (){}’[]$~: ~ is also used as part of ‘8.3’
-#' filenames on Windows. In addition, packages are normally distributed as
-#' tarballs, and these have a limit on path lengths: for maximal portability 100
-#' bytes.
-
+#' - \url{https://help.libreoffice.org/latest/he/text/scalc/guide/rename_table.html}
+#' - \url{https://support.microsoft.com/en-us/office/rename-a-worksheet-3f1f7148-ee83-404d-8ef0-9ff99fbad1f9}
+#' - \url{https://colinfay.me/writing-r-extensions/creating-r-packages.html}
 #'
 #'
 #' @param tabnames strings: character vector of names
@@ -57,18 +30,19 @@
 #' @param paste_side 'right' or 'left': describing which side of a tab name you
 #'   want to paste characters to, if required
 #' @param sep chars: if pasting characters to a tab name, what character do you
-#'   want to use to separate name and unique prefix/suffix; can be an empty
-#'   string '' or several characters like '->' or '...', but cannot be any of
-#'   these characters: \/:?*'[]
+#'   want to use to separate name and unique prefix/suffix; can be several
+#'   characters like '...', but cannot be any of the forbidden characters
+#'   described in `details`
 #' @param pad char: if pasting characters to a tab name, what character do you
 #'   want to use to pad so numbers align, (e.g. '0' for '001' or '.' for '..1'
 #'   if 3 digits of differentiation are necessary). Must be at least 1 character
-#'   but no longer. Can be a space ' ', but cannot be any of these characters:
-#'   \/:?*'[]
+#'   but no longer. Can be a space ' ', but cannot be any of the forbidden characters
+#'   described in `details`
 #' @param quiet bool: to turn off warnings if you prefer with quiet = TRUE
 #'
 #' @return a character vector of names suitable for Excel or Librecalc tab/sheet
 #'   names
+#'
 #' @export
 #'
 #' @examples
@@ -84,17 +58,26 @@
 #' rep('', 15) |> scrub_tabnames(max_width = 0, sep = '..', pad = '.')
 #' # rep('', 15) |> scrub_tabnames(max_width = 0, sep = '', pad = '') # expect_fail
 #' # rep('', 15) |> scrub_tabnames(max_width = 0, sep = '', pad = ' ') # expect_fail
-#' # dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 20, sep = '//', pad = ']') # expect_fail
-#' # dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '.', pad = '.') # expect_fail
+#' # dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
+#' # dplyr::pull(new_name) |> scrub_tabnames(max_width = 20, sep = '//', pad = ']') # expect_fail
+#' # dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
+#' # dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '.', pad = '.') # expect_fail
 #'
 #' # when stringr::str_trunc() gets fixed, the below code will work.
-#' ### dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '', pad = '.') # ??????
+#' # dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
+#' # dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '', pad = '.') # ??????
+#'
 #' # if you request a width of characters that is fewer than your replacement characters, you get some weird looking names:
-#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 2, sep = '...', pad = '.')
+#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
+#' dplyr::pull(new_name) |> scrub_tabnames(max_width = 2, sep = '...', pad = '.')
+#'
 #' # However, if you call zero width..., that's useful for naming.
-#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0)
-#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = 'tab > ', pad = '0')
-#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |> dplyr::pull(new_name) |> scrub_tabnames(max_width = 0,truncate_side = 'center')
+#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
+#' dplyr::pull(new_name) |> scrub_tabnames(max_width = 0)
+#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
+#' dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = 'tab > ', pad = '0')
+#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
+#' dplyr::pull(new_name) |> scrub_tabnames(max_width = 0,truncate_side = 'center')
 scrub_tabnames <- function(tabnames,
                            max_width = 31,
                            truncate_side = c("right", "left", "center"),
@@ -158,8 +141,7 @@ scrub_tabnames <- function(tabnames,
 }
 
 
-# All functions below are helpers to {.fn scrub_tabnames} -----------------
-
+### All functions below are helpers to {.fn scrub_tabnames} ---------------------
 
 
 # #' @family single table verbs

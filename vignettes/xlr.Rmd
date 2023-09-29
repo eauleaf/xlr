@@ -271,8 +271,7 @@ version of R's deparsed internal data representation.
 The video below is an example of copying spreadsheet data and then using
 key-chord `ctrl + alt + shift + v` in RStudio.
 
-![ctrl + alt + shift +
-v](www/Screencast-paste_from_xl.webm){alt="ctrl + alt + shift + v"}
+![ctrl + alt + shift + v](www/Screencast-paste_from_xl.webm)
 
 ### Copy paths using `paste_from_xl()`:
 
@@ -321,7 +320,7 @@ iris |> split(f = iris$Species) |> purrr::map(head, 3) |> enscript()
 
 It's also convenient to use the quick keys for `enscript()`, which are
 `ctrl + alt + shift + n`. (I remember the key-chord as all three control
-keys, plus the `n`, which is short for enscript.)
+keys, plus the `n`, which sounds short for enscript.)
 
 To use the `enscript()` quick keys, Run the function,
 `set_xlr_key_chords()` if you haven't already done so. Then:

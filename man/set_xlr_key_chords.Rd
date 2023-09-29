@@ -2,30 +2,26 @@
 % Please edit documentation in R/set_xlr_key_chords.R
 \name{set_xlr_key_chords}
 \alias{set_xlr_key_chords}
-\title{Sets key chord "ctrl + alt + shift + v" to auto-run \code{\link[=paste_from_xl]{paste_from_xl()}}.
-Sets key chord "ctrl + alt + shift + c" to auto-run \code{\link[=copy_for_xl]{copy_for_xl()}}.
-Restarts rstudio session.}
+\title{Sets xlr key-chords}
 \usage{
 set_xlr_key_chords()
 }
 \description{
-When in Rstudio, running this function allows the user to:
 \itemize{
-\item press the key chord "ctrl + alt + shift + v" to paste data copied from a spreadsheet into R directly where the cursor sits
-\item press the key chord "ctrl + alt + shift + c" to copy a data object into memory by highlighted variable or expression
-\item press the key chord "ctrl + alt + shift + n" to create a script to reproduce a highlighted data object or expression
+\item Sets key-chord "ctrl + alt + shift + v" in RStudio to auto-run \code{\link[=paste_from_xl]{paste_from_xl()}}.
+\item Sets key-chord "ctrl + alt + shift + c" in RStudio to auto-run \code{\link[=copy_for_xl]{copy_for_xl()}}.
+\item Sets key-chord "ctrl + alt + shift + n" in RStudio to auto-run \code{\link[=enscript]{enscript()}}.
+\item Sets key-chord "ctrl + alt + shift + l" in RStudio to auto-run \code{\link[=xl]{xl()}}.
 }
 }
 \details{
-To set quick-keys manually, follow these instructions from Posit:
+To enable the quick keys after running \code{set_xlr_key_chords()}, you must close
+and re-launch RStudio.
+
+To set quick-keys manually in RStudio, follow these instructions from Posit:
 \url{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 }
 \examples{
 \dontrun{ set_xlr_key_chords() }
 
-}
-\seealso{
-\code{\link[=paste_from_xl]{paste_from_xl()}}
-
-\code{\link[=copy_for_xl]{copy_for_xl()}}
 }

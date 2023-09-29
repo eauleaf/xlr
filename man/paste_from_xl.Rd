@@ -2,29 +2,29 @@
 % Please edit documentation in R/paste_from_xl.R
 \name{paste_from_xl}
 \alias{paste_from_xl}
-\title{Paste formatted data into Rstudio from a spreadsheet, with key chord
-'ctrl+alt+shift+v'.}
+\title{Paste data into Rstudio from a spreadsheet}
 \usage{
 paste_from_xl(has_fieldnames = NULL)
 }
 \arguments{
 \item{has_fieldnames}{TRUE or FALSE indicating whether field names are
 present in the spreadsheet data you copied. If user supplies no value,
-\code{\link[=paste_from_xl]{paste_from_xl()}} guesses by looking at the clipboard data.
-
-Because parameters are not user settable when employing quick keys, go to the
-console window and write 'T' or 'F' in the function echoed to the console
-if the function incorrectly guessed the presence of field names.}
+\code{\link[=paste_from_xl]{paste_from_xl()}} guesses by looking at the clipboard data. If the function
+incorrectly guesses the presence of field names, just write 'T' or 'F' into
+the function that was echoed to the console.}
 }
 \value{
--- If user copied a single spreadsheet row into the clipboard memory,
+** If user copied a single spreadsheet row into the clipboard memory,
 returns a vector.
 ** If user copied more than one spreadsheet row to the clipboard, returns a tibble.
 ** If user copied a local file to the clipboard, returns a string with the path to the file.
 }
 \description{
-Pastes spreadsheet data from the user's clipboard to RStudio,
-formatted in 1 of 2 ways.
+Imports spreadsheet data from the user's clipboard to RStudio.
+
+Will also copy full paths if copying from an OS file navigation window.
+
+Imported data formats in 1 of 2 ways.
 \enumerate{
 \item If pasting to the console window, 'ctrl+alt+shift+v' will insert a tibble
 of the copied spreadsheet data.
@@ -32,28 +32,29 @@ of the copied spreadsheet data.
 expression to produce the spreadsheet data
 }
 
-Notes:
-If pasting multiple spreadsheet rows, the data is imports as a tibble.
-If pasting single spreadsheet row, the data is imports as a vector.
-If pasting folder and file paths from an OS navigation window, the data is imports as a vector.
-
-To set the quick keys.
+To set the quick keys, use \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}
+\itemize{
+\item If pasting multiple spreadsheet rows, the data imports as a tibble.
+\item If pasting a single spreadsheet row with multiple columns, the data imports as a vector.
+\item If pasting folder and file paths from an OS navigation window, the data is imports as a vector.
+}
 }
 \details{
 To set the quick keys in RStudio, run function:
 \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
-Or, or set the quick keys manually by following these instructions:
+Or, set the quick keys manually by following these RStudio instructions:
 \url{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 }
 \note{
-Clipboard memory is limited; if you're copying a lot of data from a
-spreadsheet, try reading it in instead with \code{\link[readxl:read_excel]{readxl::read_excel()}}.
+Clipboard memory is limited; if you're copying a large quantity of data from a
+spreadsheet, try reading in the data instead with \code{\link[readxl:read_excel]{readxl::read_excel()}}.
 }
 \examples{
 \dontrun{
 # (All examples require the user to interactively select data.)
-# Copy data from a spreadsheet into working memory with 'ctrl + c' or by
-# right-clicking with the mouse and selecting 'copy', then type into the R
+# Copy data from a spreadsheet into working memory with 'ctrl + c' or
+# by right-clicking with the mouse and selecting 'copy', then,
+# to paste the copied spreadsheet data into R, type into the R
 # console:
 
 (my_data <- paste_from_xl())
@@ -61,10 +62,7 @@ spreadsheet, try reading it in instead with \code{\link[readxl:read_excel]{readx
 (my_data <- paste_from_xl(F))
 paste_from_xl()
 
-To paste the copied spreadsheet data into R.
-}
 
 }
-\seealso{
-\code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}
+
 }

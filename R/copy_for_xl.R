@@ -1,7 +1,7 @@
 #' Copies R data to your clipboard
 #'
 #' @description
-#' The format of the copied data is tab-delimeted for pasting to a spreadsheet.
+#' The format of the copied data is tab-delimeted for pasting into a spreadsheet.
 #'
 #' There are 2 ways to pass data into the function:
 #' 1) Type it out the same as any other function.
@@ -12,7 +12,7 @@
 #'
 #'
 #' @details
-#' To set up the key-chord in RStudio. Run [set_xlr_key_chords()].
+#' To set up the key-chord in RStudio, use [set_xlr_key_chords()].
 #'
 #' Copying formatted output to the clipboard requires package `clipr`.
 #'
@@ -24,10 +24,9 @@
 #' [copy_for_xl()] coerces the input data object to a tibble prior to copying to
 #' clipboard.
 #'
-#'
 #' @note
 #' All quick-keys in {.pkg xlr} use all 3 control keys `ctrl + alt + shift` plus
-#' a letter.)
+#' a letter.
 #'
 #' @param . a dataframe or object that can be coerced to a dataframe
 #'

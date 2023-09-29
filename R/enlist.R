@@ -1,25 +1,20 @@
-#' Create a list with auto-named list elements
+#' Make a list with auto-named list elements
 #'
 #'
 #' @description
 #' When passed a list, `enlist()` does not add an additional list layer.
-#' Use in place of [list] to produce a list with auto-assigned names and to avoid adding excess list structure.
+#' Use in place of [list] to produce a list with auto-assigned names and to
+#' avoid adding list structure.
 #'
-#' @details Specifically:
-#' -- `enlist` creates a list where each list element is force-named by the input expression if no list element name is available, .e.g  `enlist(mtcars)`.
-#'
-#' -- If no list exists, `enlist` places its arguments into a list, e.g. `enlist(c('hi', 'hello'))`.
-#'
-#' -- If passed a single bare list, `enlist` does not add an additional list layer.
+#' @details
+#' - `enlist` creates a list where each input list element is force-named by the assigned name or input expression, .e.g  `enlist(mtcars)`.
+#' - If no list exists, `enlist` places its arguments into a list, e.g. `enlist(c('hi', 'hello'))`.
+#' - If passed a single bare list, `enlist` does not add an additional list layer.
 #' That is, enlist() doesn't stack lists for structure's sake alone, e.g. `enlist(enlist(letters))`.
 #' In this dis-embedding case, a user provided name passed with ` = `, like `enlist(some_name = list('hi'))`, may be discarded.
-#'
-#' -- `enlist` takes dots, splicing, and injection, e.g. enlist(!!!letters).
-#'
-#' -- `enlist` ignores input argument separator commas, e.g. enlist(,,,,,).
-#'
-#' -- Naming the output can be performed by function through the parameter `.label`, e.g. enlist('me', .label = ~paste0('name_',.))
-#'
+#' - Handles dots, splicing, and injection, e.g. enlist(!!!letters).
+#' - Ignores input argument separator commas, e.g. enlist(,,'hi',,,).
+#' - Naming the output can be performed by function through the parameter `.label`, e.g. enlist('me', .label = ~paste0('name_',.))
 #'
 #' @param ... data objects; if unnamed, enlist() forces names by input expression
 #' @param .label a function or character vector to rename list elements, e.g. .label = ~substr(.,1,5).
@@ -48,24 +43,14 @@
 #'
 #'
 #' # List embedding:
-#' list(list(list(letters))) # 3 lists deep
 #' enlist(enlist(enlist(letters))) # 1 list deep
+#' list(list(list(letters))) # 3 lists deep
 #'
-#' # This dis-embedding behavior can be useful in a function when the dots `...` can be arguments or a list of arguments.
+#' list(letters, b = enlist(a = letters, 'blue')) |> enlist()
 #'
 #' # Handles non-standard evaluation:
 #' candy <- list('lollipops','gum')
 #' enlist(candy, !!!candy)
-#'
-#' # to think about
-#' list(letters, b = enlist(a = letters, 'blue')) |> enlist()
-#' list(letters, b = enlist(a = letters, 'blue'))
-#' list(letters, b = list(a = letters, 'blue'))
-#' list(letters, b = list(a = letters, 'blue')) |> enlist()
-#' list((a = list(LETTERS, letters))) |> enlist()
-#' enlist((a = list(LETTERS, letters))) # no autoname; just dis-embed
-#' enlist((list(LETTERS, letters))) # no autoname; just dis-embed
-#' enlist(a = list(LETTERS, letters)) # auto-naming
 #'
 enlist <- function(..., .label =  NULL){
   .quos <- rlang::quos(...)

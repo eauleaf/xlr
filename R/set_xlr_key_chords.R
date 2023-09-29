@@ -1,18 +1,16 @@
-#' Sets key chord "ctrl + alt + shift + v" to auto-run [paste_from_xl()].
-#' Sets key chord "ctrl + alt + shift + c" to auto-run [copy_for_xl()].
-#' Restarts rstudio session.
+#' Sets xlr key-chords
 #'
-#' When in Rstudio, running this function allows the user to:
-#'  * press the key chord "ctrl + alt + shift + v" to paste data copied from a spreadsheet into R directly where the cursor sits
-#'  * press the key chord "ctrl + alt + shift + c" to copy a data object into memory by highlighted variable or expression
-#'  * press the key chord "ctrl + alt + shift + n" to create a script to reproduce a highlighted data object or expression
+#' - Sets key-chord "ctrl + alt + shift + v" in RStudio to auto-run [paste_from_xl()].
+#' - Sets key-chord "ctrl + alt + shift + c" in RStudio to auto-run [copy_for_xl()].
+#' - Sets key-chord "ctrl + alt + shift + n" in RStudio to auto-run [enscript()].
+#' - Sets key-chord "ctrl + alt + shift + l" in RStudio to auto-run [xl()].
 #'
-#' @details To set quick-keys manually, follow these instructions from Posit:
+#' @details
+#' To enable the quick keys after running `set_xlr_key_chords()`, you must close
+#' and re-launch RStudio.
+#'
+#' To set quick-keys manually in RStudio, follow these instructions from Posit:
 #' \url{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
-#'
-#' @seealso [paste_from_xl()]
-#' @seealso [copy_for_xl()]
-#'
 #'
 #' @return NULL
 #' @export
@@ -32,20 +30,15 @@ set_xlr_key_chords <- function(){
       '{.fn set_xlr_key_chords} requires interactive use in RStudio.'
     )}
 
-  cli::cli_alert_warning('After setting quick-keys, you must restart your RStudio Session.')
-
-  # rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+V" = "xlr::run_paste_from_xl" )
-  # rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+C" = "xlr::run_copy_for_xl" )
-  # rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+N" = "xlr::run_enscript" )
-  # rstudio.prefs::use_rstudio_keyboard_shortcut( "Ctrl+Alt+Shift+>" = "xlr::run_xl" )
   rstudio.prefs::use_rstudio_keyboard_shortcut(
-    "Ctrl+Alt+Shift+O" = "xlr::run_xl",
+    "Ctrl+Alt+Shift+L" = "xlr::run_xl",
     "Ctrl+Alt+Shift+V" = "xlr::run_paste_from_xl",
     "Ctrl+Alt+Shift+C" = "xlr::run_copy_for_xl",
     "Ctrl+Alt+Shift+N" = "xlr::run_enscript"
     )
 
-  # rstudioapi::restartSession()
+
+  cli::cli_alert_warning('After setting quick-keys, you must terminate and re-launch RStudio.')
 
 }
 

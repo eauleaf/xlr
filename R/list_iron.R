@@ -1,20 +1,20 @@
 #' Iron embedded lists out of a list of objects
 #'
-#' Recursively dis-embed objects in lists of lists to a single, linear list of the objects.
-#' If object is not in a list, `list_iron` places the object in a list.
-#' Removes all empty embedded lists.
-#' Removes empty comma-separated arguments.
+#' Recursively dis-embed objects in lists of lists to a single, linear list of list objects.
 #'
+#' - If object is not in a list, `list_iron` places the object in a list.
+#' - Removes all empty embedded lists.
+#' - Removes empty comma-separated arguments.
 #'
 #' @details
 #' Because spreadsheets tabs have no hierarchical structure, any list of data
-#' objects to prepare for presentation in a workbook must be flattened to sheets.
+#' objects to prepare for presentation within a workbook must be flattened to sheets.
 #' This function is a precursor for printing listed data objects with [xlr].
-#' `list_iron` requires all objects in an embedded object list to form a
-#' single-file list, and optionally conform to a function passed by the user, e.g. [entibble].
-#' Specifically, `list_iron` recursively flattens an embedded object list, acting
-#' similarly to [purrr::list_flatten], but collapsing all embedded lists rather
-#' than a single layer. Concatenates embedded-list names via parameter `name_spec`.
+#'
+#' `list_iron` forces all objects in an embedded object list to become a
+#' single-file list, and optionally conform to a function passed by the user, e.g. [entibble()].
+#' `list_iron` acts similar to [purrr::list_flatten()], but collapses all embedded
+#' lists rather than a single layer. Also concatenates embedded-list names via parameter `name_spec`.
 #'
 #' @inheritParams purrr::list_flatten
 #' @param ... objects or list of objects.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/xl.R
 \name{xl}
 \alias{xl}
-\title{View an R objects in a Libreoffice or Excel workbook}
+\title{View an R data objects in a Libreoffice or Excel workbook}
 \usage{
 xl(
   ...,
@@ -22,74 +22,50 @@ xl(
 or more dataframes.}
 
 \item{.path}{Optional path to save a copy of the workbook output. Uses
-\code{\link[here:here]{here::here()}}. If \code{.path} is not specified, workbook is removed on or before
-closure.}
+\code{\link[here:here]{here::here()}}. If \code{.path} is not specified, workbook is saved only momentarily.}
 
-\item{.open}{TRUE (default); If FALSE, workbook will not open after being written.}
+\item{.open}{If FALSE, workbook will not open after being written.}
 
-\item{.quiet}{TRUE or FALSE (default), denoting whether you want messaging.}
+\item{.quiet}{If FALSE, echoes function messages.}
 
 \item{.sheet_titles}{NULL, a character vector the same length as the number of
 spreadsheets, or a purrr-style function/formula to apply to the default input names.
-Default is the function \code{stringr::str_to_title}.}
+The default is function: \code{\link[stringr:case]{stringr::str_to_title()}}.}
 
 \item{.dataframe_spec}{NULL (default), or a purrr-style function to apply
 across all dataframes; e.g. \verb{~janitor::clean_names(., case = 'title'))} or
 \code{janitor::clean_names} to titlecase or snakecase fieldnames.}
 
 \item{.tabname_spec}{a list that allows the user to define tab labeling
-arguments: sep = ".", pad = ".", name_spec = "{inner}"}
+arguments: sep = ".", pad = ".", and name_spec = "{inner}"}
 
 \item{.workbook_spec}{a list of arguments to pass to
-\code{\link[openxlsx:buildWorkbook]{openxlsx::buildWorkbook()}}, e.g. list(asTable = TRUE, orientation =
-'landscape', zoom = 70, startRow = 7)}
+\code{\link[openxlsx:buildWorkbook]{openxlsx::buildWorkbook()}}, e.g. \code{list(asTable = TRUE, orientation = 'landscape', zoom = 70, startRow = 7)}}
 
-\item{.return}{one of NULL, 'savepath', 'tibbles', or 'workbook'
-specifying the return information}
+\item{.return}{one of 'workbook' (default), 'savepath', 'tibbles', or NULL to
+specify the information to return (invisibly).}
 }
 \value{
 The side-effect, a workbook of spreadsheets, is the primary output of this function.
-The direct-return output is TRUE or FALSE (default) denoting whether the
-xlsx workbook file wrote out properly. However, if the parameter \code{.return} is
-specified by the user, the function will instead return the list of inputs as
-tibbles, the \code{openxlsx} workbook-object, or the save path. Direct outputs
-are returned invisibly.
+The direct-return output is determined by the input parameter \code{.return} denoting
+whether to return the \code{openxlsx} workbook-object, the list of input data cast as
+tibbles, or the save path. Any output is returned invisibly.
 }
 \description{
-Provides output of R datasets through the user's default spreasheet
-program. Produces output similar to \code{\link[tibble:view]{tibble::view()}}, but in a spreadsheet,
-which allows for larger datasets and a list of dataframes.
+Provides an output of datasets to view through the user's default spreasheet
+program.
 }
 \details{
-Auto-corrects forbidden sheetnames
-Flattens embedded lists with preserved name structure
+If you use quick keys, the function \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}} will assign
+\code{ctrl + alt + shift + l} to the function \code{xl()}. The quick keys allow you to
+open a spreadsheet by highlighting an expression or variable within an RStudio
+text editor, and then pressing all 3 control keys \code{ctrl + alt + shift} as well
+as the letter \code{L} to 'launch' a spreadsheet.
 }
 \examples{
 \dontrun{
-xl(list('hi'))
-enlist('hi') |> xl()
-enlist(hi) |> xl()
-xl(mtcars)
-xl(NA)
-xl(a = NA)
-xl(character(0))
-xl(';')
-xl(TRUE)
-list(c(list(1:5), list(5:1)), letters) |> xl()
-xl(c(1:5))
-c(1:5) |> xl()
-xl(1)
-xl(list(a = 1,5))
-list(a = 1,b=5, 1:10, letters, as.matrix(warpbreaks[1:10,]) ) |> xl()
-c(1,1:5, list(1:10)) |> xl()
-a <- tibble::tibble(iris); xl(a)
-rlang::set_names(as.list(letters), LETTERS) |> xl()
-a_dataframe <- tibble::tibble(iris); xl(a_dataframe)
-xl()
-xl('')
-xl(NULL)
-xl(a = NULL)
-xl(iris, dplyr::starwars, mtcars, cars)
+xl('hi')
+xl(mtcars, iris)
 }
 
 }

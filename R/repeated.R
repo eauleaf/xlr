@@ -1,16 +1,16 @@
 #' Flag all values in a vector that occur more than once.
 #'
 #' @description
-#' Similar to [duplicated()], but marks all repeated values as TRUE.
+#' Useful for reviewing datasets with where there should be unique values.
+#' It is similar to [duplicated()], but marks all repeated values as TRUE.
 #'
 #' Removes NULL, and treats NaN, Inf, and NA like any other value.
 #'   `repeated(c(NULL, NULL, NULL, NaN, Inf, NA, NA))` returns
 #'   `c(FALSE, FALSE, TRUE, TRUE)`
 #'
 #' @details
-#' Datasets often contain repeated data where there should be unique values.
-#'  [repeated()] is a convenience function for reviewing
-#'  repeated observations in a dataframe, and an alias for `x %in% x[duplicated(x)]`.
+#'  [repeated()] is a convenience function for reviewing repeated observations
+#'  in a dataframe, and an alias for `x %in% x[duplicated(x)]`.
 #'
 #' Filtering a dataframe '.data' by the repeated values in column 'x',
 #'   as in `dplyr::filter(.data, repeated(x))`, performs the same task as
@@ -18,7 +18,7 @@
 #'   `dplyr::group_by(.data, x)  |> dplyr::filter(dplyr::n()>1)`, but is
 #'   quicker and easier to remember.
 #'
-#' Ideally [repeated()] would be written in c++ and included in [dplyr].
+#' (Ideally [repeated()] would be written in c++ and included in [dplyr].)
 #'
 #' @param x a vector
 #'

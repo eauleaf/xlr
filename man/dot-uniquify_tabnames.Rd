@@ -41,8 +41,9 @@ scrub_tabnames before passing args. This function is recursive and can
 call itself forever if width, sep, and pad aren't checked in advance.
 }
 \examples{
-xlr:::.uniquify_tabnames(tabnames = c(NULL, NULL, NA, NA, 'a', 'a', 'a', 'b', 'b', 'c', rep('d',11)) )
-xlr:::.uniquify_tabnames(tabnames = c(NULL, NULL, NA, NA, 'a', 'a', 'a', 'b', 'b', 'c', rep('d',11)), paste_side = 'left' , sep = '|')
+tabnames = c('', NULL, NULL, NA, NA, 'a', 'a', 'a', 'b', 'b', 'c', rep('d',11))
+xlr:::.uniquify_tabnames(tabnames)
+xlr:::.uniquify_tabnames(tabnames = tabnames, paste_side = 'left' , sep = '|')
 xlr:::.uniquify_tabnames('supercalifragalisticexpealidocious')
 xlr:::.uniquify_tabnames(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'), width = 10,  truncate_side = 'center', ellipsis = '~')
 xlr:::.uniquify_tabnames(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'),truncate_side = 'center', ellipsis = '~', paste_side='left')

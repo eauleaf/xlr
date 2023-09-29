@@ -1,72 +1,49 @@
-#' View an R objects in a Libreoffice or Excel workbook
+#' View an R data objects in a Libreoffice or Excel workbook
 #'
-#' Provides output of R datasets through the user's default spreasheet
-#' program. Produces output similar to [tibble::view()], but in a spreadsheet,
-#' which allows for larger datasets and a list of dataframes.
+#' Provides an output of datasets to view through the user's default spreasheet
+#' program.
 #'
-#' Auto-corrects forbidden sheetnames
-#' Flattens embedded lists with preserved name structure
-# If passed a completely empty dataframe, such as `xl(tibble::tibble())`
+#' @details
+#' If you use quick keys, the function [set_xlr_key_chords()] will assign
+#' `ctrl + alt + shift + l` to the function `xl()`. The quick keys allow you to
+#' open a spreadsheet by highlighting an expression or variable within an RStudio
+#' text editor, and then pressing all 3 control keys `ctrl + alt + shift` as well
+#' as the letter `L` to 'launch' a spreadsheet.
 #'
 #'
 #' @param ... A dataframe, list of dataframes, or inputs coerceable to one
 #'   or more dataframes.
 #' @param .path Optional path to save a copy of the workbook output. Uses
-#'   [here::here()]. If `.path` is not specified, workbook is removed on or before
-#'   closure.
-#' @param .open TRUE (default); If FALSE, workbook will not open after being written.
-#' @param .quiet TRUE or FALSE (default), denoting whether you want messaging.
+#'   [here::here()]. If `.path` is not specified, workbook is saved only momentarily.
+#' @param .open If FALSE, workbook will not open after being written.
+#' @param .quiet If FALSE, echoes function messages.
 #' @param .sheet_titles NULL, a character vector the same length as the number of
 #' spreadsheets, or a purrr-style function/formula to apply to the default input names.
-#' Default is the function `stringr::str_to_title`.
+#' The default is function: [stringr::str_to_title()].
 #' @param .dataframe_spec NULL (default), or a purrr-style function to apply
 #'   across all dataframes; e.g. `~janitor::clean_names(., case = 'title'))` or
 #'   `janitor::clean_names` to titlecase or snakecase fieldnames.
 #' @param .tabname_spec a list that allows the user to define tab labeling
-#'   arguments: sep = ".", pad = ".", name_spec = "{inner}"
+#'   arguments: sep = ".", pad = ".", and name_spec = "{inner}"
 #' @param .workbook_spec a list of arguments to pass to
-#'   [openxlsx::buildWorkbook()], e.g. list(asTable = TRUE, orientation =
-#'   'landscape', zoom = 70, startRow = 7)
-#' @param .return one of NULL, 'savepath', 'tibbles', or 'workbook'
-#' specifying the return information
+#'   [openxlsx::buildWorkbook()], e.g. `list(asTable = TRUE, orientation =
+#'   'landscape', zoom = 70, startRow = 7)`
+#' @param .return one of 'workbook' (default), 'savepath', 'tibbles', or NULL to
+#' specify the information to return (invisibly).
 #'
 #' @seealso [openxlsx::buildWorkbook()]
 #'
 #' @return
 #' The side-effect, a workbook of spreadsheets, is the primary output of this function.
-#' The direct-return output is TRUE or FALSE (default) denoting whether the
-#' xlsx workbook file wrote out properly. However, if the parameter `.return` is
-#' specified by the user, the function will instead return the list of inputs as
-#' tibbles, the `openxlsx` workbook-object, or the save path. Direct outputs
-#' are returned invisibly.
+#' The direct-return output is determined by the input parameter `.return` denoting
+#' whether to return the `openxlsx` workbook-object, the list of input data cast as
+#' tibbles, or the save path. Any output is returned invisibly.
 #'
 #' @export
 #'
 #' @examples \dontrun{
-#' xl(list('hi'))
-#' enlist('hi') |> xl()
-#' enlist(hi) |> xl()
-#' xl(mtcars)
-#' xl(NA)
-#' xl(a = NA)
-#' xl(character(0))
-#' xl(';')
-#' xl(TRUE)
-#' list(c(list(1:5), list(5:1)), letters) |> xl()
-#' xl(c(1:5))
-#' c(1:5) |> xl()
-#' xl(1)
-#' xl(list(a = 1,5))
-#' list(a = 1,b=5, 1:10, letters, as.matrix(warpbreaks[1:10,]) ) |> xl()
-#' c(1,1:5, list(1:10)) |> xl()
-#' a <- tibble::tibble(iris); xl(a)
-#' rlang::set_names(as.list(letters), LETTERS) |> xl()
-#' a_dataframe <- tibble::tibble(iris); xl(a_dataframe)
-#' xl()
-#' xl('')
-#' xl(NULL)
-#' xl(a = NULL)
-#' xl(iris, dplyr::starwars, mtcars, cars)
+#' xl('hi')
+#' xl(mtcars, iris)
 #' }
 #'
 xl <- function(...
@@ -260,7 +237,6 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
 #' background-color: #00A500;
 
 
-
 #' Addin function to call [xl()]
 #'
 #' Requires RStudio
@@ -270,7 +246,7 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
 #'
 #'
 #' @examples \dontrun{
-#' # Highlight each item below and press key-chord `ctrl + alt + shift + o`.
+#' # Highlight each item below and press key-chord `ctrl + alt + shift + l`.
 #' # To implement the quick-keys. Run {.fn set_xlr_key_chords}.
 #'
 #' mtcars
@@ -304,4 +280,26 @@ run_xl <- function(){
 }
 
 
+# Tests:
+#' xl(NA)
+#' xl(a = NA)
+#' xl(character(0))
+#' xl(';')
+#' xl(TRUE)
+#' list(c(list(1:5), list(5:1)), letters) |> xl()
+#' xl(c(1:5))
+#' c(1:5) |> xl()
+#' xl(1)
+#' xl(list(a = 1,5))
+#' list(a = 1,b=5, 1:10, letters, as.matrix(warpbreaks[1:10,]) ) |> xl()
+#' c(1,1:5, list(1:10)) |> xl()
+#' a <- tibble::tibble(iris); xl(a)
+#' rlang::set_names(as.list(letters), LETTERS) |> xl()
+#' xl(!!!letters)
+#' a_dataframe <- tibble::tibble(iris); xl(a_dataframe)
+#' xl()
+#' xl('')
+#' xl(NULL)
+#' xl(a = NULL)
+#' xl(iris, dplyr::starwars, mtcars, cars)
 

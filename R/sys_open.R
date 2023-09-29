@@ -1,7 +1,6 @@
-#' Open a file or folder with the OS default app
+#' Open a file via the OS default app
 #'
-#' Open files or folders through the operating system default launch application.
-#' Also open URLs.
+#' Open files, folders, or URLs through the operating system default application.
 #'
 #' @details If you aren't able to open a file with `sys_open()`, right-click on
 #'   the file to make sure your operating system has a default application
@@ -10,9 +9,10 @@
 #'
 #'
 #' @param ... path strings to the files or folder you want to open
-#' -- inputs can be any combination of lists, vectors, or comma-separated inputs
-#' -- no input opens the current working folder location
-#' -- paths are automatically expanded using [normalizePath()]
+#' - inputs can be any combination of lists, vectors, or comma-separated inputs
+#' - no input opens the current working folder location
+#' - paths are automatically expanded using [normalizePath()]
+#' @param .quiet if TRUE, will echo unix system errors and warnings to the console
 #'
 #' @return character vector of named paths
 #'

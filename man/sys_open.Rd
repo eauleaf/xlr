@@ -2,22 +2,25 @@
 % Please edit documentation in R/sys_open.R
 \name{sys_open}
 \alias{sys_open}
-\title{Open a file or folder with the OS default app}
+\title{Open a file via the OS default app}
 \usage{
 sys_open(..., .quiet = TRUE)
 }
 \arguments{
 \item{...}{path strings to the files or folder you want to open
--- inputs can be any combination of lists, vectors, or comma-separated inputs
--- no input opens the current working folder location
--- paths are automatically expanded using \code{\link[=normalizePath]{normalizePath()}}}
+\itemize{
+\item inputs can be any combination of lists, vectors, or comma-separated inputs
+\item no input opens the current working folder location
+\item paths are automatically expanded using \code{\link[=normalizePath]{normalizePath()}}
+}}
+
+\item{.quiet}{if TRUE, will echo unix system errors and warnings to the console}
 }
 \value{
 character vector of named paths
 }
 \description{
-Open files or folders through the operating system default launch application.
-Also open URLs.
+Open files, folders, or URLs through the operating system default application.
 }
 \details{
 If you aren't able to open a file with \code{sys_open()}, right-click on

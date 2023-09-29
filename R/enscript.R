@@ -1,11 +1,7 @@
-#' Writes the script to produce an input
-#'
-#' Copies a formatted script to the clipboard and prints unformatted output
-#' to the console.
-#'
+#' Writes the script to reproduce the input
 #'
 #' @description
-#' A convenience function for interactive use. `enscript()` obtains R's
+#' For interactive use. `enscript()` obtains R's
 #' deparsed internal representation of the input data object and prepares that
 #' object to be input from a script. The function's purpose is to save the user
 #' the inconvenience of reformatting console output data as input code.
@@ -13,17 +9,18 @@
 #' @details
 #' Copying formatted output to the clipboard requires package [clipr].
 #'
-#' To set up the key-chord `ctrl+alt+shift+n` in RStudio. Run [set_xlr_key_chords()].
-#' The `enscript` key-chord is very helpful when making tests for a function's test file.
+#' To set up the key-chord `ctrl+alt+shift+n` in RStudio, use [set_xlr_key_chords()].
 #'
-#' If using Linux, make sure to install a clipboard tool:
+#' The `enscript` key-chord is helpful when making tests for a function's test file.
+#'
+#' If using Linux, make sure to install a clipboard tool, e.g.
 #'  apt-get install xclip
 #'   or
 #'  apt-get install xsel
 #'
 #' @note
 #' All quick-keys in {.pkg xlr} use all 3 control keys `ctrl + alt + shift` plus
-#' a letter as key chord.)
+#' a letter.
 #'
 #' @param . The data object or expression to transform into script
 #' @param to_clipboard default TRUE; whether to copy the resulting script to the clipboard

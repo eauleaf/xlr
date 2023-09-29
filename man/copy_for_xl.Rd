@@ -13,7 +13,7 @@ copy_for_xl(. = NULL)
 the data provided coerced to a tibble; clipboard data as side-effect
 }
 \description{
-The format of the copied data is tab-delimeted for pasting to a spreadsheet.
+The format of the copied data is tab-delimeted for pasting into a spreadsheet.
 
 There are 2 ways to pass data into the function:
 \enumerate{
@@ -25,7 +25,7 @@ plus the 'c'.
 }
 }
 \details{
-To set up the key-chord in RStudio. Run \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
+To set up the key-chord in RStudio, use \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
 
 Copying formatted output to the clipboard requires package \code{clipr}.
 
@@ -39,7 +39,7 @@ clipboard.
 }
 \note{
 All quick-keys in {.pkg xlr} use all 3 control keys \code{ctrl + alt + shift} plus
-a letter.)
+a letter.
 }
 \examples{
 \dontrun{
