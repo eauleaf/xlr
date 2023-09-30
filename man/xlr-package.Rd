@@ -6,6 +6,13 @@
 \alias{xlr-package}
 \title{xlr: Tools for working interactively between Excel/Libreoffice and R}
 \description{
-'xlr' is a group of functions for data scientists who use both spreadsheets and R. 'xlr' makes moving data back and forth between spreadsheets and R easier.
+Move data quickly between spreadsheets and R.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://eauleaf.github.io/xlr/}
+}
+
 }
 \keyword{internal}

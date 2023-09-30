@@ -2,7 +2,7 @@
 % Please edit documentation in R/scrub_tabnames.R
 \name{.check_forbidden_pad}
 \alias{.check_forbidden_pad}
-\title{Throw error for prohibited padding options or more than 1 char.}
+\title{Error for prohibited padding or more than 1 char}
 \usage{
 .check_forbidden_pad(pad = "")
 }
@@ -17,17 +17,21 @@ described in \code{details}}
 a single character; throws an error if input is any of these characters \/:?*'[]
 }
 \description{
-Throw error for prohibited padding options or more than 1 char.
+Error for prohibited padding or more than 1 char
 }
 \examples{
 xlr:::.check_forbidden_pad('.')
 xlr:::.check_forbidden_pad('-')
-\dontrun{ # expect error if any of these: \/:?*'[]
+\dontrun{
+
+# expect errors for the below: \/:?*'[]
+
 xlr:::.check_forbidden_pad(':')
 xlr:::.check_forbidden_pad('')
 xlr:::.check_forbidden_pad(NA)
 xlr:::.check_forbidden_pad(NULL)
 xlr:::.check_forbidden_pad("\\\\")
+
 }
 
 }

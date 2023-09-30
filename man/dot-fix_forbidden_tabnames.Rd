@@ -2,8 +2,7 @@
 % Please edit documentation in R/scrub_tabnames.R
 \name{.fix_forbidden_tabnames}
 \alias{.fix_forbidden_tabnames}
-\title{Corrects tabnames by replacing special characters one-for-one
-and notifies the user of replaced characters.}
+\title{Corrects tabnames by replacing reserved chars}
 \usage{
 .fix_forbidden_tabnames(tabnames, quiet = FALSE)
 }
@@ -16,7 +15,7 @@ and notifies the user of replaced characters.}
 the input vector with forbidden characters replaced/removed
 }
 \description{
-Quietly casts input as characters.
+Replacing special characters one-for-one and notifies the user of replaced characters.
 }
 \note{
 NA always returned as NA
@@ -24,7 +23,6 @@ NULL acts like c(), i.e c(NULL, NULL)
 }
 \examples{
 c("' '?HisTory,*?*!@#$\%^&*()_+ '[{1'}]'[:/\\\\]''", "", NA, NULL) |>  xlr:::.fix_forbidden_tabnames()
-
 " ''''''" |> xlr:::.fix_forbidden_tabnames()
 "'''1' '" |> xlr:::.fix_forbidden_tabnames()
 "'[ ]hi];'" |> xlr:::.fix_forbidden_tabnames()
@@ -45,6 +43,5 @@ enlist(NULL, NA, '[hi?]') |>  purrr::map(xlr:::.fix_forbidden_tabnames)
 }
 \seealso{
 \code{\link[=scrub_tabnames]{scrub_tabnames()}}
-
 \code{\link[=.forbidden_chars_replace]{.forbidden_chars_replace()}}
 }

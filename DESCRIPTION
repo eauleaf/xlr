@@ -1,7 +1,7 @@
 Package: xlr
 Type: Package
 Title: Tools for working interactively between Excel/Libreoffice and R
-Version: 0.0.0.9034
+Version: 0.0.0.9035
 Author: Eauleaf
 Maintainer: <eauleaf@gmail.com>
 Description: 

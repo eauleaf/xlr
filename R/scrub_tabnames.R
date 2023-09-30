@@ -140,9 +140,9 @@ scrub_tabnames <- function(tabnames,
 
 }
 
-
+#################################################################################
 ### All functions below are helpers to {.fn scrub_tabnames} ---------------------
-
+#################################################################################
 
 # #' @family single table verbs
 # #' @inheritParams args_by
@@ -150,17 +150,17 @@ scrub_tabnames <- function(tabnames,
 # #' @inheritParams filter
 
 
-#' Corrects tabnames by replacing special characters one-for-one
-#' and notifies the user of replaced characters.
+#' Corrects tabnames by replacing reserved chars
 #'
-#' Quietly casts input as characters.
+#' Replacing special characters one-for-one and notifies the user of replaced characters.
 #'
 #' @note
 #' NA always returned as NA
 #' NULL acts like c(), i.e c(NULL, NULL)
 #'
-#' @seealso [scrub_tabnames()]
-#' @seealso [.forbidden_chars_replace()]
+#' @seealso
+#' [scrub_tabnames()]
+#' [.forbidden_chars_replace()]
 #'
 #' @param tabnames vector of tab/sheet names
 #' @param quiet TRUE or FALSE to suppress notices of forbidden-char replacement
@@ -169,7 +169,6 @@ scrub_tabnames <- function(tabnames,
 #'
 #' @examples
 #' c("' '?HisTory,*?*!@#$%^&*()_+ '[{1'}]'[:/\\]''", "", NA, NULL) |>  xlr:::.fix_forbidden_tabnames()
-#'
 #' " ''''''" |> xlr:::.fix_forbidden_tabnames()
 #' "'''1' '" |> xlr:::.fix_forbidden_tabnames()
 #' "'[ ]hi];'" |> xlr:::.fix_forbidden_tabnames()
@@ -271,7 +270,7 @@ scrub_tabnames <- function(tabnames,
 
 
 
-#' Throw error for prohibited padding options or more than 1 char.
+#' Error for prohibited padding or more than 1 char
 #'
 #' @seealso [scrub_tabnames()]
 #'
@@ -282,12 +281,16 @@ scrub_tabnames <- function(tabnames,
 #' @examples
 #' xlr:::.check_forbidden_pad('.')
 #' xlr:::.check_forbidden_pad('-')
-#' \dontrun{ # expect error if any of these: \/:?*'[]
+#' \dontrun{
+#'
+#' # expect errors for the below: \/:?*'[]
+#'
 #' xlr:::.check_forbidden_pad(':')
 #' xlr:::.check_forbidden_pad('')
 #' xlr:::.check_forbidden_pad(NA)
 #' xlr:::.check_forbidden_pad(NULL)
 #' xlr:::.check_forbidden_pad("\\")
+#'
 #' }
 #'
 .check_forbidden_pad <- function(pad = "") {

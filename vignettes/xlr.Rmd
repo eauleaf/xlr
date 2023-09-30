@@ -22,12 +22,12 @@ knitr::opts_chunk$set(
 library(xlr)
 ```
 
-![](www/xlr.svg){}
+![](www/xlr.svg)
 
 ## ***R + Spreadsheets***
 
-
-**xlr** makes it easier to move information between **spreadsheets** and **R**.
+**xlr** makes it easier to move information between **spreadsheets** and
+**R**.
 
 <br>
 
@@ -78,7 +78,9 @@ spreadsheets and R.
     spreadsheets
 
 <br>
+
 <hr>
+
 <br>
 
 # `xl()`
