@@ -1,39 +1,43 @@
+xlr
+================
 
-![](vignettes/www/xlr.svg)
+<br>
 
-# xlr
+> A set of tools to help data scientists work interactively between **R
+> and spreadsheets.**
 
+<hr>
 <!-- badges: start -->
+
+[![](https://img.shields.io/badge/devel%20version-0.0.0.9036-blue.svg)](https://github.com/eauleaf/xlr)
+[![](https://img.shields.io/github/last-commit/eauleaf/xlr.svg)](https://github.com/eauleaf/xlr/commits/main)
 <!-- badges: end -->
 
-`xlr` is a set of tools to help data scientists work interactively
-between R and spreadsheets.
+<br>
 
 ## Installation
 
-You can install the development version of xlr from
-[GitHub](https://github.com/) with:
-
 ``` r
-# install.packages("devtools")
-devtools::install_github("eauleaf/xlr")
+# Development version is available here:
+# install.packages("remotes")
+remotes::install_github('eauleaf/xlr', build_vignettes = TRUE)
+library(xlr)
 ```
 
 ## Example
 
-Kick a series of datasets out of R into spreadsheets of a workbook by
-passing them to function `xl()`.
-
 ``` r
-library(xlr)
+# Send R data to workbook
 iris |> split(f = iris$Species) |> xl()
 ```
 
-For an overview of the other `xlr` functions, click on “Get started”
-above.
-
 ## Testing
 
-Because several ‘xlr’ functions require interactive use to test,
-downloading the package from github and reporting any issues you
-encounter would be very helpful.
+Because several `xlr` functions require interactive use, reporting
+issues would be helpful.
+
+## Contribute
+
+`xlr` has taken hundreds of hours to write, test, and re-write. If you
+find the package helpful, please consider paying it forward by donating
+to Ukraine: <https://u24.gov.ua/>

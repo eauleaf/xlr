@@ -59,6 +59,7 @@ xl <- function(...
 
 
 # do some input checks ---------------------------------------------------------
+  .tabname_spec <- list(sep = ".", pad = ".", name_spec = "{inner}") |> purrr::list_assign(rlang::splice(.tabname_spec))
   checkmate::assert(
     checkmate::check_list(.tabname_spec, any.missing = FALSE, len = 3),
     checkmate::check_names(.tabname_spec, must.include = c('sep', 'pad', 'name_spec'))
@@ -232,11 +233,6 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
 
 
 
-# is.posix <- function(x) any(grepl('POSIX', class(x)), na.rm = TRUE)
-# px_cols <- which(purrr::map_lgl(df_nm, is.posix))
-#' background-color: #00A500;
-
-
 #' Addin function to call [xl()]
 #'
 #' Requires RStudio
@@ -278,6 +274,8 @@ run_xl <- function(){
   }
 
 }
-
+# is.posix <- function(x) any(grepl('POSIX', class(x)), na.rm = TRUE)
+# px_cols <- which(purrr::map_lgl(df_nm, is.posix))
+#' background-color: #00A500;
 
 

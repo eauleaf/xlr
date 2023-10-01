@@ -2,8 +2,7 @@
 % Please edit documentation in R/xl.R
 \name{run_xl}
 \alias{run_xl}
-\title{background-color: #00A500;
-Addin function to call \code{\link[=xl]{xl()}}}
+\title{Addin function to call \code{\link[=xl]{xl()}}}
 \usage{
 run_xl()
 }

@@ -4,7 +4,7 @@
 \name{xlr-package}
 \alias{xlr}
 \alias{xlr-package}
-\title{xlr: Tools for working interactively between Excel/Libreoffice and R}
+\title{xlr: Tools for working between Excel/Libreoffice and R}
 \description{
 Move data quickly between spreadsheets and R.
 }
@@ -12,7 +12,13 @@ Move data quickly between spreadsheets and R.
 Useful links:
 \itemize{
   \item \url{https://eauleaf.github.io/xlr/}
+  \item \url{https://github.com/eauleaf/xlr}
+  \item Report bugs at \url{https://github.com/eauleaf/xlr/issues}
 }
+
+}
+\author{
+\strong{Maintainer}:  Eauleaf \email{eauleaf@gmail.com}
 
 }
 \keyword{internal}

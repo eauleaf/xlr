@@ -26,6 +26,7 @@
 #' @export
 #'
 #' @examples
+#' #TODO: transport these to tests and decide what needs to stay...
 #' entibble('')
 #' letters |> entibble()
 #' letters |>  purrr::set_names(LETTERS) |> entibble()
@@ -178,8 +179,10 @@ entibble <- function(
 
 
 
-#' Internal function used in entibble.
-#' Process dataframes, matrices, vectors, factors to named tibble.
+
+#' Process dataframes, matrices, vectors, factors to named tibble
+#'
+#' Function called in [entibble()].
 #'
 #' @param .in_data user data to tibble
 #' @param .rowname user specified rowname; ignored if no rownames
@@ -227,8 +230,9 @@ entibble <- function(
 
 
 
-#' Internal function used in [.to_tibble()].
 #' Transform a named vector, factor, or list to a one or 2 column tibble
+#'
+#' Function called in [.to_tibble()].
 #'
 #' @param .in_vec input data
 #' @param .rowname user specified name for rows

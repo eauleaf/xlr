@@ -56,6 +56,7 @@ liberal about names, such as duplicate column names, and makes an effort to prod
 in place of a nested tibble.
 }
 \examples{
+#TODO: transport these to tests and decide what needs to stay...
 entibble('')
 letters |> entibble()
 letters |>  purrr::set_names(LETTERS) |> entibble()

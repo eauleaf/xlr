@@ -15,38 +15,35 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-# install(build_vignettes = TRUE)
+
 ```
 
+
+
 ```{r setup, include = FALSE}
+# ![](www/xlr.svg)
+# install(build_vignettes = TRUE)
 library(xlr)
 ```
 
-![](www/xlr.svg)
 
 ## ***R + Spreadsheets***
 
-**xlr** makes it easier to move information between **spreadsheets** and
-**R**.
 
 <br>
-
-##### Install:
-
-```{r download-xlr, eval = F}
-remotes::install_github('eauleaf/xlr', build_vignettes = TRUE)
-library(xlr)
-```
-
 <br>
 
-This package is somewhere between *dev and beta.*
+The package is somewhere between *dev and beta.*
 
-**Testing and feedback would be helpful.**
+--- **Testing and feedback would be helpful** ---
+
+
 
 <br>
 
 ## Overview:
+
+> **xlr** makes it easier to move information between **spreadsheets** and **R**. 
 
 Spreadsheets are a great tool for presenting 2-dimensional data in a
 reader-friendly format and are still the workhorse of the business
@@ -54,13 +51,13 @@ community, but spreadsheets don't have the data processing power of R,
 so its common for data professionals to work in both spreadsheets and R.
 However, working in both tools can be frustrating. It's time expensive
 to read data back forth between the two, and most of the time, I just
-want a series of decent-looking tables pushed to a workbook. **xlr** is
-an effort to reduce the friction that comes from having to work in both
+want a series of decent-looking tables pushed out to a workbook. **xlr** is
+an effort to reduce the friction that comes from needing to work in both
 spreadsheets and R.
 
 <br>
 
-## Functions:
+## Descriptions:
 
 -   **`xl()`** -- quickly output a list of datasets as spreadsheets in a
     workbook
@@ -79,7 +76,15 @@ spreadsheets and R.
 
 <br>
 
-<hr>
+
+## Details and Examples:
+
+```{r download-xlr, eval = F}
+# Install
+remotes::install_github('eauleaf/xlr', build_vignettes = TRUE)
+library(xlr)
+```
+
 
 <br>
 
@@ -108,25 +113,31 @@ data object becomes a labeled spreadsheet in the workbook.
 
 ![xl(iris, mtcars, 1:100, dplyr::starwars)](www/Screencast-xl.webm)
 
-### `xl()` use details:
 
 To use `xl()`, pass a dataframe or lists of dataframes. It does not
-matter if you pass nested lists of lists where your data objects are
-buried at various depths, `xl()` flattens and auto-names the workbook
-and the spreadsheet tabs. Nested lists can be useful for the naming of
-groups on spreadsheet tabs.
+matter if you pass in lists with nested lists where your data objects are
+buried somewhere. `xl()` recursively flattens and auto-names the spreadsheets and workbook. In fact, nested lists can be useful in the naming of
+groupings within spreadsheet tabs if you provide a sheet-naming specification like `.tabname_spec = list(name_spec = "{outer}|{inner}")`.
 
 Try running the below examples in your console.
 
-```         
-xl(your_datasets = enlist(flowers = iris, mtcars, datasets::USArrests)) 
+```
+your_datasets <- enlist(flowers = iris, mtcars, datasets::USArrests)
+
+xl(your_datasets) 
+
+xl(your_datasets, .tabname_spec = list(name_spec = "{outer}|{inner}")) 
 
 iris |> split(f = iris$Species) |> xl()
+
+iris |> split(f = iris$Species) |> xl(your_datasets)
+
 ```
 
-`xl()` writes the workbook in a temp directory and, to keep workbooks
+
+`xl()` writes your workbooks in a temp directory and, to keep workbooks
 from building up, uses `later::later()` to remove the savefile 5 minutes
-after your write time. Temp directories also delete themselves when you
+after write time. Temp directories also delete themselves when you
 close R. If, however, you want to save a workbook, specify a path or
 just a save name in the `xl()` input parameter `.path`. Specifying a
 savename signals to `xl()` not to mark the file for cleanup. For
@@ -135,7 +146,7 @@ example, `xl(iris, .path = 'flower_data')` will save your data under
 uses `here::here()` internally.)
 
 `xl()` creates tibbles of all datasets you pass in, and if specified by
-the user parameter `.return`, optionally returns (invisibly) the
+the user parameter `.return`, optionally returns (always invisibly) the
 `openxlsx` workbook object (default), or the data objects in a list, or
 the workbook savepath as a string.
 
@@ -294,9 +305,9 @@ window and then using the key-chord `ctrl + alt + shift + v` in RStudio.
 
 # `enscript()`
 
-I often process data manually down to particular information that's too
-small to deal with saving and then retrieving later from a serialized
-file or database. Instead, I just want to save the information as text
+I often manually process data down to particular information that's too
+small to deal with saving and retrieving from a serialized
+file or database. Instead, I just want to save my processed dataset as text
 within the script, but I hate manually recreating the object.
 
 If you have an object in a variable, and want that variable's data to be
@@ -304,22 +315,22 @@ deparsed into a formatted script, pass that variable into `enscript()`,
 as in:
 
 ```{r enscript-example1, eval = F}
-enscript(mtcars)
+enscript(head(mtcars))
 ```
 
 `enscript()` copies formatted code to your clipboard that will reproduce
 that variable's internal R object.
 
-You can also pass in an expression by piping 'enscript()' onto the end
+You can also pass in an expression by piping 'enscript()' on the end
 of anything, like:
 
 ```{r enscript-example2, eval = F}
-iris |> split(f = iris$Species) |> purrr::map(head, 3) |> enscript()
+iris |> split(f = iris$Species) |> purrr::map(head, 2) |> enscript()
 ```
 
 ### The `enscript()` key-chord:
 
-It's also convenient to use the quick keys for `enscript()`, which are
+It's also convenient to use quick keys for `enscript()`, which are
 `ctrl + alt + shift + n`. (I remember the key-chord as all three control
 keys, plus the `n`, which sounds short for enscript.)
 
@@ -357,7 +368,7 @@ filtering a dataframe for identical observations, like:
 mtcars |> dplyr::filter(repeated(disp))
 ```
 
-`repeated()` is just `x %in% x[duplicated(x)]` with some assertion
+`repeated()` is just `x %in% x[duplicated(x)]` with assertion
 checks, but way easier to remember than `x %in% x[duplicated(x)]`. Use
 it in `and` and `or` statements like this:
 
@@ -372,19 +383,19 @@ mtcars |> dplyr::filter(repeated(hp) | repeated(disp))
 
 # `sys_open()`
 
-`sys_open()` opens .xlsx files, but also opens any file, folder, or URL
-since it requests the operating system open the location via the OS
-commmand line interface. This function passes a path string (or many, if
+`sys_open()` opens the .xlsx files, but also opens any file, folder, or URL
+since it requests the operating system to open the input location via an OS
+command-line interface. This function passes a path string (or many, if
 you like) to your OS, asking it to open up the location using the
 default application. The reason I use it instead of other functions is
-because I've had better luck getting things to open when asking the user
+because I've had better luck getting things to open when asking the 
 system to make the decisions about how to open a file.
 
-If you aren't able to open a file with `sys_open()`, using your
+If you aren't able to open a file with `sys_open()`, then, using your
 operating system's navigation window, right-click on the file to make
 sure your operating system has a default application assigned that file
-type; then double-click on the file to make sure it opens in that
-default application.
+type; after that, double-click on the file to make sure it opens in your
+specified default application.
 
 The video below is an example of opening up some PDF files by piping
 them from `paste_from_xl()` to `sys_open()`.
@@ -406,37 +417,35 @@ to each. For example, consider the ridiculously embedded list structure
 below and list_iron's simplification of it:
 
 ```{r list_iron-example, eval = T}
-rediculous <- list(list(list(list(flower_data = iris)), car_data = mtcars))
+ridiculous <- list(list(list(list(flower_data = iris)), car_data = mtcars))
 
 # Original list depth
-rediculous |> str()
+ridiculous |> str()
 
 # Ironed list depth
-rediculous |> list_iron() |> str()
+ridiculous |> list_iron() |> str()
 ```
 
 Notice the auto-naming of the list items above, i.e.
-*'rediculous\|flower_data'*. You can control that naming with
+*'ridiculous\|flower_data'*. Control the naming with
 `name_spec` and `name_repair`. You can also apply a function while
 flattening all of the leaves in the lists with the parameter `.f`, as
 shown below:
 
 ```{r list_iron-example2, eval = T}
-list_iron(rediculous, .f = ~tail(.,2))
+list_iron(ridiculous, .f = ~tail(.,2))
 ```
 
 <br>
 
 # `entibble()`
 
-`entibble()` makes tibbles, but has defaults useful for spreadsheets.
-`entibble()` automatically includes rownames, if they exist, as the
-first column of the tibble. Also, `entibble()` does not repeat input
-elements to obtain common lengths in order to produce a dataframe, and
-`entibble()` treats a list of data inputs equivalent to comma-separated
-data inputs.
+`entibble()` makes a tibble with defaults useful for spreadsheets, i.e. it: 
+- automatically includes rownames, if they exist, as the first column of the tibble
+- does not repeat input elements to obtain common lengths in order to produce a dataframe
+- treats a list of data inputs equivalent to comma-separated data inputs.
 
-For example, compare the tibbled and entibbled data below.
+For instance, compare the tibbled and entibbled data below.
 
 ```{r entibble-example, eval = T}
 alpha <- rlang::set_names(letters, LETTERS)
@@ -449,4 +458,5 @@ tibble::tibble(alpha) |> head(2)
 # inputs if the listed objects have compatible row dimensions
 entibble(list(alpha, letters)) |> tail(2)
 tibble::tibble(list(alpha, letters)) |> tail(2)
+
 ```

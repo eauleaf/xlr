@@ -2,8 +2,7 @@
 % Please edit documentation in R/entibble.R
 \name{.vector_2_tibble}
 \alias{.vector_2_tibble}
-\title{Internal function used in \code{\link[=.to_tibble]{.to_tibble()}}.
-Transform a named vector, factor, or list to a one or 2 column tibble}
+\title{Transform a named vector, factor, or list to a one or 2 column tibble}
 \usage{
 .vector_2_tibble(.in_vec, .rowname = "rowname", .vec_name = "")
 }
@@ -18,8 +17,7 @@ Transform a named vector, factor, or list to a one or 2 column tibble}
 tibble
 }
 \description{
-Internal function used in \code{\link[=.to_tibble]{.to_tibble()}}.
-Transform a named vector, factor, or list to a one or 2 column tibble
+Function called in \code{\link[=.to_tibble]{.to_tibble()}}.
 }
 \examples{
 letters |> rlang::set_names() |> .vector_2_tibble()

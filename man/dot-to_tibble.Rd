@@ -2,8 +2,7 @@
 % Please edit documentation in R/entibble.R
 \name{.to_tibble}
 \alias{.to_tibble}
-\title{Internal function used in entibble.
-Process dataframes, matrices, vectors, factors to named tibble.}
+\title{Process dataframes, matrices, vectors, factors to named tibble}
 \usage{
 .to_tibble(.in_data = NULL, .rowname = "rowname", .vec_name = "")
 }
@@ -18,8 +17,7 @@ Process dataframes, matrices, vectors, factors to named tibble.}
 a tibble
 }
 \description{
-Internal function used in entibble.
-Process dataframes, matrices, vectors, factors to named tibble.
+Function called in \code{\link[=entibble]{entibble()}}.
 }
 \examples{
 .to_tibble(head(mtcars), 'vehicle')
