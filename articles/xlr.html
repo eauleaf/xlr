@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9038</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9039</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -551,10 +551,15 @@ parameter <code>.f</code>, as shown below:</p>
 <code>entibble()</code><a class="anchor" aria-label="anchor" href="#entibble"></a>
 </h2>
 <p><code><a href="../reference/entibble.html">entibble()</a></code> makes a tibble with defaults useful for
-spreadsheets, i.e. it: - automatically includes rownames, if they exist,
-as the first column of the tibble - does not repeat input elements to
-obtain common lengths in order to produce a dataframe - treats a list of
-data inputs equivalent to comma-separated data inputs.</p>
+spreadsheets, i.e. it:</p>
+<ul>
+<li>automatically includes rownames, if they exist, as the first column
+of the tibble</li>
+<li>does not repeat input elements to obtain common lengths in order to
+produce a dataframe</li>
+<li>treats a list of data inputs equivalent to comma-separated data
+inputs.</li>
+</ul>
 <p>For instance, compare the tibbled and entibbled data below.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/set_names.html" class="external-link">set_names</a></span><span class="op">(</span><span class="va">letters</span>, <span class="va">LETTERS</span><span class="op">)</span></span>
