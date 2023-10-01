@@ -1,7 +1,7 @@
 Package: xlr
 Type: Package
 Title: Tools for working between Excel/Libreoffice and R
-Version: 0.0.0.9038
+Version: 0.0.0.9039
 Authors@R: 
   c(person(family = "Eauleaf", email = "eauleaf@gmail.com", role = c("aut", "cre")))
 Maintainer: <eauleaf@gmail.com>

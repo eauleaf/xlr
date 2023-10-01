@@ -438,9 +438,10 @@ list_iron(ridiculous, .f = ~tail(.,2))
 # `entibble()`
 
 `entibble()` makes a tibble with defaults useful for spreadsheets, i.e. it: 
-- automatically includes rownames, if they exist, as the first column of the tibble
-- does not repeat input elements to obtain common lengths in order to produce a dataframe
-- treats a list of data inputs equivalent to comma-separated data inputs.
+
+* automatically includes rownames, if they exist, as the first column of the tibble
+* does not repeat input elements to obtain common lengths in order to produce a dataframe
+* treats a list of data inputs equivalent to comma-separated data inputs.
 
 For instance, compare the tibbled and entibbled data below.
 
