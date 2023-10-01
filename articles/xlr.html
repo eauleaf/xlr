@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9035</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9036</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,14 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
 </form>
 
-      <ul class="navbar-nav"></ul>
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/eauleaf/xlr/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 
     
@@ -68,48 +75,41 @@
       <img src="../logo.svg" class="logo" alt=""><h1>xlr</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/eauleaf/xlr/blob/HEAD/vignettes/xlr.Rmd" class="external-link"><code>vignettes/xlr.Rmd</code></a></small>
       <div class="d-none name"><code>xlr.Rmd</code></div>
     </div>
 
     
     
-<p><img src="www/xlr.svg"></p>
 <div class="section level3">
 <h3 id="r-spreadsheets">
 <strong><em>R + Spreadsheets</em></strong><a class="anchor" aria-label="anchor" href="#r-spreadsheets"></a>
 </h3>
-<p><strong>xlr</strong> makes it easier to move information between
-<strong>spreadsheets</strong> and <strong>R</strong>.</p>
+<p><br><br></p>
+<p>The package is somewhere between <em>dev and beta.</em></p>
+<p>— <strong>Testing and feedback would be helpful</strong> —</p>
 <p><br></p>
-<div class="section level6">
-<h6 id="install">Install:<a class="anchor" aria-label="anchor" href="#install"></a>
-</h6>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'eauleaf/xlr'</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://eauleaf.github.io/xlr/">xlr</a></span><span class="op">)</span></span></code></pre></div>
-<p><br></p>
-<p>This package is somewhere between <em>dev and beta.</em></p>
-<p><strong>Testing and feedback would be helpful.</strong></p>
-<p><br></p>
-</div>
 </div>
 <div class="section level3">
 <h3 id="overview">Overview:<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h3>
+<blockquote>
+<p><strong>xlr</strong> makes it easier to move information between
+<strong>spreadsheets</strong> and <strong>R</strong>.</p>
+</blockquote>
 <p>Spreadsheets are a great tool for presenting 2-dimensional data in a
 reader-friendly format and are still the workhorse of the business
 community, but spreadsheets don’t have the data processing power of R,
 so its common for data professionals to work in both spreadsheets and R.
 However, working in both tools can be frustrating. It’s time expensive
 to read data back forth between the two, and most of the time, I just
-want a series of decent-looking tables pushed to a workbook.
+want a series of decent-looking tables pushed out to a workbook.
 <strong>xlr</strong> is an effort to reduce the friction that comes from
-having to work in both spreadsheets and R.</p>
+needing to work in both spreadsheets and R.</p>
 <p><br></p>
 </div>
 <div class="section level3">
-<h3 id="functions">Functions:<a class="anchor" aria-label="anchor" href="#functions"></a>
+<h3 id="descriptions">Descriptions:<a class="anchor" aria-label="anchor" href="#descriptions"></a>
 </h3>
 <ul>
 <li>
@@ -141,7 +141,14 @@ embedded lists to a named, single-file list</li>
 default behavior useful for spreadsheets</li>
 </ul>
 <p><br></p>
-<hr>
+</div>
+<div class="section level3">
+<h3 id="details-and-examples">Details and Examples:<a class="anchor" aria-label="anchor" href="#details-and-examples"></a>
+</h3>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Install</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'eauleaf/xlr'</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://eauleaf.github.io/xlr/">xlr</a></span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 </div>
 <div class="section level2">
@@ -168,23 +175,27 @@ workbook.</p>
 <div class="figure">
 <video src="www/Screencast-xl.webm" controls=""><a href="www/Screencast-xl.webm"></a></video><p class="caption">xl(iris, mtcars, 1:100, dplyr::starwars)</p>
 </div>
-<div class="section level4">
-<h4 id="xl-use-details">
-<code>xl()</code> use details:<a class="anchor" aria-label="anchor" href="#xl-use-details"></a>
-</h4>
 <p>To use <code><a href="../reference/xl.html">xl()</a></code>, pass a dataframe or lists of dataframes. It
-does not matter if you pass nested lists of lists where your data
-objects are buried at various depths, <code><a href="../reference/xl.html">xl()</a></code> flattens and
-auto-names the workbook and the spreadsheet tabs. Nested lists can be
-useful for the naming of groups on spreadsheet tabs.</p>
+does not matter if you pass in lists with nested lists where your data
+objects are buried somewhere. <code><a href="../reference/xl.html">xl()</a></code> recursively flattens and
+auto-names the spreadsheets and workbook. In fact, nested lists can be
+useful in the naming of groupings within spreadsheet tabs if you provide
+a sheet-naming specification like
+<code>.tabname_spec = list(name_spec = "{outer}|{inner}")</code>.</p>
 <p>Try running the below examples in your console.</p>
-<pre><code><span><span class="fu"><a href="../reference/xl.html">xl</a></span><span class="op">(</span>your_datasets <span class="op">=</span> <span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span>flowers <span class="op">=</span> <span class="va">iris</span>, <span class="va">mtcars</span>, <span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/USArrests.html" class="external-link">USArrests</a></span><span class="op">)</span><span class="op">)</span> </span>
+<pre><code><span><span class="va">your_datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span>flowers <span class="op">=</span> <span class="va">iris</span>, <span class="va">mtcars</span>, <span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/USArrests.html" class="external-link">USArrests</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span>f <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/xl.html">xl</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
-<p><code><a href="../reference/xl.html">xl()</a></code> writes the workbook in a temp directory and, to
+<span><span class="fu"><a href="../reference/xl.html">xl</a></span><span class="op">(</span><span class="va">your_datasets</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="fu"><a href="../reference/xl.html">xl</a></span><span class="op">(</span><span class="va">your_datasets</span>, .tabname_spec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name_spec <span class="op">=</span> <span class="st">"{outer}|{inner}"</span><span class="op">)</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span>f <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/xl.html">xl</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span>f <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/xl.html">xl</a></span><span class="op">(</span><span class="va">your_datasets</span><span class="op">)</span></span></code></pre>
+<p><code><a href="../reference/xl.html">xl()</a></code> writes your workbooks in a temp directory and, to
 keep workbooks from building up, uses <code><a href="https://r-lib.github.io/later/reference/later.html" class="external-link">later::later()</a></code> to
-remove the savefile 5 minutes after your write time. Temp directories
-also delete themselves when you close R. If, however, you want to save a
+remove the savefile 5 minutes after write time. Temp directories also
+delete themselves when you close R. If, however, you want to save a
 workbook, specify a path or just a save name in the <code><a href="../reference/xl.html">xl()</a></code>
 input parameter <code>.path</code>. Specifying a savename signals to
 <code><a href="../reference/xl.html">xl()</a></code> not to mark the file for cleanup. For example,
@@ -193,10 +204,9 @@ input parameter <code>.path</code>. Specifying a savename signals to
 <code>.path</code> uses <code><a href="https://here.r-lib.org//reference/here.html" class="external-link">here::here()</a></code> internally.)</p>
 <p><code><a href="../reference/xl.html">xl()</a></code> creates tibbles of all datasets you pass in, and if
 specified by the user parameter <code>.return</code>, optionally returns
-(invisibly) the <code>openxlsx</code> workbook object (default), or the
-data objects in a list, or the workbook savepath as a string.</p>
+(always invisibly) the <code>openxlsx</code> workbook object (default),
+or the data objects in a list, or the workbook savepath as a string.</p>
 <p><br></p>
-</div>
 </div>
 <div class="section level2">
 <h2 id="enlist">
@@ -358,29 +368,28 @@ in RStudio.</p>
 <h2 id="enscript">
 <code>enscript()</code><a class="anchor" aria-label="anchor" href="#enscript"></a>
 </h2>
-<p>I often process data manually down to particular information that’s
-too small to deal with saving and then retrieving later from a
-serialized file or database. Instead, I just want to save the
-information as text within the script, but I hate manually recreating
-the object.</p>
+<p>I often manually process data down to particular information that’s
+too small to deal with saving and retrieving from a serialized file or
+database. Instead, I just want to save my processed dataset as text
+within the script, but I hate manually recreating the object.</p>
 <p>If you have an object in a variable, and want that variable’s data to
 be deparsed into a formatted script, pass that variable into
 <code><a href="../reference/enscript.html">enscript()</a></code>, as in:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/enscript.html">enscript</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/enscript.html">enscript</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/enscript.html">enscript()</a></code> copies formatted code to your clipboard that
 will reproduce that variable’s internal R object.</p>
-<p>You can also pass in an expression by piping ‘enscript()’ onto the
-end of anything, like:</p>
+<p>You can also pass in an expression by piping ‘enscript()’ on the end
+of anything, like:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span>f <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">head</span>, <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/enscript.html">enscript</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span>f <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">head</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/enscript.html">enscript</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="the-enscript-key-chord">The <code>enscript()</code> key-chord:<a class="anchor" aria-label="anchor" href="#the-enscript-key-chord"></a>
 </h4>
-<p>It’s also convenient to use the quick keys for
-<code><a href="../reference/enscript.html">enscript()</a></code>, which are <code>ctrl + alt + shift + n</code>.
-(I remember the key-chord as all three control keys, plus the
-<code>n</code>, which sounds short for enscript.)</p>
+<p>It’s also convenient to use quick keys for <code><a href="../reference/enscript.html">enscript()</a></code>,
+which are <code>ctrl + alt + shift + n</code>. (I remember the key-chord
+as all three control keys, plus the <code>n</code>, which sounds short
+for enscript.)</p>
 <p>To use the <code><a href="../reference/enscript.html">enscript()</a></code> quick keys, Run the function,
 <code><a href="../reference/set_xlr_key_chords.html">set_xlr_key_chords()</a></code> if you haven’t already done so.
 Then:</p>
@@ -426,7 +435,7 @@ observations, like:</p>
 <span><span class="co">#&gt; Merc 450SL        17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3</span></span>
 <span><span class="co">#&gt; Merc 450SLC       15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3</span></span></code></pre></div>
 <p><code><a href="../reference/repeated.html">repeated()</a></code> is just <code>x %in% x[duplicated(x)]</code>
-with some assertion checks, but way easier to remember than
+with assertion checks, but way easier to remember than
 <code>x %in% x[duplicated(x)]</code>. Use it in <code>and</code> and
 <code>or</code> statements like this:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -440,19 +449,19 @@ with some assertion checks, but way easier to remember than
 <h2 id="sys_open">
 <code>sys_open()</code><a class="anchor" aria-label="anchor" href="#sys_open"></a>
 </h2>
-<p><code><a href="../reference/sys_open.html">sys_open()</a></code> opens .xlsx files, but also opens any file,
-folder, or URL since it requests the operating system open the location
-via the OS commmand line interface. This function passes a path string
-(or many, if you like) to your OS, asking it to open up the location
-using the default application. The reason I use it instead of other
-functions is because I’ve had better luck getting things to open when
-asking the user system to make the decisions about how to open a
+<p><code><a href="../reference/sys_open.html">sys_open()</a></code> opens the .xlsx files, but also opens any
+file, folder, or URL since it requests the operating system to open the
+input location via an OS command-line interface. This function passes a
+path string (or many, if you like) to your OS, asking it to open up the
+location using the default application. The reason I use it instead of
+other functions is because I’ve had better luck getting things to open
+when asking the system to make the decisions about how to open a
 file.</p>
-<p>If you aren’t able to open a file with <code><a href="../reference/sys_open.html">sys_open()</a></code>, using
-your operating system’s navigation window, right-click on the file to
-make sure your operating system has a default application assigned that
-file type; then double-click on the file to make sure it opens in that
-default application.</p>
+<p>If you aren’t able to open a file with <code><a href="../reference/sys_open.html">sys_open()</a></code>, then,
+using your operating system’s navigation window, right-click on the file
+to make sure your operating system has a default application assigned
+that file type; after that, double-click on the file to make sure it
+opens in your specified default application.</p>
 <p>The video below is an example of opening up some PDF files by piping
 them from <code><a href="../reference/paste_from_xl.html">paste_from_xl()</a></code> to <code><a href="../reference/sys_open.html">sys_open()</a></code>.</p>
 <div class="figure">
@@ -474,10 +483,10 @@ the list objects and applying a function to each. For example, consider
 the ridiculously embedded list structure below and list_iron’s
 simplification of it:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rediculous</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>flower_data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span><span class="op">)</span>, car_data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">ridiculous</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>flower_data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span><span class="op">)</span>, car_data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Original list depth</span></span>
-<span><span class="va">rediculous</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">ridiculous</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 1</span></span>
 <span><span class="co">#&gt;  $ :List of 2</span></span>
 <span><span class="co">#&gt;   ..$         :List of 1</span></span>
@@ -502,15 +511,15 @@ simplification of it:</p>
 <span><span class="co">#&gt;   .. ..$ carb: num [1:32] 4 4 1 1 2 1 4 2 2 4 ...</span></span>
 <span></span>
 <span><span class="co"># Ironed list depth</span></span>
-<span><span class="va">rediculous</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/list_iron.html">list_iron</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">ridiculous</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/list_iron.html">list_iron</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 2</span></span>
-<span><span class="co">#&gt;  $ rediculous|flower_data:'data.frame':  150 obs. of  5 variables:</span></span>
+<span><span class="co">#&gt;  $ ridiculous|flower_data:'data.frame':  150 obs. of  5 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Sepal.Length: num [1:150] 5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...</span></span>
 <span><span class="co">#&gt;   ..$ Sepal.Width : num [1:150] 3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...</span></span>
 <span><span class="co">#&gt;   ..$ Petal.Length: num [1:150] 1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...</span></span>
 <span><span class="co">#&gt;   ..$ Petal.Width : num [1:150] 0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...</span></span>
 <span><span class="co">#&gt;   ..$ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...</span></span>
-<span><span class="co">#&gt;  $ rediculous|car_data   :'data.frame':  32 obs. of  11 variables:</span></span>
+<span><span class="co">#&gt;  $ ridiculous|car_data   :'data.frame':  32 obs. of  11 variables:</span></span>
 <span><span class="co">#&gt;   ..$ mpg : num [1:32] 21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...</span></span>
 <span><span class="co">#&gt;   ..$ cyl : num [1:32] 6 6 4 6 8 6 8 4 4 6 ...</span></span>
 <span><span class="co">#&gt;   ..$ disp: num [1:32] 160 160 108 258 360 ...</span></span>
@@ -523,18 +532,18 @@ simplification of it:</p>
 <span><span class="co">#&gt;   ..$ gear: num [1:32] 4 4 4 3 3 3 3 4 4 4 ...</span></span>
 <span><span class="co">#&gt;   ..$ carb: num [1:32] 4 4 1 1 2 1 4 2 2 4 ...</span></span></code></pre></div>
 <p>Notice the auto-naming of the list items above, i.e.
-<em>‘rediculous|flower_data’</em>. You can control that naming with
+<em>‘ridiculous|flower_data’</em>. Control the naming with
 <code>name_spec</code> and <code>name_repair</code>. You can also apply
 a function while flattening all of the leaves in the lists with the
 parameter <code>.f</code>, as shown below:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_iron.html">list_iron</a></span><span class="op">(</span><span class="va">rediculous</span>, .f <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">.</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $`rediculous|flower_data`</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_iron.html">list_iron</a></span><span class="op">(</span><span class="va">ridiculous</span>, .f <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">.</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $`ridiculous|flower_data`</span></span>
 <span><span class="co">#&gt;     Sepal.Length Sepal.Width Petal.Length Petal.Width   Species</span></span>
 <span><span class="co">#&gt; 149          6.2         3.4          5.4         2.3 virginica</span></span>
 <span><span class="co">#&gt; 150          5.9         3.0          5.1         1.8 virginica</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $`rediculous|car_data`</span></span>
+<span><span class="co">#&gt; $`ridiculous|car_data`</span></span>
 <span><span class="co">#&gt;                mpg cyl disp  hp drat   wt qsec vs am gear carb</span></span>
 <span><span class="co">#&gt; Maserati Bora 15.0   8  301 335 3.54 3.57 14.6  0  1    5    8</span></span>
 <span><span class="co">#&gt; Volvo 142E    21.4   4  121 109 4.11 2.78 18.6  1  1    4    2</span></span></code></pre></div>
@@ -544,14 +553,12 @@ parameter <code>.f</code>, as shown below:</p>
 <h2 id="entibble">
 <code>entibble()</code><a class="anchor" aria-label="anchor" href="#entibble"></a>
 </h2>
-<p><code><a href="../reference/entibble.html">entibble()</a></code> makes tibbles, but has defaults useful for
-spreadsheets. <code><a href="../reference/entibble.html">entibble()</a></code> automatically includes rownames,
-if they exist, as the first column of the tibble. Also,
-<code><a href="../reference/entibble.html">entibble()</a></code> does not repeat input elements to obtain common
-lengths in order to produce a dataframe, and <code><a href="../reference/entibble.html">entibble()</a></code>
-treats a list of data inputs equivalent to comma-separated data
-inputs.</p>
-<p>For example, compare the tibbled and entibbled data below.</p>
+<p><code><a href="../reference/entibble.html">entibble()</a></code> makes a tibble with defaults useful for
+spreadsheets, i.e. it: - automatically includes rownames, if they exist,
+as the first column of the tibble - does not repeat input elements to
+obtain common lengths in order to produce a dataframe - treats a list of
+data inputs equivalent to comma-separated data inputs.</p>
+<p>For instance, compare the tibbled and entibbled data below.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/set_names.html" class="external-link">set_names</a></span><span class="op">(</span><span class="va">letters</span>, <span class="va">LETTERS</span><span class="op">)</span></span>
 <span></span>
@@ -592,7 +599,7 @@ inputs.</p>
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by .</p>
+<p>Developed by Eauleaf.</p>
 </div>
 
 <div class="pkgdown-footer-right">
