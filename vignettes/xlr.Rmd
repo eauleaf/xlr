@@ -43,8 +43,6 @@ The package is somewhere between *dev and beta.*
 
 ## Overview:
 
-> **xlr** makes it easier to move information between **spreadsheets** and **R**. 
-
 Spreadsheets are a great tool for presenting 2-dimensional data in a
 reader-friendly format and are still the workhorse of the business
 community, but spreadsheets don't have the data processing power of R,
@@ -57,7 +55,7 @@ spreadsheets and R.
 
 <br>
 
-## Descriptions:
+## Functions:
 
 -   **`xl()`** -- quickly output a list of datasets as spreadsheets in a
     workbook

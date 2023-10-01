@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 <br>
 
 > A set of tools to help data scientists work interactively between 
-> __R and spreadsheets.__ 
+> __R__ and __spreadsheets__. 
 
 <hr>
 
@@ -32,9 +32,8 @@ knitr::opts_chunk$set(
 <br>
 
 
-## Installation
+## Setup
 ``` r
-# Development version is available here:
 # install.packages("remotes")
 remotes::install_github('eauleaf/xlr', build_vignettes = TRUE)
 library(xlr)

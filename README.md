@@ -3,22 +3,21 @@ xlr
 
 <br>
 
-> A set of tools to help data scientists work interactively between **R
-> and spreadsheets.**
+> A set of tools to help data scientists work interactively between
+> **R** and **spreadsheets**.
 
 <hr>
 <!-- badges: start -->
 
-[![](https://img.shields.io/badge/devel%20version-0.0.0.9036-blue.svg)](https://github.com/eauleaf/xlr)
+[![](https://img.shields.io/badge/devel%20version-0.0.0.9037-blue.svg)](https://github.com/eauleaf/xlr)
 [![](https://img.shields.io/github/last-commit/eauleaf/xlr.svg)](https://github.com/eauleaf/xlr/commits/main)
 <!-- badges: end -->
 
 <br>
 
-## Installation
+## Setup
 
 ``` r
-# Development version is available here:
 # install.packages("remotes")
 remotes::install_github('eauleaf/xlr', build_vignettes = TRUE)
 library(xlr)
