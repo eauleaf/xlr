@@ -18,10 +18,9 @@ knitr::opts_chunk$set(
 
 ```
 
-
+<!-- ![](www/xlr.svg) -->
 
 ```{r setup, include = FALSE}
-# ![](www/xlr.svg)
 # install(build_vignettes = TRUE)
 library(xlr)
 ```
@@ -97,7 +96,7 @@ It's easiest to see what `xl()` does by passing it some example data;
 try sending it some pre-loaded datasets, like:
 
 ```{r xlr-example1, eval = F}
-xl(mtcars, iris, letters, Titanic, AirPassengers)
+xl(mtcars, iris, letters, AirPassengers)
 ```
 
 If you type that code to the R console, you should get a workbook that
