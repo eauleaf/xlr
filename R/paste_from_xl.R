@@ -2,15 +2,14 @@
 #'
 #'
 #' @description
-#' Imports spreadsheet data from the user's clipboard to RStudio.
-#'
-#' Will also copy full paths if copying from an OS file navigation window.
+#' Imports spreadsheet data from the user's clipboard to RStudio. Also,
+#' copies full file paths if copied from an OS file navigation window.
 #'
 #' Imported data formats in 1 of 2 ways.
 #' 1) If pasting to the console window, 'ctrl+alt+shift+v' will insert a tibble
-#' of the copied spreadsheet data.
+#' or vector of the copied spreadsheet data.
 #' 2) If pasting to the text editor window, 'ctrl+alt+shift+v' will insert an
-#' expression to produce the spreadsheet data
+#' expression to produce the spreadsheet data.
 #'
 #' To set the quick keys, use [set_xlr_key_chords()]
 #'
@@ -24,9 +23,10 @@
 #'
 #' @param has_fieldnames TRUE or FALSE indicating whether field names are
 #'   present in the spreadsheet data you copied. If user supplies no value,
-#'   [paste_from_xl()] guesses by looking at the clipboard data. If the function
-#'   incorrectly guesses the presence of field names, just write 'T' or 'F' into
-#'   the function that was echoed to the console.
+#'   `paste_from_xl()` guesses by looking at the clipboard data. If the function
+#'   incorrectly guesses the presence of field names, just place T or F into
+#'   the function echoed to the console. If `has_fieldnames` is set to either T
+#'   or F, the data always imports as a tibble.
 #'
 #' @details To set the quick keys in RStudio, run function:
 #' [set_xlr_key_chords()].
@@ -34,9 +34,9 @@
 #' \url{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 #'
 #' @returns
-#' ** If user copied a single spreadsheet row into the clipboard memory,
+#' ** If user copied a single spreadsheet row or column into clipboard memory,
 #'   returns a vector.
-#' ** If user copied more than one spreadsheet row to the clipboard, returns a tibble.
+#' ** If user copied more than one spreadsheet row or column to the clipboard, returns a tibble.
 #' ** If user copied a local file to the clipboard, returns a string with the path to the file.
 #'
 #' @export
@@ -66,19 +66,24 @@ paste_from_xl <- function( has_fieldnames = NULL ){
     cli::cli_abort('[.fn paste_from_xl] must be run interactively.')
   }
 
-  xl_data <- suppressWarnings(clipr::read_clip())
-  if ( is.null(xl_data) ) {
+  datr <- suppressWarnings(clipr::read_clip())
+  if ( is.null(datr) ) {
     cli::cli_alert_danger('The clipboard is empty. Nothing to paste.')
     return(invisible())
   }
 
 
-
   # process clip ------------------------------------------------------------
-  if( length(xl_data) == 1 ){
+  if(
+    is.null(has_fieldnames) &&
+    (
+      length(datr) == 1 ||
+      all(stringr::str_detect(datr, pattern = '\\t', negate = TRUE),na.rm = TRUE)
+    )
+    ){
 
     # clip to vector
-    from_xl <- I(xl_data) |>
+    from_xl <- I(datr) |>
       readr::read_delim(
         delim = '\t', col_names = FALSE,
         show_col_types = FALSE, trim_ws = TRUE) |>
@@ -88,7 +93,7 @@ paste_from_xl <- function( has_fieldnames = NULL ){
 
     # guess headers
     if( is.null(has_fieldnames) ){
-      headers <- I(xl_data[1]) |>
+      headers <- I(datr[1]) |>
         readr::read_delim( delim = '\t', col_names = FALSE,
                            show_col_types = FALSE,
                            name_repair = "universal_quiet") |>
@@ -102,7 +107,7 @@ paste_from_xl <- function( has_fieldnames = NULL ){
     }
 
     # clip to tibble
-    from_xl <- I(xl_data) |>
+    from_xl <- I(datr) |>
       readr::read_delim(delim = '\t', col_names = headers, show_col_types = FALSE,
                         name_repair = "universal_quiet",trim_ws = TRUE) |>
       as.data.frame() |>
@@ -147,19 +152,23 @@ run_paste_from_xl <- function(){
   }
 
   paste_locn <- purrr::pluck(rstudioapi::getActiveDocumentContext(), "id")
+  # if( paste_locn != "#console" ){
+  #   row1 <- purrr::pluck(rstudioapi::getSourceEditorContext(id = paste_locn),'selection', 1, 'range', 'start', 'row')
+  #   row2 <- purrr::pluck(rstudioapi::getSourceEditorContext(id = paste_locn),'selection', 1, 'range', 'start', 'row')
+  # }
 
 
-  xl_data <- suppressWarnings(clipr::read_clip())
-  if ( is.null(xl_data) ) {
+  datr <- suppressWarnings(clipr::read_clip())
+  if ( is.null(datr) ) {
     cli::cli_alert_danger('The clipboard is empty. Nothing to paste.')
     return(invisible())
   }
 
 
   out <- paste_from_xl()
-  default_input_name <- 'xl_data'
-  if( length(out)==1 && identical(names(out),'path') ){
-    out <- out[[1]]
+  default_input_name <- 'datr'
+  # if( is.null(dim(out)) && identical(names(out),'path') ){
+  if( is.null(dim(out)) && all(stringr::str_detect(out, '^((?:[A-Z]:\\\\)|(?:/))'), na.rm = TRUE) ){
     default_input_name <- 'path'
   }
 
@@ -187,7 +196,7 @@ run_paste_from_xl <- function(){
     rstudioapi::setSelectionRanges(c(row1,0,row2,Inf), id = paste_locn)
     # https://docs.posit.co/ide/server-pro/1.3.947-1/rstudio-ide-commands.html
     rstudioapi::executeCommand('reindent')
-    rstudioapi::setCursorPosition(c(row1,0), id = paste_locn)
+    try(rstudioapi::setCursorPosition(c(row1,0), id = paste_locn),silent = TRUE)
 
   }
 

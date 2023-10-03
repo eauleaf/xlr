@@ -9,27 +9,27 @@ paste_from_xl(has_fieldnames = NULL)
 \arguments{
 \item{has_fieldnames}{TRUE or FALSE indicating whether field names are
 present in the spreadsheet data you copied. If user supplies no value,
-\code{\link[=paste_from_xl]{paste_from_xl()}} guesses by looking at the clipboard data. If the function
-incorrectly guesses the presence of field names, just write 'T' or 'F' into
-the function that was echoed to the console.}
+\code{paste_from_xl()} guesses by looking at the clipboard data. If the function
+incorrectly guesses the presence of field names, just place T or F into
+the function echoed to the console. If \code{has_fieldnames} is set to either T
+or F, the data always imports as a tibble.}
 }
 \value{
-** If user copied a single spreadsheet row into the clipboard memory,
+** If user copied a single spreadsheet row or column into clipboard memory,
 returns a vector.
-** If user copied more than one spreadsheet row to the clipboard, returns a tibble.
+** If user copied more than one spreadsheet row or column to the clipboard, returns a tibble.
 ** If user copied a local file to the clipboard, returns a string with the path to the file.
 }
 \description{
-Imports spreadsheet data from the user's clipboard to RStudio.
-
-Will also copy full paths if copying from an OS file navigation window.
+Imports spreadsheet data from the user's clipboard to RStudio. Also,
+copies full file paths if copied from an OS file navigation window.
 
 Imported data formats in 1 of 2 ways.
 \enumerate{
 \item If pasting to the console window, 'ctrl+alt+shift+v' will insert a tibble
-of the copied spreadsheet data.
+or vector of the copied spreadsheet data.
 \item If pasting to the text editor window, 'ctrl+alt+shift+v' will insert an
-expression to produce the spreadsheet data
+expression to produce the spreadsheet data.
 }
 
 To set the quick keys, use \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}

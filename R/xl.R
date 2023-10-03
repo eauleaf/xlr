@@ -267,7 +267,7 @@ run_xl <- function(){
   if( identical(text_expr, character(0)) || text_expr == '' ){
     cli::cli_bullets(c(
       "x" = '{.strong Nothing selected to {.fn xl} }',
-      "i" = "Highlight an expression in your text editor, then press `ctrl+alt+shift+>`."
+      "i" = "Highlight an expression in your text editor, then press `ctrl+alt+shift+L`."
     ))
   } else {
     rstudioapi::sendToConsole(code = paste(text_expr, '|> xlr::xl()'))
