@@ -16,7 +16,7 @@ the inconvenience of reformatting console output data as input code."><meta prop
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9040</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9041</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,15 +75,15 @@ the inconvenience of reformatting console output data as input code.</p>
 
 <dt>quiet</dt>
 <dd><p>TRUE or FALSE indicating whether to write the scripted
-expression out to the console.</p></dd>
+expression to the console.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>The formatted deparsed expression, invisibly if to_clipboard = TRUE.
-The object's internal expression written to clipboard memory as side-effect.</p>
+<p>The formatted deparsed expression, invisibly if to_clipboard = FALSE.
+The primary output is the object's internal expression written to clipboard memory</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -106,7 +106,7 @@ a letter.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">enscript</span><span class="op">(</span><span class="va">letters</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># [letters] is copied to clipboard; press `ctrl + v` to paste the output</span></span></span>
+<span class="r-in"><span><span class="co"># `letters` is copied to clipboard; press `ctrl + v` to paste the output</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">enscript</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"🎊🌈"</span>,<span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">enscript</span><span class="op">(</span><span class="op">)</span></span></span>
@@ -128,6 +128,10 @@ a letter.</p>
 <span class="r-in"><span><span class="fu"><a href="enlist.html">enlist</a></span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="va">letters</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># returns the deparsed script as plain text</span></span></span>
+<span class="r-in"><span><span class="fu">enscript</span><span class="op">(</span><span class="va">letters</span>, to_clipboard <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "letters &lt;- c(\n\"a\", \"b\", \"c\", \"d\", \"e\", \"f\", \"g\", \"h\", \"i\", \"j\", \"k\", \"l\", \n\"m\", \"n\", \"o\", \"p\", \"q\", \"r\", \"s\", \"t\", \"u\", \"v\", \"w\", \"x\", \n\"y\", \"z\"\n)\n"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

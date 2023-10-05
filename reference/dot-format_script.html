@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9040</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9041</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,12 +73,10 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="co"># list(head(mtcars)) |&gt; deparse1(backtick = TRUE) |&gt; xlr:::.format_script()</span></span></span>
-<span class="r-in"><span><span class="co"># TODO: # fix formatting script for these:</span></span></span>
-<span class="r-in"><span><span class="co"># head(dplyr::starwars) |&gt; enlist() |&gt; deparse(backtick = TRUE) |&gt; glue::glue_collapse() |&gt; stringr::str_squish() |&gt; xlr:::.format_script() |&gt; cat()</span></span></span>
-<span class="r-in"><span><span class="co"># enlist(head(iris), "`quick_text`='hello'`", tail(dplyr::starwars)) |&gt; deparse(backtick = T) |&gt; glue::glue_collapse() |&gt; stringr::str_squish() |&gt; stringr::str_extract_all('(?&lt;=\(|, )`.+?` = ')</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse1</a></span><span class="op">(</span>backtick <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">xlr</span><span class="fu">:::</span><span class="fu">.format_script</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "c(\"a\", \"b\", \"c\", \"d\", \"e\")"</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">iris</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse1</a></span><span class="op">(</span>backtick <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">xlr</span><span class="fu">:::</span><span class="fu">.format_script</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "list(\nstructure(\nlist(\nSepal.Length = c(\n6.2, 5.9\n), \nSepal.Width = c(\n3.4, 3\n), \nPetal.Length = c(\n5.4, 5.1\n), \nPetal.Width = c(\n2.3, 1.8\n), \nSpecies = structure(\nc(\n3L, 3L\n), \nlevels = c(\n\"setosa\", \"versicolor\", \"virginica\"\n), \nclass = \"factor\"\n)\n), \nrow.names = 149:150, \nclass = \"data.frame\"\n)\n)\n"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

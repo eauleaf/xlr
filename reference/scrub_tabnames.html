@@ -14,7 +14,7 @@ characters permissible as spreadsheet tab names"><meta property="og:image" conte
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9040</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9041</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,9 +136,8 @@ names</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">scrub_tabnames</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1" "2" "3" "4" "5"</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'\\:blue/:'</span>, <span class="st">'red'</span>, <span class="st">'gr?*een///////'</span>, <span class="st">'[]'</span>, <span class="st">'[orange]'</span>,<span class="st">''</span>, <span class="cn">NA</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">some_tabnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'\\:blue/:'</span>, <span class="st">'red'</span>, <span class="st">'gr?*een///////'</span>, <span class="st">'[]'</span>, <span class="st">'[orange]'</span>,<span class="st">''</span>, <span class="cn">NA</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">scrub_tabnames</span><span class="op">(</span><span class="va">some_tabnames</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Sheet names should not contain:  `\`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `-`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Sheet names should not contain:  `/`</span>
@@ -156,22 +155,10 @@ names</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "--blue--"       "red"            "gr##een-------" "()"            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] "(orange)"       ".1"             "NA"            </span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'history'</span>, <span class="cn">NA</span>, <span class="st">'HISTORY'</span>, <span class="st">'Entire History of the Universe'</span>,<span class="cn">NULL</span>,<span class="cn">NULL</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'history'</span>, <span class="st">'Entire History of the Universe'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Sheet names should not contain:  `the word 'history'`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `hist`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "hist.1"                      "NA"                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "HIST.2"                      "Entire Hist of the Universe"</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"'\'don't worry\''"</span>, <span class="st">'`NA`'</span>, <span class="cn">NA</span>, <span class="st">"'HIS'T''"</span>, <span class="st">'Entire History of \'the\' \'Universe\''</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Sheet names should not contain:  `a single quote ' at the start of a tabname`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `an empty string`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Sheet names should not contain:  `a single quote ' at the end of a tabname`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `an empty string`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Sheet names should not contain:  `the word 'history'`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `hist`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "`don't worry`"                "`NA`"                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "NA"                           "`HIS'T`"                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "Entire Hist of 'the' 'Univer"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "hist"                        "Entire Hist of the Universe"</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'\\/:[]?*'</span>, <span class="st">'\\?:*/[]'</span>, <span class="st">'~!@#$%^&amp;()-_=+{}|;:,&lt;.&gt; '</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Sheet names should not contain:  `\`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `-`</span>
@@ -195,72 +182,16 @@ names</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "---()##"                  "-#-#-()"                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3] "~!@#$%^#()-_=+{}|;-,(.) "</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/precip.html" class="external-link">precip</a></span><span class="op">)</span>,<span class="st">'/'</span>,<span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/precip.html" class="external-link">precip</a></span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span>max_width <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Sheet names should not contain:  `/`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `-`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Mobile-67"  "Juneau-54." "Phoenix-7"  "Little Roc" "Los Angele"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "Sacramento" "San Franci" "Denver-13"  "Hartford-4" "Wilmington"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "Washington" "Jacksonvil" "Miami-59.8" "Atlanta-48" "Honolulu-2"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] "Boise-11.5" "Chicago-34" "Peoria-35." "Indianapol" "Des Moines"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] "Wichita-30" "Louisville" "New Orlean" "Portland-4" "Baltimore-"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26] "Boston-42." "Detroit-31" "Sault Ste." "Duluth-30." "Minneapoli"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "Jackson-49" "Kansas Cit" "St Louis-3" "Great Fall" "Omaha-30.2"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [36] "Reno-7.2"   "Concord-36" "Atlantic C" "Albuquerqu" "Albany-33."</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41] "Buffalo-36" "New York-4" "Charlotte-" "Raleigh-42" "Bismark-16"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [46] "Cincinnati" "Cleveland-" "Columbus-3" "Oklahoma C" "Portland-3"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [51] "Philadelph" "Pittsburg-" "Providence" "Columbia-4" "Sioux Fall"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [56] "Memphis-49" "Nashville-" "Dallas-35." "El Paso-7." "Houston-48"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61] "Salt Lake " "Burlington" "Norfolk-44" "Richmond-4" "Seattle Ta"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [66] "Spokane-17" "Charleston" "Milwaukee-" "Cheyenne-1" "San Juan-5"</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/precip.html" class="external-link">precip</a></span><span class="op">)</span>,<span class="st">'/'</span>,<span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/precip.html" class="external-link">precip</a></span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span>max_width <span class="op">=</span> <span class="fl">8</span>, sep <span class="op">=</span> <span class="st">'_#'</span>, pad <span class="op">=</span> <span class="st">'0'</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Sheet names should not contain:  `/`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `-`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Mobile-6" "Juneau-5" "Phoenix-" "Little R" "Los Ange" "Sacramen"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "San Fran" "Denver-1" "Hartford" "Wilmingt" "Washingt" "Jacksonv"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "Miami-59" "Atlanta-" "Honolulu" "Boise-11" "Chicago-" "Peoria-3"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "Indianap" "Des Moin" "Wichita-" "Louisvil" "New Orle" "Portl_#1"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "Baltimor" "Boston-4" "Detroit-" "Sault St" "Duluth-3" "Minneapo"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "Jackson-" "Kansas C" "St Louis" "Great Fa" "Omaha-30" "Reno-7.2"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "Concord-" "Atlantic" "Albuquer" "Albany-3" "Buffalo-" "New York"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [43] "Charlott" "Raleigh-" "Bismark-" "Cincinna" "Clevelan" "Columbus"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [49] "Oklahoma" "Portl_#2" "Philadel" "Pittsbur" "Providen" "Columbia"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [55] "Sioux Fa" "Memphis-" "Nashvill" "Dallas-3" "El Paso-" "Houston-"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61] "Salt Lak" "Burlingt" "Norfolk-" "Richmond" "Seattle " "Spokane-"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [67] "Charlest" "Milwauke" "Cheyenne" "San Juan"</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/precip.html" class="external-link">precip</a></span><span class="op">)</span>,<span class="st">'/'</span>,<span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/precip.html" class="external-link">precip</a></span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span>max_width <span class="op">=</span> <span class="fl">0</span>, sep <span class="op">=</span> <span class="st">'...'</span>, pad <span class="op">=</span> <span class="st">'0'</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> The minimum width must be greater than the number of characters required</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>         to differentiate possible duplicated tabnames plus the characters in `sep`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>         </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Setting the tabname character width to 5.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Sheet names should not contain:  `/`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `-`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicates remain after replacements. Trying again ... </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/precip.html" class="external-link">precip</a></span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span>max_width <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Mobil" "Junea" "Phoen" "Littl" "Los A" "Sacra" "San F" "Denve" "Hartf"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "Wilmi" "Washi" "J...1" "Miami" "A...1" "Honol" "Boise" "Chica" "Peori"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "India" "Des M" "Wichi" "Louis" "New O" "P...1" "Balti" "Bosto" "Detro"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [28] "Sault" "Dulut" "Minne" "J...2" "Kansa" "St Lo" "Great" "Omaha" "Reno-"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "Conco" "A...2" "Albuq" "Alban" "Buffa" "New Y" "C...1" "Ralei" "Bisma"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [46] "Cinci" "Cleve" "C...2" "Oklah" "P...2" "Phila" "Pitts" "Provi" "C...3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "Wilmi" "Washi" "Jac.1" "Miami" "Atl.1" "Honol" "Boise" "Chica" "Peori"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "India" "Des M" "Wichi" "Louis" "New O" "Por.1" "Balti" "Bosto" "Detro"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [28] "Sault" "Dulut" "Minne" "Jac.2" "Kansa" "St Lo" "Great" "Omaha" "Reno" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "Conco" "Atl.2" "Albuq" "Alban" "Buffa" "New Y" "Cha.1" "Ralei" "Bisma"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [46] "Cinci" "Cleve" "Col.1" "Oklah" "Por.2" "Phila" "Pitts" "Provi" "Col.2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [55] "Sioux" "Memph" "Nashv" "Dalla" "El Pa" "Houst" "Salt " "Burli" "Norfo"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [64] "Richm" "Seatt" "Spoka" "C...4" "Milwa" "Cheye" "San J"</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/precip.html" class="external-link">precip</a></span><span class="op">)</span>,<span class="st">'/'</span>,<span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/precip.html" class="external-link">precip</a></span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span>max_width <span class="op">=</span> <span class="fl">0</span>, sep <span class="op">=</span> <span class="st">'..'</span>, pad <span class="op">=</span> <span class="st">'.'</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> The minimum width must be greater than the number of characters required</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>         to differentiate possible duplicated tabnames plus the characters in `sep`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>         </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Setting the tabname character width to 4.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicates remain after replacements. Trying again ... </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Mobi" "June" "Phoe" "Litt" "Los " "Sacr" "S..1" "Denv" "Hart" "Wilm"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "Wash" "J..1" "Miam" "A..1" "Hono" "Bois" "Chic" "Peor" "Indi" "Des "</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21] "Wich" "Loui" "N..1" "P..1" "Balt" "Bost" "Detr" "Saul" "Dulu" "Minn"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "J..2" "Kans" "St L" "Grea" "Omah" "Reno" "Conc" "A..2" "Albu" "Alba"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [41] "Buff" "N..2" "C..1" "Rale" "Bism" "Cinc" "Clev" "C..2" "Okla" "P..2"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [51] "Phil" "Pitt" "Prov" "C..3" "Siou" "Memp" "Nash" "Dall" "El P" "Hous"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61] "Salt" "Burl" "Norf" "Rich" "Seat" "Spok" "C..4" "Milw" "Chey" "S..2"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [64] "Richm" "Seatt" "Spoka" "Cha.2" "Milwa" "Cheye" "San J"</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">''</span>, <span class="fl">15</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span>max_width <span class="op">=</span> <span class="fl">0</span>, sep <span class="op">=</span> <span class="st">'..'</span>, pad <span class="op">=</span> <span class="st">'.'</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> The minimum width must be greater than the number of characters required</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>         to differentiate possible duplicated tabnames plus the characters in `sep`.</span>
@@ -269,95 +200,7 @@ names</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "...1" "...2" "...3" "...4" "...5" "...6" "...7" "...8" "...9" "..10"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [11] "..11" "..12" "..13" "..14" "..15"</span>
-<span class="r-in"><span><span class="co"># rep('', 15) |&gt; scrub_tabnames(max_width = 0, sep = '', pad = '') # expect_fail</span></span></span>
-<span class="r-in"><span><span class="co"># rep('', 15) |&gt; scrub_tabnames(max_width = 0, sep = '', pad = ' ') # expect_fail</span></span></span>
-<span class="r-in"><span><span class="co"># dplyr::starwars |&gt; dplyr::mutate(new_name = paste(name,'of', homeworld)) |&gt;</span></span></span>
-<span class="r-in"><span><span class="co"># dplyr::pull(new_name) |&gt; scrub_tabnames(max_width = 20, sep = '//', pad = ']') # expect_fail</span></span></span>
-<span class="r-in"><span><span class="co"># dplyr::starwars |&gt; dplyr::mutate(new_name = paste(name,'of', homeworld)) |&gt;</span></span></span>
-<span class="r-in"><span><span class="co"># dplyr::pull(new_name) |&gt; scrub_tabnames(max_width = 0, sep = '.', pad = '.') # expect_fail</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># when stringr::str_trunc() gets fixed, the below code will work.</span></span></span>
-<span class="r-in"><span><span class="co"># dplyr::starwars |&gt; dplyr::mutate(new_name = paste(name,'of', homeworld)) |&gt;</span></span></span>
-<span class="r-in"><span><span class="co"># dplyr::pull(new_name) |&gt; scrub_tabnames(max_width = 0, sep = '', pad = '.') # ??????</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># if you request a width of characters that is fewer than your replacement characters, you get some weird looking names:</span></span></span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="va"><a href="https://dplyr.tidyverse.org/reference/starwars.html" class="external-link">starwars</a></span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>new_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">name</span>,<span class="st">'of'</span>, <span class="va">homeworld</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">new_name</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span>max_width <span class="op">=</span> <span class="fl">2</span>, sep <span class="op">=</span> <span class="st">'...'</span>, pad <span class="op">=</span> <span class="st">'.'</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> The minimum width must be greater than the number of characters required</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>         to differentiate possible duplicated tabnames plus the characters in `sep`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>         </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Setting the tabname character width to 5.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Luke " "C-3PO" "R2-D2" "D...1" "Leia " "Owen " "Beru " "R5-D4" "Biggs"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "Obi-W" "Anaki" "Wilhu" "Chewb" "Han S" "Greed" "Jabba" "Wedge" "Jek T"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "Yoda " "Palpa" "Boba " "IG-88" "Bossk" "Lando" "Lobot" "Ackba" "Mon M"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [28] "Arvel" "Wicke" "Nien " "Qui-G" "Nute " "Finis" "Jar J" "Roos " "Rugor"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "Ric O" "Watto" "Sebul" "Quars" "Shmi " "D...2" "Bib F" "Ayla " "Dud B"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [46] "Gasga" "Ben Q" "Mace " "Ki-Ad" "Kit F" "Eeth " "Adi G" "Saese" "Yarae"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [55] "Plo K" "Mas A" "Grega" "Cordé" "Clieg" "Poggl" "Lumin" "Barri" "Dormé"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [64] "Dooku" "Bail " "Jango" "Zam W" "Dexte" "Lama " "Taun " "Jocas" "Ratts"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [73] "R4-P1" "Wat T" "San H" "Shaak" "Griev" "Tarff" "Raymu" "Sly M" "Tion "</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [82] "Finn " "Rey o" "Poe D" "BB8 o" "Capta" "Padmé"</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># However, if you call zero width..., that's useful for naming.</span></span></span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="va"><a href="https://dplyr.tidyverse.org/reference/starwars.html" class="external-link">starwars</a></span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>new_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">name</span>,<span class="st">'of'</span>, <span class="va">homeworld</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">new_name</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span>max_width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> The minimum width must be greater than the number of characters required</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>         to differentiate possible duplicated tabnames plus the characters in `sep`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>         </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Setting the tabname character width to 3.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Luk" "C-3" "R2-" "D.1" "Lei" "Owe" "Ber" "R5-" "Big" "Obi" "Ana" "Wil"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "Che" "Han" "G.1" "Jab" "Wed" "Jek" "Yod" "Pal" "Bob" "IG-" "Bos" "Lan"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "Lob" "Ack" "Mon" "Arv" "Wic" "Nie" "Qui" "Nut" "F.1" "Jar" "Roo" "Rug"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "Ric" "W.1" "Seb" "Qua" "Shm" "D.2" "Bib" "Ayl" "Dud" "Gas" "Ben" "Mac"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [49] "Ki-" "Kit" "Eet" "Adi" "Sae" "Yar" "Plo" "Mas" "G.2" "Cor" "Cli" "Pog"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61] "Lum" "Bar" "Dor" "Doo" "Bai" "Jan" "Zam" "Dex" "Lam" "Tau" "Joc" "Rat"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [73] "R4-" "W.2" "San" "Sha" "Gri" "Tar" "Ray" "Sly" "Tio" "F.2" "Rey" "Poe"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [85] "BB8" "Cap" "Pad"</span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="va"><a href="https://dplyr.tidyverse.org/reference/starwars.html" class="external-link">starwars</a></span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>new_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">name</span>,<span class="st">'of'</span>, <span class="va">homeworld</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">new_name</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span>max_width <span class="op">=</span> <span class="fl">0</span>, sep <span class="op">=</span> <span class="st">'tab &gt; '</span>, pad <span class="op">=</span> <span class="st">'0'</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Sheet names should not contain:  `&gt;`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `)`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> The minimum width must be greater than the number of characters required</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>         to differentiate possible duplicated tabnames plus the characters in `sep`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>         </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Setting the tabname character width to 8.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Luke Sky" "C-3PO of" "R2-D2 of" "Darth Va" "Leia Org" "Owen Lar"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "Beru Whi" "R5-D4 of" "Biggs Da" "Obi-Wan " "Anakin S" "Wilhuff "</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "Chewbacc" "Han Solo" "Greedo o" "Jabba De" "Wedge An" "Jek Tono"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "Yoda of " "Palpatin" "Boba Fet" "IG-88 of" "Bossk of" "Lando Ca"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "Lobot of" "Ackbar o" "Mon Moth" "Arvel Cr" "Wicket S" "Nien Nun"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "Qui-Gon " "Nute Gun" "Finis Va" "Jar Jar " "Roos Tar" "Rugor Na"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "Ric Olié" "Watto of" "Sebulba " "Quarsh P" "Shmi Sky" "Darth Ma"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [43] "Bib Fort" "Ayla Sec" "Dud Bolt" "Gasgano " "Ben Quad" "Mace Win"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [49] "Ki-Adi-M" "Kit Fist" "Eeth Kot" "Adi Gall" "Saesee T" "Yarael P"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [55] "Plo Koon" "Mas Amed" "Gregar T" "Cordé of" "Cliegg L" "Poggle t"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61] "Luminara" "Barriss " "Dormé of" "Dooku of" "Bail Pre" "Jango Fe"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [67] "Zam Wese" "Dexter J" "Lama Su " "Taun We " "Jocasta " "Ratts Ty"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [73] "R4-P17 o" "Wat Tamb" "San Hill" "Shaak Ti" "Grievous" "Tarfful "</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [79] "Raymus A" "Sly Moor" "Tion Med" "Finn of " "Rey of N" "Poe Dame"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [85] "BB8 of N" "Captain " "Padmé Am"</span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="va"><a href="https://dplyr.tidyverse.org/reference/starwars.html" class="external-link">starwars</a></span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>new_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">name</span>,<span class="st">'of'</span>, <span class="va">homeworld</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">new_name</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span>max_width <span class="op">=</span> <span class="fl">0</span>,truncate_side <span class="op">=</span> <span class="st">'center'</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> The minimum width must be greater than the number of characters required</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>         to differentiate possible duplicated tabnames plus the characters in `sep`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>         </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Setting the tabname character width to 3.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ****************************************************************************</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ***** There are still issues after scrubbing names. Rerunning function *****</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ****************************************************************************</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Lue" "C-e" "R2o" "Dae" "Len" "Owe" "Bee" "R5e" "Bie" "Obn" "Ane" "Wiu"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "Chk" "Haa" "Gra" "Jaa" "Wea" "JeV" "YoA" "P~1" "Boo" "IGA" "Boa" "L~1"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "Lon" "Aca" "Moa" "ArA" "Wir" "Nit" "QuA" "Nua" "Fit" "Jao" "Roo" "Ruo"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "Rio" "Waa" "See" "Quo" "She" "Dar" "Bih" "Ayh" "Dur" "Gan" "Bed" "Mal"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [49] "Kia" "Kim" "Eea" "Adt" "Sah" "Yaa" "Pln" "Maa" "Gro" "Coo" "Cle" "Pos"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [61] "Lul" "Bal" "D~1" "D~2" "Ban" "Jan" "Zan" "Dem" "L~2" "Tao" "Jot" "Rar"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [73] "R4A" "Wao" "Sat" "Shi" "Gre" "Tak" "Ran" "Sla" "Tiu" "FiA" "ReA" "PoA"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [85] "BBA" "CaA" "P~2"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
