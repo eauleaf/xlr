@@ -67,7 +67,18 @@ paste_from_xl <- function( has_fieldnames = NULL ){
   }
 
   datr <- suppressWarnings(clipr::read_clip())
-  if ( is.null(datr) ) {
+
+  if ( is.null(datr) && .Platform$OS.type == "windows" ) {
+    # Run Windows powershell to get paths and capture output
+    powershell_script='
+    [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
+    [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+    [System.Windows.Forms.Clipboard]::GetData("FileDrop")'
+    datr <- shQuote(powershell_script) |>
+      shell(shell = 'powershell', intern = TRUE) |> try(silent = T)
+  }
+
+  if (is.null(datr) || identical(datr, character(0)) || inherits(datr, "try-error") ){
     cli::cli_alert_danger('The clipboard is empty. Nothing to paste.')
     return(invisible())
   }
@@ -153,33 +164,16 @@ run_paste_from_xl <- function(){
 
   paste_locn <- purrr::pluck(rstudioapi::getActiveDocumentContext(), "id")
 
-
-  datr <- suppressWarnings(clipr::read_clip())
-  if ( is.null(datr) && .Platform$OS.type == "windows" ) {
-
-    # Run Windows powershell to get paths and capture output
-    powershell_script='
-    [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
-    [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
-    [System.Windows.Forms.Clipboard]::GetData("FileDrop")
-    '
-    datr <- shQuote(powershell_script) |>
-      shell(shell = 'powershell', intern = TRUE) |> try(silent = T)
-  }
-
-  if (is.null(datr) || identical(datr, character(0)) || inherits(datr, "try-error") ){
-    cli::cli_alert_danger('The clipboard is empty. Nothing to paste.')
+  out <- paste_from_xl() |> try(silent = TRUE)
+  if (is.null(out)){
     return(invisible())
   }
 
-
-
-  out <- paste_from_xl()
   default_input_name <- 'datr'
-  # if( is.null(dim(out)) && identical(names(out),'path') ){
   if( is.null(dim(out)) && all(stringr::str_detect(out, '^((?:[A-Z]:\\\\)|(?:/))'), na.rm = TRUE) ){
     default_input_name <- 'path'
   }
+
 
   # ask user for a variable name --------------------------------------------
   input_name <- svDialogs::dlg_input(
@@ -197,15 +191,19 @@ run_paste_from_xl <- function(){
 
   # if pasting to script ----------------------------------------------------
   if( paste_locn != "#console" ){
+    rstudioapi::executeCommand('activateSource')
 
     out_expr <- glue::glue('\n{input_name}{enscript({out}, to_clipboard = FALSE )}\n')
-    row1 <- purrr::pluck(rstudioapi::getSourceEditorContext(id = paste_locn),'selection', 1, 'range', 'start', 'row')
     rstudioapi::insertText(text = out_expr, id = paste_locn)
-    row2 <- purrr::pluck(rstudioapi::getSourceEditorContext(id = paste_locn),'selection', 1, 'range', 'start', 'row')
+    row1 <- purrr::pluck(rstudioapi::getSourceEditorContext(id = paste_locn),'selection', 1, 'range', 'start', 'row')
+    print(row1)
+    row2 <- max(stringr::str_count(out_expr, '\\n'),1) + row1 - 1
+    # row2 <- purrr::pluck(rstudioapi::getSourceEditorContext(id = paste_locn),'selection', 1, 'range', 'start', 'row')
     rstudioapi::setSelectionRanges(c(row1,0,row2,Inf), id = paste_locn)
     # https://docs.posit.co/ide/server-pro/1.3.947-1/rstudio-ide-commands.html
     rstudioapi::executeCommand('reindent')
-    try(rstudioapi::setCursorPosition(c(row1,0), id = paste_locn),silent = TRUE)
+    rstudioapi::setCursorPosition(c(row1,0), id = paste_locn)
+
 
   }
 
