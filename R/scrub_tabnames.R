@@ -46,38 +46,13 @@
 #' @export
 #'
 #' @examples
-#' scrub_tabnames(1:5)
-#' c('\\:blue/:', 'red', 'gr?*een///////', '[]', '[orange]','', NA) |> scrub_tabnames()
-#' c('history', NA, 'HISTORY', 'Entire History of the Universe',NULL,NULL) |> scrub_tabnames()
-#' c("'\'don't worry\''", '`NA`', NA, "'HIS'T''", 'Entire History of \'the\' \'Universe\'') |> scrub_tabnames()
+#' some_tabnames <- c('\\:blue/:', 'red', 'gr?*een///////', '[]', '[orange]','', NA)
+#' scrub_tabnames(some_tabnames)
+#' c('history', 'Entire History of the Universe') |> scrub_tabnames()
 #' c('\\/:[]?*', '\\?:*/[]', '~!@#$%^&()-_=+{}|;:,<.> ') |> scrub_tabnames()
-#' paste0(names(datasets::precip),'/',datasets::precip) |> scrub_tabnames(max_width = 10)
-#' paste0(names(datasets::precip),'/',datasets::precip) |> scrub_tabnames(max_width = 8, sep = '_#', pad = '0')
-#' paste0(names(datasets::precip),'/',datasets::precip) |> scrub_tabnames(max_width = 0, sep = '...', pad = '0')
-#' paste0(names(datasets::precip),'/',datasets::precip) |> scrub_tabnames(max_width = 0, sep = '..', pad = '.')
+#' names(datasets::precip) |> scrub_tabnames(max_width = 5)
 #' rep('', 15) |> scrub_tabnames(max_width = 0, sep = '..', pad = '.')
-#' # rep('', 15) |> scrub_tabnames(max_width = 0, sep = '', pad = '') # expect_fail
-#' # rep('', 15) |> scrub_tabnames(max_width = 0, sep = '', pad = ' ') # expect_fail
-#' # dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
-#' # dplyr::pull(new_name) |> scrub_tabnames(max_width = 20, sep = '//', pad = ']') # expect_fail
-#' # dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
-#' # dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '.', pad = '.') # expect_fail
 #'
-#' # when stringr::str_trunc() gets fixed, the below code will work.
-#' # dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
-#' # dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = '', pad = '.') # ??????
-#'
-#' # if you request a width of characters that is fewer than your replacement characters, you get some weird looking names:
-#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
-#' dplyr::pull(new_name) |> scrub_tabnames(max_width = 2, sep = '...', pad = '.')
-#'
-#' # However, if you call zero width..., that's useful for naming.
-#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
-#' dplyr::pull(new_name) |> scrub_tabnames(max_width = 0)
-#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
-#' dplyr::pull(new_name) |> scrub_tabnames(max_width = 0, sep = 'tab > ', pad = '0')
-#' dplyr::starwars |> dplyr::mutate(new_name = paste(name,'of', homeworld)) |>
-#' dplyr::pull(new_name) |> scrub_tabnames(max_width = 0,truncate_side = 'center')
 scrub_tabnames <- function(tabnames,
                            max_width = 31,
                            truncate_side = c("right", "left", "center"),
@@ -407,9 +382,6 @@ scrub_tabnames <- function(tabnames,
 #' tabnames = c('', NULL, NULL, NA, NA, 'a', 'a', 'a', 'b', 'b', 'c', rep('d',11))
 #' xlr:::.uniquify_tabnames(tabnames)
 #' xlr:::.uniquify_tabnames(tabnames = tabnames, paste_side = 'left' , sep = '|')
-#' xlr:::.uniquify_tabnames('supercalifragalisticexpealidocious')
-#' xlr:::.uniquify_tabnames(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'), width = 10,  truncate_side = 'center', ellipsis = '~')
-#' xlr:::.uniquify_tabnames(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'),truncate_side = 'center', ellipsis = '~', paste_side='left')
 #'
 .uniquify_tabnames <- function(tabnames, truncate_side = "right", paste_side = "right",
                                width = 31, sep = "->", pad = ".", ellipsis = "", quiet = FALSE) {

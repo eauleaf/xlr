@@ -12,11 +12,11 @@ enscript(. = NULL, to_clipboard = TRUE, quiet = FALSE)
 \item{to_clipboard}{default TRUE; whether to copy the resulting script to the clipboard}
 
 \item{quiet}{TRUE or FALSE indicating whether to write the scripted
-expression out to the console.}
+expression to the console.}
 }
 \value{
-The formatted deparsed expression, invisibly if to_clipboard = TRUE.
-The object's internal expression written to clipboard memory as side-effect.
+The formatted deparsed expression, invisibly if to_clipboard = FALSE.
+The primary output is the object's internal expression written to clipboard memory
 }
 \description{
 For interactive use. \code{enscript()} obtains R's
@@ -44,7 +44,7 @@ a letter.
 \dontrun{
 
 enscript(letters)
-# [letters] is copied to clipboard; press `ctrl + v` to paste the output
+# `letters` is copied to clipboard; press `ctrl + v` to paste the output
 
 enscript(1:5 * 10)
 rep("🎊🌈",3) |> enscript()
@@ -66,5 +66,8 @@ enlist(candy, !!candy, !!!candy, enlist(!!!candy)) |> enscript()
 enlist(!!letters)
 
 }
+
+# returns the deparsed script as plain text
+enscript(letters, to_clipboard = FALSE)
 
 }

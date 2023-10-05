@@ -1,13 +1,11 @@
 #' Make a list with auto-named list elements
 #'
-#'
 #' @description
-#' When passed a list, `enlist()` does not add an additional list layer.
 #' Use in place of [list] to produce a list with auto-assigned names and to
 #' avoid adding list structure.
 #'
 #' @details
-#' - `enlist` creates a list where each input list element is force-named by the assigned name or input expression, .e.g  `enlist(mtcars)`.
+#' - Creates a list where each input list element is force-named by the assigned name or input expression, .e.g  `enlist(mtcars)`.
 #' - If no list exists, `enlist` places its arguments into a list, e.g. `enlist(c('hi', 'hello'))`.
 #' - If passed a single bare list, `enlist` does not add an additional list layer.
 #' That is, enlist() doesn't stack lists for structure's sake alone, e.g. `enlist(enlist(letters))`.

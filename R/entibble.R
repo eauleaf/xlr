@@ -1,19 +1,19 @@
-#' Convert a data object or list of data objects to a tibble with rownames
+#' Convert data objects to a tibble with defaults optimized for spreadsheet presentation
 #'
-#' Same as [tibble()] with different defaults.
-#' [entibble]:
-#'  * Always includes rownames, if available, as the first column of the tibble
-#'  * Is not concerned with duplicate column names unless specified by user with .name_repair
+#' Default behaviors:
+#'  * Always includes rownames in tibble, if available
 #'  * Does not repeat input elements to obtain common lengths
-#'  * Transforms lists with uniform arrays into columns of a tibble
-#'  * Treats ragged list of input elements similar to [tibble()] but includes names as column if possible
-#'  * Arranges lists of lists to produce a single table, if row dimensions allow it
+#'  * Arranges lists with uniform arrays into columns of a single tibble
+#'  * A list of ragged elements becomes a two column tibble where the first column is names and
+#'  the second column is a nested list
+#'  * Is unconcerned with duplicate column names unless specified by user with .name_repair
+#'
 #'
 #'  @details
 #'  Entibble is designed to work with the function [xl()] to produce a viewable
-#'  output of R data in spreadsheets. To help [xl()] succeed as often as possible, [entibble()] is
+#'  output of R data within spreadsheets. To help `xl()` succeed as often as possible, `entibble()` is
 #'  liberal about names, such as duplicate column names, and makes an effort to produce a flat table
-#'  in place of a nested tibble.
+#'  in place of a nested [tibble::tibble()].
 #'
 #' @inheritParams tibble::tibble
 #' @param ... object or expression to convert to a tibble
@@ -26,112 +26,31 @@
 #' @export
 #'
 #' @examples
-#' #TODO: transport these to tests and decide what needs to stay...
-#' entibble('')
 #' letters |> entibble()
-#' letters |>  purrr::set_names(LETTERS) |> entibble()
-#' letters |>  purrr::set_names(LETTERS) |> entibble(.rowname = 'user-specified rowname')
+#'
+#' # naming examples
 #' (example_data <- letters |>  purrr::set_names(LETTERS))
 #' example_data |> entibble()
-#' example_data |> entibble(.rowname = 'user-specified rowname')
+#' example_data |> entibble(.rowname = 'a user-specified name')
 #' example_data |> entibble(.name_repair = ~c('name_A', 'name_B'))
-#' tibble::tibble(example_data, !!!letters) # ragged data
-#' entibble(example_data, !!!letters) # ragged data
-#' entibble(!!!letters)
-#' tibble::tibble(!!!letters)
 #' entibble(example_data, example_data)
-#' # tibble::tibble(example_data, example_data)
-#'
-#' letters |> purrr::set_names(LETTERS) |> as.list() |> tibble::tibble()
-#' letters |> purrr::set_names(LETTERS) |> as.list() |> entibble()
-#'
-#'
-#' enlist(head(iris), tail(mtcars)) |> tibble::tibble()
-#' enlist(head(iris), tail(mtcars)) |> entibble()
-#'
-#' enlist(head(iris), head(mtcars)) |> entibble()
-#' entibble(head(iris), head(mtcars))
-#' tibble::tibble(head(iris), head(mtcars))
-#' entibble(head(iris), head(mtcars, 11))
-#' # tibble::tibble(head(iris), head(mtcars,11))
-#'
-#'
-#' tibble::tibble(y = 1:3,x = 11:13)
-#' entibble(y = c(1, 2, 3),x = c(11, 12, 13))
-#' # tibble::tibble(x = 1:3,x = 11:13)
-#' entibble(x = 1:3, x = 11:13)
-#' entibble(x = 1:3,x = 10:14, .name_repair = 'minimal')
-#' # tibble::tibble(x = 1:3,x = 10:14, .name_repair = 'minimal')
-#' tibble::tibble(x = 1:3,x = 11:13, .name_repair = 'unique')
-#' entibble(x = 1:3,x = 11:13, .name_repair = 'unique')
-#' entibble(x = 1:3,x = 11:13, .name_repair = 'unique_quiet')
-#' entibble(x = 1:3,x = 11:13, .name_repair = ~scrub_tabnames(., sep = ' <-- ', quiet = TRUE))
-#' enlist(head(iris), head(mtcars))
-#'
-#' tibble::tibble(x = 1:3,x = 11:13, .name_repair = ~scrub_tabnames(., sep = ' <-- ', quiet = TRUE))
-#'
-#' as.matrix(1:10) |> rownames()
-#' as.matrix(1:10) |> entibble()
-#' as.matrix(list(1:10,11:20)) |> entibble()
-#' as.matrix(list(1:10,11:20)) |> tibble::tibble()
-#' as.matrix(1:10) |> tibble::tibble()
-#' as.matrix(warpbreaks[1:10, ]) |> tibble::has_rownames()
-#' as.matrix(warpbreaks[1:10, ]) |> entibble()
-#' # ignores unused rownames
-#' as.matrix(warpbreaks[1:10, ]) |> entibble(.rowname = 'row_nums')
-#' matrix(c(1, 2, 3, 11, 12, 13), nrow = 2, ncol = 3, byrow = TRUE, dimnames = list(c('row1', 'row2'), c('C.1', 'C.2', 'C.3'))) |> entibble()
-#' tail(iris) |> tibble::has_rownames()
-#' tail(iris) |> entibble()
-#' mtcars |> entibble()
+#' entibble(x = 1:3, x = 11:13, .name_repair = 'unique_quiet')
 #' mtcars |> entibble(.rowname = 'vehicle')
-#' 5 |> entibble()
-#' NA |> entibble()
-#' NULL |> entibble()
-#' enlist(head(iris), head(mtcars)) |> purrr::map(entibble)
-#' enlist(letters, LETTERS) |> purrr::map(entibble)
-#' enlist(letters, LETTERS) |> purrr::map(entibble, .name_repair = ~'a-z')
-#' enlist(head(iris), head(mtcars)) |> entibble()
-#' head(iris) |> purrr::map(entibble)
-#' entibble(!!!head(iris))
-#' enlist(head(iris), head(mtcars)) |> entibble()
-#' enlist(head(iris), head(mtcars)) |> tibble::tibble()
 #'
-#' letters |> purrr::set_names(LETTERS) |> tibble::tibble()
-#' letters |> purrr::set_names(LETTERS) |> entibble()
+#' # nests ragged data
+#' entibble(example_data, !!!letters)
 #'
-#' letters |> purrr::set_names(LETTERS) |> tibble::enframe( name = 'row', value = 'blue')
+#' # spreads conforming rows and lists of conforming rows
+#' entibble(x = 1:3, y = 11:13)
+#' entibble(x = 1:3, y = 10:14)
 #'
-#' # If rowname is specified, but the dataframe has no rownames, rowname is ignored.
-#' entibble(iris, .rowname = 'flower_name')
-#' letters |> as.list() |> tibble::tibble()
-#' letters |> as.list() |> entibble(.rowname = 'a-z')
-#' letters |> list() |> tibble::tibble()
-#' letters |> list() |> entibble(.rowname = 'a-z')
-#' letters |> enlist() |> entibble(.rowname = 'a-z')
+#' # be somewhat careful about conforming row inputs; it is different from `tibble()`
+#' enlist(head(iris), tail(mtcars)) |> entibble()
+#' as.matrix(list(1:10,11:20)) |> entibble()
 #'
-#' colours() |> rlang::set_names() |> entibble() |> entibble(another_col = colours())
-#' colours() |> rlang::set_names() |> entibble(another_col = colours())
-#' letters |> as.list() |> enlist() |> entibble()
-#' # dplyr::bind_cols(letters, LETTERS) |> copy_for_xl()
-#' # letters |> rlang::set_names(LETTERS) |> copy_for_xl()
-#'
-#' entibble(1:10,11:20)
-#' entibble(c(1:10,11:20))
-#'
-#' entibble(list(1:10,11:20))
-#' tibble::tibble(list(1:10,11:20))
-#'
-#' entibble(enlist(1:10,11:20))
-#' entibble(enlist(1:10,11:20), .rowname = 'nums')
-#' entibble(list(1:10),list(11:20))
-#' tibble::tibble(enlist(1:10),enlist(11:20))
-#' entibble(enlist(1:10),enlist(11:20))
-#' entibble(enlist(1:10),enlist(11:20), .rowname = 'blue')
-#' entibble(enlist(1:10),enlist(11:20), .rowname = 'a column name', .name_repair = 'unique')
-#' entibble(enlist(1:10),enlist(11:20), .rowname = 'a column name', .name_repair = 'universal')
-#' entibble(enlist(1:10),enlist(11:20), .rowname = 'a column name', .name_repair = 'universal_quiet')
-#' entibble(enlist(list(1:10),list(11:20)))
-#' entibble(enlist((1:10),(11:20)))
+#' # if you want to ensure separate lists, call [purrr::map()] or [list_iron()]
+#' enlist(head(iris), tail(mtcars)) |> purrr::map(entibble)
+#' enlist(head(iris), tail(mtcars)) |> list_iron(.f = entibble)
 #'
 entibble <- function(
     ...,
@@ -140,20 +59,14 @@ entibble <- function(
 ){
 
   in_exprs <- enlist(...) |> rlang::eval_tidy()
-  # in_names <- names(in_exprs)
-  # cat(in_names)
 
 
   if ( length(in_exprs) == 0 ){
-
     return(tibble::tibble())
-
   } else {
 
     checkmate::assert_string(.rowname, null.ok = FALSE, na.ok = FALSE)
-    # out <- list_iron(in_exprs, .f = identity, name_spec = "{inner}")
-    # if(identical(names(out), NULL) && identical(length(out), length(in_names))){names(out) <- in_names}
-    # out <- enlist(!!!in_exprs, .f = identity, name_spec = "{inner}") |>
+
     out <- in_exprs |> purrr::imap(.f = ~.to_tibble(.x, .rowname = .rowname, .vec_name = .y))
     row_counts <- out |> purrr::map_int(nrow) |> unique()
     is_ragged <- length(row_counts)!=1
@@ -200,33 +113,58 @@ entibble <- function(
 ){
 
 
-  if( is.data.frame(.in_data) || is.matrix(.in_data) ){
+
+  # if( is.data.frame(.in_data) || is.matrix(.in_data) || is.table(.in_data)){
+  if( !is.null(dim(.in_data)) ){
 
     if( tibble::is_tibble( .in_data ) ){
       out <- .in_data
     } else {
-      out <- asplit(x = .in_data, MARGIN = 2) |> purrr::map(as.vector) |> dplyr::bind_cols()
-      if( tibble::has_rownames( .in_data ) ){
+
+      matrix_names <- if(is.matrix(.in_data)){ rownames(.in_data)} else { NULL }
+
+      if(is.table(.in_data)){ .in_data <- as.data.frame(.in_data) }
+
+      out <- asplit(x = .in_data, MARGIN = 2) |> purrr::map(as.vector)
+      if(length(out)==1 && is.null(names(out)) ){ names(out) <- .vec_name}
+      out <- out |> dplyr::bind_cols()
+      if( tibble::has_rownames( .in_data ) || !is.null(matrix_names) ){
         out <-  tibble::add_column(.data = out, !!.rowname := rownames(.in_data), .before = 1, .name_repair = "minimal")
       }
+
     }
 
 
-  } else if (is.vector( .in_data ) || is.factor(.in_data) ){
+  } else if (is.vector( .in_data ) || is.factor( .in_data ) ){
 
     out <- .vector_2_tibble(.in_vec = .in_data, .rowname = .rowname, .vec_name = .vec_name )
 
+  } else if (is.null(.in_data)) {
+
+    out <- tibble::tibble()
+
   } else {
 
-    # tibble anything else
-    out <- tibble::tibble(!!.in_data, .name_repair = 'minimal')
+    # tibble anything else tibble-able
+    out <- tibble::tibble({{.in_data}}, .name_repair = 'minimal') |> try(silent = TRUE)
+    # tibble formulas
+    if( !is.data.frame(out) ){
+      # must be two lines for evaluation of formulas
+      out <- deparse({{.in_data}}) |> try(silent = TRUE)
+      out <- out |> tibble::tibble() |> try(silent = TRUE)
+    } else if(!is.data.frame(out)){
+      cli::cli_abort('Cannot coerce {(.in_data)} to a tibble.')
+    }
+
+    if( identical(1L, ncol(out)) ){
+      out <- out |> rlang::set_names(.vec_name)
+    }
 
   }
 
   return(out)
 
 }
-
 
 
 
@@ -249,10 +187,12 @@ entibble <- function(
     out <- .in_vec |> tibble::enframe( name = .rowname, value = .vec_name )
   } else {
     out <- .in_vec |> tibble::tibble( .name_repair = ~as.character(.vec_name) )
-    # out <- .in_vec |> tibble::tibble( .name_repair = .vec_name )
   }
 
   return(out)
 
 }
+
+
+
 

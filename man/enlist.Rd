@@ -16,13 +16,12 @@ enlist(..., .label = NULL)
 a named list
 }
 \description{
-When passed a list, \code{enlist()} does not add an additional list layer.
 Use in place of \link{list} to produce a list with auto-assigned names and to
 avoid adding list structure.
 }
 \details{
 \itemize{
-\item \code{enlist} creates a list where each input list element is force-named by the assigned name or input expression, .e.g  \code{enlist(mtcars)}.
+\item Creates a list where each input list element is force-named by the assigned name or input expression, .e.g  \code{enlist(mtcars)}.
 \item If no list exists, \code{enlist} places its arguments into a list, e.g. \code{enlist(c('hi', 'hello'))}.
 \item If passed a single bare list, \code{enlist} does not add an additional list layer.
 That is, enlist() doesn't stack lists for structure's sake alone, e.g. \code{enlist(enlist(letters))}.

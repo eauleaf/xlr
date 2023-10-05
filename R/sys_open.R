@@ -53,6 +53,9 @@ sys_open <- function( ... , .quiet = TRUE){
   checkmate::assert_flag(.quiet)
   return_errors <- if(.quiet){ NULL } else {''}
 
+  # if (identical(browser, "false"))
+  #   return(invisible())
+
   if( ...length()==0 ){
     paths <- sys_paths <- here::here()
   } else {
@@ -87,7 +90,7 @@ sys_open <- function( ... , .quiet = TRUE){
 
 
   if(( .Platform$OS.type == "windows" )) {
-    results <- paths |> purrr::map(shell.exec)
+    results <- paste('open', shQuote(paths)) |> purrr::map(shell)
     # return(result)
   } else if(.Platform$OS.type == "unix") {
     results <- paths |> purrr::map(\(path) system2('open', glue::glue("\"{path}\""), stdout = return_errors, stderr = return_errors, timeout = 10))
@@ -98,8 +101,10 @@ sys_open <- function( ... , .quiet = TRUE){
     # return(result)
   } else {
     cli::cli_alert_danger('Unable to recognize your OS and so cannot open your system paths.
-                          Run `.Platform$OS.type` to identify your operating system and report it
-                          as an issue at `https://github.com/eauleaf/xlr.`')
+                          Please run the code `.Platform$OS.type` in your console to identify
+                          your operating system and report it as an issue at:
+                          `https://github.com/eauleaf/xlr.`
+                          ')
   }
 
     return(paths)

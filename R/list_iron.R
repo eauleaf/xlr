@@ -35,7 +35,7 @@
 #' a_list |> list_iron() |> str()
 #'
 #' # Naming examples:
-#' messy_list <- list(list(list(1:5), a = list(5:1, 'green', list('blue')), letters), list('red', list('orange')))
+#' messy_list <- list(list(list(1:5), a = list(5:1, 'green', list('blue')), letters))
 #' messy_list |> str()
 #' messy_list |> list_iron() |> str()
 #' messy_list |> list_iron(name_repair = 'unique') |> names()

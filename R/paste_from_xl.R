@@ -152,17 +152,26 @@ run_paste_from_xl <- function(){
   }
 
   paste_locn <- purrr::pluck(rstudioapi::getActiveDocumentContext(), "id")
-  # if( paste_locn != "#console" ){
-  #   row1 <- purrr::pluck(rstudioapi::getSourceEditorContext(id = paste_locn),'selection', 1, 'range', 'start', 'row')
-  #   row2 <- purrr::pluck(rstudioapi::getSourceEditorContext(id = paste_locn),'selection', 1, 'range', 'start', 'row')
-  # }
 
 
   datr <- suppressWarnings(clipr::read_clip())
-  if ( is.null(datr) ) {
+  if ( is.null(datr) && .Platform$OS.type == "windows" ) {
+
+    # Run Windows powershell to get paths and capture output
+    powershell_script='
+    [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
+    [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+    [System.Windows.Forms.Clipboard]::GetData("FileDrop")
+    '
+    datr <- shQuote(powershell_script) |>
+      shell(shell = 'powershell', intern = TRUE) |> try(silent = T)
+  }
+
+  if (is.null(datr) || identical(datr, character(0)) || inherits(datr, "try-error") ){
     cli::cli_alert_danger('The clipboard is empty. Nothing to paste.')
     return(invisible())
   }
+
 
 
   out <- paste_from_xl()

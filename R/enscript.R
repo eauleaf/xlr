@@ -25,17 +25,17 @@
 #' @param . The data object or expression to transform into script
 #' @param to_clipboard default TRUE; whether to copy the resulting script to the clipboard
 #' @param quiet TRUE or FALSE indicating whether to write the scripted
-#'   expression out to the console.
+#'   expression to the console.
 #'
-#' @return The formatted deparsed expression, invisibly if to_clipboard = TRUE.
-#' The object's internal expression written to clipboard memory as side-effect.
+#' @return The formatted deparsed expression, invisibly if to_clipboard = FALSE.
+#' The primary output is the object's internal expression written to clipboard memory
 #'
 #' @export
 #'
 #' @examples \dontrun{
 #'
 #' enscript(letters)
-#' # [letters] is copied to clipboard; press `ctrl + v` to paste the output
+#' # `letters` is copied to clipboard; press `ctrl + v` to paste the output
 #'
 #' enscript(1:5 * 10)
 #' rep("🎊🌈",3) |> enscript()
@@ -57,6 +57,9 @@
 #' enlist(!!letters)
 #'
 #' }
+#'
+#' # returns the deparsed script as plain text
+#' enscript(letters, to_clipboard = FALSE)
 #'
 enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 
@@ -169,12 +172,9 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 #'
 #' @return a string with embedded '/n' line breaks
 #'
-#' @examples \dontrun{
-#' # list(head(mtcars)) |> deparse1(backtick = TRUE) |> xlr:::.format_script()
-#' # TODO: # fix formatting script for these:
-#' # head(dplyr::starwars) |> enlist() |> deparse(backtick = TRUE) |> glue::glue_collapse() |> stringr::str_squish() |> xlr:::.format_script() |> cat()
-#' # enlist(head(iris), "`quick_text`='hello'`", tail(dplyr::starwars)) |> deparse(backtick = T) |> glue::glue_collapse() |> stringr::str_squish() |> stringr::str_extract_all('(?<=\\(|, )`.+?` = ')
-#'}
+#' @examples
+#' letters[1:5] |> deparse1(backtick = TRUE) |> xlr:::.format_script()
+#' list(tail(iris,2)) |> deparse1(backtick = TRUE) |> xlr:::.format_script()
 #'
 .format_script <- function(obj_expr, snip_width = 70) {
 
@@ -182,7 +182,7 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
   snip_width <- checkmate::assert_integerish(snip_width, lower = 4, max.len = 1, any.missing = FALSE)
 
 
-  if( nchar(obj_expr) <= snip_width ) {
+  if( nchar(obj_expr) <= snip_width) {
     return(obj_expr)
   }
 

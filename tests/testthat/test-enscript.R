@@ -1,3 +1,15 @@
+#' # TODO: # fix formatting script for these:
+#' # head(dplyr::starwars) |> enlist() |> deparse(backtick = TRUE) |> glue::glue_collapse() |> stringr::str_squish() |> xlr:::.format_script() |> cat()
+#' # enlist(head(iris), "`quick_text`='hello'`", tail(dplyr::starwars)) |> deparse(backtick = T) |> glue::glue_collapse() |> stringr::str_squish() |> stringr::str_extract_all('(?<=\\(|, )`.+?` = ')
+
+test_that('.format_script ', {
+  expect_equal(
+    list(tail(iris,2)) |> deparse1(backtick = TRUE) |> xlr:::.format_script(),
+    "list(\nstructure(\nlist(\nSepal.Length = c(\n6.2, 5.9\n), \nSepal.Width = c(\n3.4, 3\n), \nPetal.Length = c(\n5.4, 5.1\n), \nPetal.Width = c(\n2.3, 1.8\n), \nSpecies = structure(\nc(\n3L, 3L\n), \nlevels = c(\n\"setosa\", \"versicolor\", \"virginica\"\n), \nclass = \"factor\"\n)\n), \nrow.names = 149:150, \nclass = \"data.frame\"\n)\n)\n"
+  )
+})
+
+
 test_that('invisible deparsed output and quiet', {
   expect_equal(
     1:5 |> enscript(to_clipboard = F, quiet = T),
@@ -139,7 +151,7 @@ test_that('starwars script (copied to user clipboard) is correct: dplyr::starwar
   )
 })
 
-test_that('test another expression rlang::set_names(letters, LETTERS) |> enlist() |> enscript()', {
+test_that('test enscripted expression rlang::set_names(letters, LETTERS) |> enlist() |> enscript()', {
   expect_equal(
     list(
       "rlang::set_names(letters, LETTERS)" = c(

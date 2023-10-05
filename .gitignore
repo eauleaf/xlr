@@ -5,6 +5,7 @@
 .Rdata
 .httr-oauth
 .DS_Store
-temp_backup
+vignettes/rsconnect
+rsconnect
 inst/doc
 docs
