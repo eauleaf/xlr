@@ -152,7 +152,6 @@ xl <- function(...
   } else if( !is.character(.sheet_titles) ){
     sheet_fun <- rlang::as_function(.sheet_titles)
     .sheet_titles <- in_names |> sheet_fun()
-    # names(sheet_titles) <- names(df_list)
   }
 
   # incorporate any user assigned workbook specs
