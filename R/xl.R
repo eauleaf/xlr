@@ -53,7 +53,7 @@ xl <- function(...
                ,.sheet_titles = stringr::str_to_title
                ,.dataframe_spec = NULL
                ,.tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}") # arguments passed to scrub tabnames, see [scrub_tabnames] for options; # collapse description for list-embedded tabnames grouped, passed to purrr::list_flatten @importParam
-               ,.workbook_spec = list(asTable = TRUE, orientation = 'landscape', zoom = 85, name = NULL) # @seealso [opensxlsx::buildWorkbook] args as a named list
+               ,.workbook_spec = list(asTable = TRUE, orientation = 'landscape', zoom = 80, name = NULL) # @seealso [opensxlsx::buildWorkbook] args as a named list
                ,.return = list('workbook', 'savepath', 'tibbles', NULL)
 ){
 
@@ -179,7 +179,7 @@ xl <- function(...
     sheet_nm <- sheet_names[[df_name]]
     dt_cols <- which(purrr::map_lgl(df_nm, lubridate::is.Date))
     px_cols <- which(purrr::map_lgl(df_nm, lubridate::is.POSIXt))
-    purrr::map(dt_cols, ~openxlsx::addStyle(wb, sheet = sheet_nm, style = date_style, rows = 1:(nrow(df_nm)+1), cols = .))
+    purrr::map(dt_cols, ~openxlsx::addStyle(wb, sheet = sheet_nm, style = date_style, rows = start_row+1:(nrow(df_nm)), cols = .))
     openxlsx::addStyle(wb, sheet = sheet_nm, style = fieldname_style, rows = start_row:start_row, cols = 1:ncol(df_nm))
     openxlsx::freezePane(wb, sheet = sheet_nm, firstRow = TRUE)
     openxlsx::freezePane(wb, sheet = sheet_nm, firstActiveRow = start_row+1)
