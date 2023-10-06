@@ -130,9 +130,9 @@ paste_from_xl <- function( has_fieldnames = NULL ){
   # check if windows path
   # Sys.info()['sysname']=='Windows'
   # chartr("\\", "/", from_xl)
-  if( length(from_xl)==1 && all(stringr::str_detect(from_xl[[1]], '^((?:[A-Z]:\\\\)|(?:/))'), na.rm = TRUE) ){
-    from_xl <- from_xl |> rlang::set_names('path')
-  }
+  # if( length(from_xl)==1 && all(stringr::str_detect(from_xl[[1]], '^((?:[A-Z]:\\\\)|(?:/))'), na.rm = TRUE) ){
+  #   from_xl <- from_xl |> rlang::set_names('path')
+  # }
 
 
 return(from_xl)
