@@ -12,7 +12,7 @@ xl(
   .sheet_titles = stringr::str_to_title,
   .dataframe_spec = NULL,
   .tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}"),
-  .workbook_spec = list(asTable = TRUE, orientation = "landscape", zoom = 85, name =
+  .workbook_spec = list(asTable = TRUE, orientation = "landscape", zoom = 80, name =
     NULL),
   .return = list("workbook", "savepath", "tibbles", NULL)
 )
@@ -66,6 +66,9 @@ as the letter \code{L} to 'launch' a spreadsheet.
 \dontrun{
 xl('hi')
 xl(mtcars, iris)
+xl(mtcars, .sheet_titles = NULL)
+iris |> split(f = iris$Species) |> xl(.workbook_spec = list(startRow = c(6,4,2), zoom = 110))
+iris |> split(f = iris$Species) |> xl(.sheet_titles=c('SMALL',NA,'LARGE'))
 }
 
 }

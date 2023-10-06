@@ -44,6 +44,9 @@
 #' @examples \dontrun{
 #' xl('hi')
 #' xl(mtcars, iris)
+#' xl(mtcars, .sheet_titles = NULL)
+#' iris |> split(f = iris$Species) |> xl(.workbook_spec = list(startRow = c(6,4,2), zoom = 110))
+#' iris |> split(f = iris$Species) |> xl(.sheet_titles=c('SMALL',NA,'LARGE'))
 #' }
 #'
 xl <- function(...
@@ -76,18 +79,34 @@ xl <- function(...
 # build list of tibbles --------------------------------------------------------
   df_list <- list_iron( ... , name_spec = .tabname_spec[['name_spec']], .f = entibble) |>
     purrr::map_if(.p = \(.x) identical(.x, tibble::tibble()), .f = \(.x) entibble(`NULL` = "NULL"))
+  len_wb <- length(df_list)
 
+  if( len_wb==0 ){
+    cli::cli_abort('Insufficient data provided to create a workbook.')
+  }
 # some more input checks -------------------------------------------------------
   checkmate::assert(
     checkmate::check_function(.sheet_titles),
     checkmate::check_formula(.sheet_titles),
-    checkmate::check_character(.sheet_titles, len = length(df_list)),
+    checkmate::check_character(.sheet_titles, len = len_wb),
     checkmate::check_null(.sheet_titles)
   )
 
-  if( length(df_list)==0 ){
-    cli::cli_abort('Insufficient data provided to create a workbook.')
-  }
+
+
+# generic spreadsheet formatting options --------------------------------------------------
+  prior_maxWidth <- dplyr::coalesce(getOption("openxlsx.maxWidth"),45)
+  prior_minWidth <- dplyr::coalesce(getOption("openxlsx.minWidth", 5))
+  prior_dateFormat <- dplyr::coalesce(getOption("openxlsx.dateFormat"), "yyyy-mm-dd")
+  options("openxlsx.maxWidth" = 45)
+  options("openxlsx.minWidth" = 5)
+  options("openxlsx.dateFormat" = "yyyy-mm-dd")
+  date_style <- openxlsx::createStyle(numFmt = 'DATE')
+  fieldname_style <- openxlsx::createStyle(
+    textDecoration = "Bold", fontColour = '#ffffff', bgFill = '#aaaaaa',
+    border = 'topbottom', borderStyle = 'thick', fontSize = 11)
+  header_style <- openxlsx::createStyle(
+    textDecoration = "Bold", fontSize = 12)
 
 
 
@@ -98,7 +117,7 @@ xl <- function(...
     wb_name_tmp <- rlang::quos( ... ) |> rlang::exprs_auto_name() |>
       names() |> purrr::pluck(1)
     wb_name_tmp <- paste0('xlr-', wb_name_tmp) |> fs::path_sanitize(replacement = "#") |>
-      stringr::str_replace_all('\\$','#') |> # currently, 'gio open' incorrectly handles '$' filenames. E.g. '$' |> xl() fails in Ubuntu
+      stringr::str_replace_all('\\$','#') |> # 'gio open' incorrectly handles filenames with a '$' char. E.g. '$' |> xl() fails in Ubuntu (so removing '$' from filenames)
       stringr::str_squish() |>
       stringr::str_sub(start = 1, end = 20)
     wb_name_tmp <- paste0(
@@ -119,96 +138,89 @@ xl <- function(...
   for_scrub_tabnames <- list(tabnames = in_names, quiet = .quiet) |>
     purrr::list_assign(rlang::splice(.tabname_spec)) |>
     purrr::discard_at('name_spec') |> purrr::map_at(.at = c('sep','pad'), .f = scrub_tabnames)
-  sheet_names <- rlang::call2(scrub_tabnames, rlang::splice(for_scrub_tabnames)) |>
-    rlang::eval_tidy()
-  names(df_list) <- sheet_names
+  names(df_list) <- sheet_names <- rlang::call2(scrub_tabnames, rlang::splice(for_scrub_tabnames)) |> rlang::eval_tidy()
 
 
 
-# sheet titles -----------------------------------------------------------------
-  start_row <- 3
+# determine sheet titles & start_row ------------------------------------------
+  .start_row <- 3
+  min_startrow <- 2
   no_titles <- identical(NULL,.sheet_titles)
   if( no_titles ){
-    start_row <- 1
-  } else if( is.character(.sheet_titles) ){
-    sheet_titles <- .sheet_titles
-  } else {
+    .start_row <- 1
+    min_startrow <- 1
+  } else if( !is.character(.sheet_titles) ){
     sheet_fun <- rlang::as_function(.sheet_titles)
-    sheet_titles <- in_names |> sheet_fun()
+    .sheet_titles <- in_names |> sheet_fun()
+    # names(sheet_titles) <- names(df_list)
   }
 
-
-# spreadsheet formatting options --------------------------------------------------
-  prior_maxWidth <- dplyr::coalesce(getOption("openxlsx.maxWidth"),45)
-  prior_minWidth <- dplyr::coalesce(getOption("openxlsx.minWidth", 5))
-  prior_dateFormat <- dplyr::coalesce(getOption("openxlsx.dateFormat"), "yyyy-mm-dd")
-  options("openxlsx.maxWidth" = 45)
-  options("openxlsx.minWidth" = 5)
-  options("openxlsx.dateFormat" = "yyyy-mm-dd")
-  date_style <- openxlsx::createStyle(numFmt = 'DATE')
-  fieldname_style <- openxlsx::createStyle(
-    textDecoration = "Bold", fontColour = '#ffffff', bgFill = '#aaaaaa',
-    border = 'topbottom', borderStyle = 'thick')
-  header_style <- openxlsx::createStyle(
-    textDecoration = "Bold", fontSize = 12)
-
-
-# build the workbook -----------------------------------------------------------
-  for_buildWorkbook <- list(
+  # incorporate any user assigned workbook specs
+  .workbook_spec <- list(
     x = df_list,
-    asTable = TRUE,
-    # name = NULL,
-    startRow = start_row ) |>
-    purrr::list_assign(rlang::splice(.workbook_spec))
-  wb <- rlang::call2(openxlsx::buildWorkbook, rlang::splice(for_buildWorkbook)) |> rlang::eval_tidy()
+    startRow = .start_row,
+    # zoom = 75,
+    asTable = TRUE
+  ) |> purrr::list_assign(rlang::splice(.workbook_spec))
+
+  # create vector for each .workbook_spec$startRow
+  # (start rows are important if the user wants to leave room to add data later or add additional table)
+  .workbook_spec$startRow <- pmax(.workbook_spec$startRow, min_startrow)
+  if(length(.workbook_spec$startRow)!=len_wb){
+  .workbook_spec$startRow <- rep(x = .workbook_spec$startRow[[1]], times = len_wb)
+  }
+
+  # build the workbook
+  wb <- rlang::call2(openxlsx::buildWorkbook, rlang::splice(.workbook_spec)) |> rlang::eval_tidy()
   names(wb) <- sheet_names
-  names(sheet_names) <- names(df_list)
-  names(sheet_titles) <- names(df_list)
+  openxlsx::modifyBaseFont(wb, fontSize = 10, fontName = 'Arial')
 
-
-  # allows user to overwrite 'start_row' if provided in 'for_buildWorkbook'
-  start_row <- for_buildWorkbook$startRow
+  # names(sheet_names) <- names(df_list)
 
   # TODO: build better control of automatic colwidths
+  # determine table colwidths
   # tmp <- df_list |> purrr::map(~purrr::map_int(., ~max(nchar(.), na.rm = TRUE)))
   # print(tmp)
 
-# apply formatting workbook ----------------------------------------------------
-  for(df_name in names(df_list)){
-    df_nm <- df_list[[df_name]]
-    sheet_nm <- sheet_names[[df_name]]
+  # apply formatting workbook ----------------------------------------------------
+  # for(df_name in names(df_list)){
+  for(i in 1:len_wb){
+    start_row <- .workbook_spec$startRow[[i]]
+    df_nm <- df_list[[i]]
+    sheet_nm <- sheet_names[[i]]
     dt_cols <- which(purrr::map_lgl(df_nm, lubridate::is.Date))
     px_cols <- which(purrr::map_lgl(df_nm, lubridate::is.POSIXt))
-    purrr::map(dt_cols, ~openxlsx::addStyle(wb, sheet = sheet_nm, style = date_style, rows = start_row+1:(nrow(df_nm)), cols = .))
+    purrr::map(dt_cols, ~openxlsx::addStyle(wb, sheet = sheet_nm, style = date_style, rows = start_row:(nrow(df_nm)+start_row+1), cols = .))
     openxlsx::addStyle(wb, sheet = sheet_nm, style = fieldname_style, rows = start_row:start_row, cols = 1:ncol(df_nm))
     openxlsx::freezePane(wb, sheet = sheet_nm, firstRow = TRUE)
     openxlsx::freezePane(wb, sheet = sheet_nm, firstActiveRow = start_row+1)
     openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 'auto', cols = 1:ncol(df_nm))
     openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 20, cols = px_cols)
     openxlsx::setColWidths(wb, sheet = sheet_nm, widths = 12, cols = dt_cols)
-    openxlsx::addStyle(wb, sheet = sheet_nm, style = header_style, rows = 1, cols = 1, stack = TRUE)
-    if(!no_titles){openxlsx::writeData(wb, sheet = sheet_nm, x = sheet_titles[[df_name]], startCol = 1, startRow = 1, colNames = FALSE)}
+    if(!no_titles){
+      openxlsx::addStyle(wb, sheet = sheet_nm, style = header_style, rows = 1, cols = 1, stack = TRUE)
+      openxlsx::writeData(wb, sheet = sheet_nm, x = .sheet_titles[[i]], startCol = 1, startRow = 1, colNames = FALSE)
+      }
   }
-  # return(enlist(names(wb), names(df_list), sheet_names, sheet_titles))
+  # return(enlist(names(wb), names(df_list), sheet_names, .sheet_titles))
 
 
-# save workbook ----------------------------------------------------------------
-out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = TRUE)
+  # save workbook ----------------------------------------------------------------
+  out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = TRUE)
 
 
-# reset users options -----------------------------------------------------
+  # reset users options -----------------------------------------------------
   options("openxlsx.maxWidth" = prior_maxWidth)
   options("openxlsx.minWidth" = prior_minWidth)
   options("openxlsx.dateFormat" = prior_dateFormat)
 
 
-# open and unlink wb after ~5 min ----------------------------------------------
+  # open and unlink wb after ~5 min ----------------------------------------------
   if( .open ){ sys_open(.path) }
   if(mk_tempfile){ later::later(~unlink(.path), 300) }
 
 
-# prep user-specified direct output --------------------------------------------
-
+  # prep user-specified return output --------------------------------------------
   .return = match.arg(.return[[1]], .return, several.ok = FALSE)
   if(!is.null(.return)){
     out <- switch(
@@ -216,10 +228,10 @@ out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = 
       savepath = .path,
       tibbles = df_list,
       workbook = wb
-      )
+    )
   }
 
-# report -----------------------------------------------------------------------
+  # report locn -----------------------------------------------------------------------
   cli::cat_line()
   cli::cat_line('Workbook location:')
   cli::cli_alert('{(.path)}')

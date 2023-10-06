@@ -107,6 +107,12 @@ entibble <- function(
 #' @export
 #'
 #' @examples .to_tibble(head(mtcars), 'vehicle')
+#' iris |> .to_tibble()
+#' letters |> .to_tibble()
+#' letters |> rlang::set_names() |> .to_tibble()
+#' list(1:10,11:20) |> .to_tibble()
+#' as.matrix(list(1:3,11:13,c('a','b','c'))) |> entibble()
+#'
 .to_tibble <- function(.in_data = NULL,
                        .rowname = 'rowname',
                        .vec_name = ''
@@ -121,16 +127,30 @@ entibble <- function(
       out <- .in_data
     } else {
 
-      matrix_names <- if(is.matrix(.in_data)){ rownames(.in_data)} else { NULL }
+      stor_names <- NULL
+      if( is.table(.in_data) ){ .in_data <- data.frame(.in_data, check.names = FALSE) }
+      if( is.data.frame(.in_data) ){ out <- .in_data |> purrr::map(as.vector)
+      } else {
+        if(is.matrix(.in_data)){stor_names <- rownames(.in_data)}
+        out <- asplit(x = .in_data, MARGIN = 2) |> purrr::map(as.vector)
+      }
 
-      if(is.table(.in_data)){ .in_data <- as.data.frame(.in_data) }
-
-      out <- asplit(x = .in_data, MARGIN = 2) |> purrr::map(as.vector)
-      if(length(out)==1 && is.null(names(out)) ){ names(out) <- .vec_name}
+      if(length(out)==1 && is.null(names(out)) ){ names(out) <- .vec_name }
       out <- out |> dplyr::bind_cols()
-      if( tibble::has_rownames( .in_data ) || !is.null(matrix_names) ){
+      if( tibble::has_rownames( .in_data ) || !is.null(stor_names) ){
         out <-  tibble::add_column(.data = out, !!.rowname := rownames(.in_data), .before = 1, .name_repair = "minimal")
       }
+      # prior if-not-tibble code:
+      # matrix_names <- if(is.matrix(.in_data)){ rownames(.in_data)} else { NULL }
+      #
+      # if( is.table(.in_data) ){ .in_data <- data.frame(.in_data, check.names = FALSE) }
+      #
+      # out <- asplit(x = .in_data, MARGIN = 2) |> purrr::map(as.vector)
+      # if(length(out)==1 && is.null(names(out)) ){ names(out) <- .vec_name}
+      # out <- out |> dplyr::bind_cols()
+      # if( tibble::has_rownames( .in_data ) || !is.null(matrix_names) ){
+      #   out <-  tibble::add_column(.data = out, !!.rowname := rownames(.in_data), .before = 1, .name_repair = "minimal")
+      # }
 
     }
 

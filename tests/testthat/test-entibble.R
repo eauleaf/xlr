@@ -63,7 +63,7 @@ test_that('handles matrices and multi-dim tables', {
     entibble(Titanic) |> head(2),
     structure(list(Class = c("1st", "2nd"), Sex = c("Male", "Male"),
                    Age = c("Child", "Child"), Survived = c("No", "No"),
-                   Freq= c("  0", "  0")), row.names = c(NA, -2L),
+                   Freq = c(0, 0)), row.names = c(NA, -2L),
               class = c("tbl_df", "tbl", "data.frame"))
   )
 })
@@ -77,7 +77,20 @@ test_that("matrices are tibbled with rownames", {
   )
 })
 
-test_that("test names", {
+test_that("factors become chars if not in a tibble, but other atomic types are preserved", {
+  expect_equal(
+    warpbreaks |> entibble() |> purrr::map_chr(class),
+    c(breaks = "numeric", wool = "character", tension = "character")
+  )
+  expect_equal(
+    iris |> entibble() |> purrr::map_chr(class),
+    c(Sepal.Length = "numeric", Sepal.Width = "numeric", Petal.Length = "numeric",
+      Petal.Width = "numeric", Species = "character")
+  )
+
+})
+
+test_that("test preserved names and user naming for row and col names", {
   expect_equal(entibble(x = list(y = 1:3, z = 4:5))$rowname, c("y", "z"))
   expect_equal(entibble(x = c(y = 1, z = 2)) |> names(), c('rowname', "x"))
   expect_equal(

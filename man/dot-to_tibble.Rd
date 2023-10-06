@@ -21,4 +21,10 @@ Function called in \code{\link[=entibble]{entibble()}}.
 }
 \examples{
 .to_tibble(head(mtcars), 'vehicle')
+iris |> .to_tibble()
+letters |> .to_tibble()
+letters |> rlang::set_names() |> .to_tibble()
+list(1:10,11:20) |> .to_tibble()
+as.matrix(list(1:3,11:13,c('a','b','c'))) |> entibble()
+
 }
