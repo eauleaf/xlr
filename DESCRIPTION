@@ -1,7 +1,7 @@
 Package: xlr
 Type: Package
 Title: Tools for working between Excel/Libreoffice and R
-Version: 0.0.0.9046
+Version: 0.0.0.9047
 Authors@R: c(person(family = "Eauleaf", email = "eauleaf@gmail.com", role = c("aut", "cre")))
 Maintainer: <eauleaf@gmail.com>
 Description: Move data quickly between spreadsheets and R. 
