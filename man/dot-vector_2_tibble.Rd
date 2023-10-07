@@ -20,6 +20,6 @@ tibble
 Function called in \code{\link[=.to_tibble]{.to_tibble()}}.
 }
 \examples{
-letters |> rlang::set_names() |> .vector_2_tibble()
-
+letters[1:5] |> rlang::set_names() |> .vector_2_tibble()
+letters[1:5] |> rlang::set_names() |> .vector_2_tibble(.rowname = 'a_name', .vec_name = 'alphas')
 }

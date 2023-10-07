@@ -67,7 +67,7 @@ entibble <- function(
 
     checkmate::assert_string(.rowname, null.ok = FALSE, na.ok = FALSE)
 
-    out <- in_exprs |> purrr::imap(.f = ~.to_tibble(.x, .rowname = .rowname, .vec_name = .y))
+    out <- in_exprs |> purrr::imap(.f = \(.x,.y).to_tibble(.x, .rowname = .rowname, .vec_name = .y))
     row_counts <- out |> purrr::map_int(nrow) |> unique()
     is_ragged <- length(row_counts)!=1
 
@@ -199,8 +199,8 @@ entibble <- function(
 #' @return tibble
 #' @export
 #'
-#' @examples letters |> rlang::set_names() |> .vector_2_tibble()
-#'
+#' @examples letters[1:5] |> rlang::set_names() |> .vector_2_tibble()
+#' letters[1:5] |> rlang::set_names() |> .vector_2_tibble(.rowname = 'a_name', .vec_name = 'alphas')
 .vector_2_tibble <- function(.in_vec, .rowname = 'rowname', .vec_name = ''){
 
   if (!is.null(names( .in_vec ))) {

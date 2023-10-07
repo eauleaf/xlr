@@ -1,4 +1,13 @@
 # Tests:
+# https://testthat.r-lib.org/articles/third-edition.html
+# withr::deferred_run()
+#
+# test_that('xl() writes a dataframe',{
+#   expect_true(
+#     xl(dplyr::starwars, .open = F, .path = testthat::test_path('test.xlsx'), .return = 'bool')
+#   )
+# })
+
 #' xl(NA)
 #' xl(a = NA)
 #' xl(character(0))
@@ -20,3 +29,12 @@
 #' xl(NULL)
 #' xl(a = NULL)
 #' xl(iris, dplyr::starwars, mtcars, cars)
+
+
+### manual tests
+# dplyr::starwars |> split(f = dplyr::starwars$eye_color) |> xl(.sheet_titles = ~stringr::str_to_title(paste(., 'eye color')))
+# dplyr::starwars |> split(f = dplyr::starwars$eye_color) |> xl(.dataframe_spec = ~janitor::clean_names(., case = 'title'))
+# dplyr::starwars |> xl(.open = F)
+# dplyr::starwars |> xl(.path = 'boogabooga')
+# file.remove(here::here('boogabooga.xlsx'))
+

@@ -12,9 +12,9 @@ xl(
   .sheet_titles = stringr::str_to_title,
   .dataframe_spec = NULL,
   .tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}"),
-  .workbook_spec = list(asTable = TRUE, orientation = "landscape", zoom = 80, name =
+  .workbook_spec = list(asTable = TRUE, orientation = "landscape", zoom = 70, name =
     NULL),
-  .return = list("workbook", "savepath", "tibbles", NULL)
+  .return = list("workbook", "savepath", "tibbles", "boolean")
 )
 }
 \arguments{
@@ -42,8 +42,8 @@ arguments: sep = ".", pad = ".", and name_spec = "{inner}"}
 \item{.workbook_spec}{a list of arguments to pass to
 \code{\link[openxlsx:buildWorkbook]{openxlsx::buildWorkbook()}}, e.g. \code{list(asTable = TRUE, orientation = 'landscape', zoom = 70, startRow = 7)}}
 
-\item{.return}{one of 'workbook' (default), 'savepath', 'tibbles', or NULL to
-specify the information to return (invisibly).}
+\item{.return}{return (invisibly) one of 'workbook' (default), 'savepath',
+'tibbles', or 'boolean' for workbook write success/failure}
 }
 \value{
 The side-effect, a workbook of spreadsheets, is the primary output of this function.
@@ -69,6 +69,8 @@ xl(mtcars, iris)
 xl(mtcars, .sheet_titles = NULL)
 iris |> split(f = iris$Species) |> xl(.workbook_spec = list(startRow = c(6,4,2), zoom = 110))
 iris |> split(f = iris$Species) |> xl(.sheet_titles=c('SMALL',NA,'LARGE'))
+dplyr::starwars |> xl()
+dplyr::starwars |> split(f = dplyr::starwars$eye_color) |> xl(.sheet_titles = toupper)
 }
 
 }

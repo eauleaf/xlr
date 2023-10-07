@@ -108,7 +108,7 @@ paste_from_xl <- function( has_fieldnames = NULL ){
         readr::read_delim( delim = '\t', col_names = FALSE,
                            show_col_types = FALSE,
                            name_repair = "universal_quiet") |>
-        purrr::map_lgl(~ (is.character(.) | is.na(.)) & !grepl('[\\/]',.) ) |>
+        purrr::map_lgl(\(.) (is.character(.) | is.na(.)) & !grepl('[\\/]',.) ) |>
         all()
     } else if ( has_fieldnames ) {
       # unless user specified
