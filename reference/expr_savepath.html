@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9051</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9052</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,11 +84,11 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">expr_savepath</span><span class="op">(</span>.path <span class="op">=</span> <span class="st">'hi'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/home/runner/work/xlr/xlr/hi.xlsx"</span>
 <span class="r-in"><span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu">expr_savepath</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp7UGibs/xlr-iris_20231009_2112_23506.xlsx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp3mAc4V/xlr-iris_20231009_2115_07227.xlsx"</span>
 <span class="r-in"><span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu">expr_savepath</span><span class="op">(</span>.path <span class="op">=</span> <span class="st">'hi'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/home/runner/work/xlr/xlr/hi.xlsx"</span>
 <span class="r-in"><span><span class="fu">expr_savepath</span><span class="op">(</span><span class="va">iris</span>, .file_suffix <span class="op">=</span> <span class="st">'.pdf'</span>, .tmp_prefix <span class="op">=</span> <span class="st">'boing-'</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp7UGibs/boing-iris_20231009_2112_23509.pdf"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp3mAc4V/boing-iris_20231009_2115_07231.pdf"</span>
 <span class="r-in"><span><span class="co"># .path, if specified, overrides prefix</span></span></span>
 <span class="r-in"><span><span class="fu">expr_savepath</span><span class="op">(</span>.path <span class="op">=</span> <span class="st">'hi'</span>, .file_suffix <span class="op">=</span> <span class="st">'.pdf'</span>, .tmp_prefix <span class="op">=</span> <span class="st">'boing-'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/home/runner/work/xlr/xlr/hi.pdf"</span>
