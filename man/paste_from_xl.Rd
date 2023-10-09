@@ -44,6 +44,10 @@ To set the quick keys in RStudio, run function:
 \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()}}.
 Or, set the quick keys manually by following these RStudio instructions:
 \url{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
+
+In Windows, path copying and pasting from a navigation window into R requires that a Powershell
+script be callable from the command prompt. (Sometimes organizations don't allow
+employees to use Powershell.)
 }
 \note{
 Clipboard memory is limited; if you're copying a large quantity of data from a
@@ -51,6 +55,7 @@ spreadsheet, try reading in the data instead with \code{\link[readxl:read_excel]
 }
 \examples{
 \dontrun{
+
 # (All examples require the user to interactively select data.)
 # Copy data from a spreadsheet into working memory with 'ctrl + c' or
 # by right-clicking with the mouse and selecting 'copy', then,

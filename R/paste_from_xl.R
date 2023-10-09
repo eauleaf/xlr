@@ -33,6 +33,10 @@
 #' Or, set the quick keys manually by following these RStudio instructions:
 #' \url{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 #'
+#' In Windows, path copying and pasting from a navigation window into R requires that a Powershell
+#' script be callable from the command prompt. (Sometimes organizations don't allow
+#' employees to use Powershell.)
+#'
 #' @returns
 #' ** If user copied a single spreadsheet row or column into clipboard memory,
 #'   returns a vector.
@@ -42,6 +46,7 @@
 #' @export
 #'
 #' @examples \dontrun{
+#'
 #' # (All examples require the user to interactively select data.)
 #' # Copy data from a spreadsheet into working memory with 'ctrl + c' or
 #' # by right-clicking with the mouse and selecting 'copy', then,
