@@ -14,7 +14,10 @@
 #' @param ... A dataframe, list of dataframes, or inputs coercible to one
 #'   or more dataframes.
 #' @param .path Optional path to save a copy of the workbook output. Uses
-#'   [here::here()]. If `.path` is not specified, workbook is saved only momentarily.
+#'   [here::here()] for savepath completion. If `.path` does not end in '.xlsx',
+#'   automatically adds the suffix. If `.path` is not specified, workbook is
+#'   saved only momentarily in an auto-named temp file. Always creates the specified
+#'   directory location.
 #' @param .open If `FALSE`, workbook will not open after being written.
 #' @param .quiet If `FALSE`, echoes function messages.
 #' @param .sheet_titles `NULL`, a character vector the same length as the number of
@@ -70,7 +73,7 @@ xl <- function(...
     checkmate::check_list(.tabname_spec, any.missing = FALSE, len = 3),
     checkmate::check_names(.tabname_spec, must.include = c('sep', 'pad', 'name_spec'))
   )
-  checkmate::assert_string(.path, null.ok = TRUE, na.ok = FALSE)
+  # checkmate::assert_string(.path, null.ok = TRUE, na.ok = FALSE)
   checkmate::assert_flag(.open, na.ok = FALSE, null.ok = FALSE)
   checkmate::assert_flag(.quiet, na.ok = FALSE, null.ok = FALSE)
   checkmate::assert(
@@ -99,60 +102,27 @@ xl <- function(...
     checkmate::check_null(.sheet_titles)
   )
 
-  # apply a user-specified function to dataframes
-  # if(!is.null(.dataframe_spec)){ df_list <- purrr::map(df_list, .f = \(.x) purrr::map(.x, .f = .dataframe_spec)) }
-  if(!is.null(.dataframe_spec)){ df_list <- df_list |> purrr::map(.f = .dataframe_spec) }
-
-# generic spreadsheet formatting options --------------------------------------------------
-  # prior_maxWidth <- dplyr::coalesce(getOption("openxlsx.maxWidth"),45)
-  # prior_minWidth <- dplyr::coalesce(getOption("openxlsx.minWidth", 5))
-  # prior_dateFormat <- dplyr::coalesce(getOption("openxlsx.dateFormat"), "yyyy-mm-dd")
-  # options("openxlsx.maxWidth" = 45)
-  # options("openxlsx.minWidth" = 5)
-  # options("openxlsx.dateFormat" = "yyyy-mm-dd")
-  date_style <- openxlsx::createStyle(numFmt = 'DATE')
-  fieldname_style <- openxlsx::createStyle(
-    textDecoration = "Bold",
-    fontColour = '#ffffff', bgFill = '#aaaaaa',
-    border = 'topbottom', borderStyle = 'thick', fontSize = 11)
-  header_style <- openxlsx::createStyle(
-    textDecoration = "Bold", fontSize = 12)
-
 
 
 # construct savename path ------------------------------------------------------
-  mk_tempfile <- is.null(.path)
+  path <- expr_savepath(..., .path = .path)
 
-  if (mk_tempfile){
-    wb_name_tmp <- rlang::quos( ... ) |> rlang::exprs_auto_name() |>
-      names() |> purrr::pluck(1)
-    wb_name_tmp <- paste0('xlr-', wb_name_tmp) |> fs::path_sanitize(replacement = "#") |>
-      stringr::str_replace_all('\\$','#') |> # 'gio open' incorrectly handles filenames with a '$' char. E.g. '$' |> xl() fails in Ubuntu (so removing '$' from filenames)
-      stringr::str_squish() |>
-      stringr::str_sub(start = 1, end = 20)
-    wb_name_tmp <- paste0(
-      wb_name_tmp, '_',
-      stringr::str_replace(format(Sys.time(), "%Y%m%d_%H%M_%OS3"),'\\.',''), '.xlsx')
-    .path <- file.path(tempdir(), wb_name_tmp)
-  } else if (!stringr::str_detect(.path, '(?i)\\.xlsx$')) {
-    .path <- paste0(here::here(.path),'.xlsx')
-  } else {
-    .path <- here::here(.path)
-  }
+
+# apply a user-specified function to dataframes ---------------------------
+  if(!is.null(.dataframe_spec)){ df_list <- df_list |> purrr::map(.f = .dataframe_spec) }
+
 
 
 
 # flatten lists, prep sheet names, entibble data, adjust fieldnames ------------
-  # if(!is.null(.dataframe_spec)){ df_list <- purrr::map(df_list, .f = .dataframe_spec) }
-  # in_names <- names(df_list)
   for_scrub_tabnames <- list(tabnames = in_names, quiet = .quiet) |>
     purrr::list_assign(rlang::splice(.tabname_spec)) |>
     purrr::discard_at('name_spec') |> purrr::map_at(.at = c('sep','pad'), .f = scrub_tabnames)
   names(df_list) <- sheet_names <- rlang::call2(scrub_tabnames, rlang::splice(for_scrub_tabnames)) |> rlang::eval_tidy()
-  # note: `names(df_list)` and `sheet_names` can be different due to naming rules in R
+  # note: `names(df_list)` and `sheet_names` can be different due to list naming rules in R
 
 
-# determine sheet titles & start_row ------------------------------------------
+# determine sheet titles & start_row -------------------------------------------
   df_start_row <- 3
   min_startrow <- 2
   no_titles <- identical(NULL,.sheet_titles)
@@ -179,10 +149,22 @@ xl <- function(...
   .workbook_spec$startRow <- rep(x = .workbook_spec$startRow[[1]], times = len_wb)
   }
 
-  # build the workbook
+
+# build the workbook ------------------------------------------------------
   wb <- rlang::call2(openxlsx::buildWorkbook, rlang::splice(.workbook_spec)) |> rlang::eval_tidy()
   names(wb) <- sheet_names
   openxlsx::modifyBaseFont(wb, fontSize = 10, fontName = 'Arial')
+
+
+
+# spreadsheet formatting options --------------------------------------------------
+  date_style <- openxlsx::createStyle(numFmt = 'DATE')
+  fieldname_style <- openxlsx::createStyle(
+    textDecoration = "Bold",
+    fontColour = '#ffffff', bgFill = '#aaaaaa',
+    border = 'topbottom', borderStyle = 'thick', fontSize = 11)
+  header_style <- openxlsx::createStyle(
+    textDecoration = "Bold", fontSize = 12)
 
   # apply formatting workbook ----------------------------------------------------
 min_width <- 8
@@ -192,11 +174,9 @@ scale_width <- .90
     start_row <- .workbook_spec$startRow[[i]]
     current_df <- df_list[[i]]
     sheet_nm <- sheet_names[[i]]
-    # col_widths <- as.integer(dplyr::summarize_all(current_df, \(.) max(nchar(.),5L, na.rm = T)))
     col_widths <- round(purrr::map_dbl(current_df, \(.) min(max(nchar(.),min_width, na.rm = TRUE), max_width))*scale_width)
     dt_cols <- which(purrr::map_lgl(current_df, lubridate::is.Date))
     px_cols <- which(purrr::map_lgl(current_df, lubridate::is.POSIXt))
-    # purrr::map(dt_cols, ~openxlsx::addStyle(wb, sheet = sheet_nm, style = date_style, rows = start_row:(nrow(current_df)+start_row+1), cols = .))
     purrr::map(dt_cols, \(.)openxlsx::addStyle(wb, sheet = sheet_nm, style = date_style, rows = start_row:(nrow(current_df)+start_row+1), cols = .))
     openxlsx::addStyle(wb, sheet = sheet_nm, style = fieldname_style, rows = start_row:start_row, cols = 1:ncol(current_df))
     openxlsx::freezePane(wb, sheet = sheet_nm, firstRow = TRUE)
@@ -210,40 +190,29 @@ scale_width <- .90
       openxlsx::writeData(wb, sheet = sheet_nm, x = .sheet_titles[[i]], startCol = 1, startRow = 1, colNames = FALSE)
     }
   }
-  # return(enlist(names(wb), names(df_list), sheet_names, .sheet_titles))
 
 
-  # save workbook --------------------------------------------------------------
-  if(!mk_tempfile){dir.create(path = dirname(.path), showWarnings = FALSE, recursive = TRUE)}
-  out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = TRUE)
+# save workbook --------------------------------------------------------------
+  if(!is.null(path)){dir.create(path = dirname(path), showWarnings = FALSE, recursive = TRUE)}
+  out <- openxlsx::saveWorkbook(wb, file = path, overwrite = TRUE, returnValue = TRUE)
 
+# open and unlink wb after ~5 min ----------------------------------------------
+  if( .open ){ sys_open(path) }
+  if(is.null(.path)){ later::later(\(path) unlink(path), 300) }
+  locn_reporter(path, desc = 'Workbook ')
 
-  # reset users options -----------------------------------------------------
-  # options("openxlsx.maxWidth" = prior_maxWidth)
-  # options("openxlsx.minWidth" = prior_minWidth)
-  # options("openxlsx.dateFormat" = prior_dateFormat)
-
-
-  # open and unlink wb after ~5 min ----------------------------------------------
-  if( .open ){ sys_open(.path) }
-  if(mk_tempfile){ later::later(\(.path) unlink(.path), 300) }
 
 
 # prep user-specified return output --------------------------------------------
   .return = match.arg(.return[[1]], c('workbook', 'savepath', 'tibbles', 'boolean'), several.ok = FALSE)
     out <- switch(
       EXPR = .return,
-      savepath = .path,
+      savepath = path,
       tibbles = df_list,
       workbook = wb,
       boolean = out
     )
 
-  # report locn -----------------------------------------------------------------------
-  cli::cat_line()
-  cli::cat_line('Workbook location:')
-  cli::cat_line(glue::glue("    '{.path}'"))
-  cli::cat_line()
 
 
   return(invisible(out))
@@ -294,12 +263,9 @@ run_xl <- function(){
   }
 
 }
-# is.posix <- function(x) any(grepl('POSIX', class(x)), na.rm = TRUE)
-# px_cols <- which(purrr::map_lgl(current_df, is.posix))
 
-### gl |> split(f = gl$llc) |> xl()
 
-### manual tests
+### quick manual tests
 # dplyr::starwars |> split(f = dplyr::starwars$eye_color) |> xl(.sheet_titles = ~stringr::str_to_title(paste(., 'eye color')))
 # dplyr::starwars |> split(f = dplyr::starwars$eye_color) |> xl(.dataframe_spec = ~janitor::clean_names(., case = 'title'))
 # dplyr::starwars |> xl(.open = F)

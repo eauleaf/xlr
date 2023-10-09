@@ -11,8 +11,8 @@ paste_from_xl(has_fieldnames = NULL)
 present in the spreadsheet data you copied. If user supplies no value,
 \code{paste_from_xl()} guesses by looking at the clipboard data. If the function
 incorrectly guesses the presence of field names, just place T or F into
-the function echoed to the console. If \code{has_fieldnames} is set to either T
-or F, the data always imports as a tibble.}
+the function echoed to the console. If \code{has_fieldnames} is set to either TRUE
+or FALSE, the data always imports as a tibble.}
 }
 \value{
 ** If user copied a single spreadsheet row or column into clipboard memory,

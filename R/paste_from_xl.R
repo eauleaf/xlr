@@ -25,8 +25,8 @@
 #'   present in the spreadsheet data you copied. If user supplies no value,
 #'   `paste_from_xl()` guesses by looking at the clipboard data. If the function
 #'   incorrectly guesses the presence of field names, just place T or F into
-#'   the function echoed to the console. If `has_fieldnames` is set to either T
-#'   or F, the data always imports as a tibble.
+#'   the function echoed to the console. If `has_fieldnames` is set to either TRUE
+#'   or FALSE, the data always imports as a tibble.
 #'
 #' @details To set the quick keys in RStudio, run function:
 #' [set_xlr_key_chords()].

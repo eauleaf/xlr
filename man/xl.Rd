@@ -22,7 +22,9 @@ xl(
 or more dataframes.}
 
 \item{.path}{Optional path to save a copy of the workbook output. Uses
-\code{\link[here:here]{here::here()}}. If \code{.path} is not specified, workbook is saved only momentarily.}
+\code{\link[here:here]{here::here()}} for savepath completion. If \code{.path} does not end in '.xlsx',
+automatically adds the suffix. If \code{.path} is not specified, workbook is
+saved only momentarily in an auto-named temp file.}
 
 \item{.open}{If \code{FALSE}, workbook will not open after being written.}
 

@@ -393,6 +393,13 @@ the location using its default application. The reason I use it instead of other
 functions is because I've had better luck getting files to open when requesting 
 that the operating system make the decisions about how to open up the file.
 
+
+Try running `sys_open()` without any inputs. It should pop open a navigation pane
+in your working directory.
+```{r example-sysopen, eval = F}
+sys_open()
+```
+
 If you aren't able to open a file with `sys_open()`, then, using your
 operating system's navigation window, right-click on the file to make
 sure your operating system has a default application assigned that file
@@ -459,6 +466,8 @@ tibble::tibble(alpha) |> head(2)
 # lists passed to entibble are dumped and their objects joined like comma-separated 
 # inputs if the listed objects have compatible row dimensions
 entibble(list(alpha, letters)) |> tail(2)
+
+# compare the above to `tibble()`
 tibble::tibble(list(alpha, letters)) |> tail(2)
 
 ```
