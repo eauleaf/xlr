@@ -67,10 +67,16 @@
     <loc>https://eauleaf.github.io/xlr/reference/entibble.html</loc>
   </url>
   <url>
+    <loc>https://eauleaf.github.io/xlr/reference/expr_savepath.html</loc>
+  </url>
+  <url>
     <loc>https://eauleaf.github.io/xlr/reference/index.html</loc>
   </url>
   <url>
     <loc>https://eauleaf.github.io/xlr/reference/list_iron.html</loc>
+  </url>
+  <url>
+    <loc>https://eauleaf.github.io/xlr/reference/locn_reporter.html</loc>
   </url>
   <url>
     <loc>https://eauleaf.github.io/xlr/reference/paste_from_xl.html</loc>

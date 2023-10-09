@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9048</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9050</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -461,6 +461,10 @@ default application. The reason I use it instead of other functions is
 because I’ve had better luck getting files to open when requesting that
 the operating system make the decisions about how to open up the
 file.</p>
+<p>Try running <code><a href="../reference/sys_open.html">sys_open()</a></code> without any inputs. It should pop
+open a navigation pane in your working directory.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sys_open.html">sys_open</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>If you aren’t able to open a file with <code><a href="../reference/sys_open.html">sys_open()</a></code>, then,
 using your operating system’s navigation window, right-click on the file
 to make sure your operating system has a default application assigned
@@ -486,7 +490,7 @@ smooshes any additional list structure out of the input.
 the list objects and applying a function to each. For example, consider
 the ridiculously embedded list structure below and list_iron’s
 simplification of it:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ridiculous</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>car_data <span class="op">=</span> <span class="va">mtcars</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>flower_data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Original list depth</span></span>
@@ -541,7 +545,7 @@ Control the naming with <code>name_spec</code> and
 <code>name_repair</code>. You can also apply a function, with parameter
 <code>.f</code>, while flattening out all of the leaves in the lists ,
 as shown below:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/list_iron.html">list_iron</a></span><span class="op">(</span><span class="va">ridiculous</span>, .f <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">.</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $`ridiculous|car_data`</span></span>
 <span><span class="co">#&gt;                mpg cyl disp  hp drat   wt qsec vs am gear carb</span></span>
@@ -569,7 +573,7 @@ a dataframe</li>
 inputs</li>
 </ul>
 <p>For instance, compare the tibbled and entibbled data below.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/set_names.html" class="external-link">set_names</a></span><span class="op">(</span><span class="va">letters</span>, <span class="va">LETTERS</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># rownames are forced in so they show up in spreadsheets</span></span>
@@ -594,6 +598,8 @@ inputs</li>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Y       y     y      </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Z       z     z</span></span>
+<span></span>
+<span><span class="co"># compare the above to `tibble()`</span></span>
 <span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">alpha</span>, <span class="va">letters</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 1</span></span></span>
 <span><span class="co">#&gt;   `list(alpha, letters)`</span></span>
