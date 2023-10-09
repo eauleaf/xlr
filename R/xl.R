@@ -103,15 +103,11 @@ xl <- function(...
   )
 
 
-
-# construct savename path ------------------------------------------------------
-  path <- expr_savepath(..., .path = .path)
-
-
 # apply a user-specified function to dataframes ---------------------------
   if(!is.null(.dataframe_spec)){ df_list <- df_list |> purrr::map(.f = .dataframe_spec) }
 
-
+# construct savename path ------------------------------------------------------
+  path <- expr_savepath(..., .path = .path)
 
 
 # flatten lists, prep sheet names, entibble data, adjust fieldnames ------------
@@ -193,12 +189,13 @@ scale_width <- .90
 
 
 # save workbook --------------------------------------------------------------
-  if(!is.null(path)){dir.create(path = dirname(path), showWarnings = FALSE, recursive = TRUE)}
+  if(!is.null(.path)){dir.create(path = dirname(path), showWarnings = FALSE, recursive = TRUE)}
   out <- openxlsx::saveWorkbook(wb, file = path, overwrite = TRUE, returnValue = TRUE)
 
 # open and unlink wb after ~5 min ----------------------------------------------
   if( .open ){ sys_open(path) }
-  if(is.null(.path)){ later::later(\(path) unlink(path), 300) }
+  # if temp file, delete
+  if(is.null(.path)){ later::later(func = ~unlink(path), delay = 300 )}
   .locn_reporter(path, desc = 'Workbook ')
 
 
