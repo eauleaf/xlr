@@ -43,6 +43,9 @@
     <loc>https://eauleaf.github.io/xlr/reference/dot-format_script.html</loc>
   </url>
   <url>
+    <loc>https://eauleaf.github.io/xlr/reference/dot-locn_reporter.html</loc>
+  </url>
+  <url>
     <loc>https://eauleaf.github.io/xlr/reference/dot-paste_names.html</loc>
   </url>
   <url>
@@ -74,9 +77,6 @@
   </url>
   <url>
     <loc>https://eauleaf.github.io/xlr/reference/list_iron.html</loc>
-  </url>
-  <url>
-    <loc>https://eauleaf.github.io/xlr/reference/locn_reporter.html</loc>
   </url>
   <url>
     <loc>https://eauleaf.github.io/xlr/reference/paste_from_xl.html</loc>
