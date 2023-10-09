@@ -199,7 +199,7 @@ scale_width <- .90
 # open and unlink wb after ~5 min ----------------------------------------------
   if( .open ){ sys_open(path) }
   if(is.null(.path)){ later::later(\(path) unlink(path), 300) }
-  locn_reporter(path, desc = 'Workbook ')
+  .locn_reporter(path, desc = 'Workbook ')
 
 
 

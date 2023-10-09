@@ -42,6 +42,7 @@ expr_savepath <- function(..., .path = NULL, .file_suffix = '.xlsx', .tmp_prefix
   }
 
   return(.path)
+
 }
 
 
@@ -51,10 +52,10 @@ expr_savepath <- function(..., .path = NULL, .file_suffix = '.xlsx', .tmp_prefix
 #' @param desc optional to describe type of path
 #'
 #' @return the input path
-#' @export
 #'
-#' @examples here::here() |> locn_reporter( desc = 'Workbook ')
-locn_reporter <- function(path, desc = ''){
+#' @examples here::here() |> xlr:::.locn_reporter( desc = 'Workbook ')
+.locn_reporter <- function(path, desc = ''){
+
     cli::cat_line()
     cli::cat_line(glue::glue(desc, 'location:'))
     cli::cat_line(glue::glue("    '{path}'"))
