@@ -1,6 +1,6 @@
 #' View an R data objects in a Libreoffice or Excel workbook
 #'
-#' Provides an output of datasets to view through the user's default spreasheet
+#' Provides an output of datasets to view through the user's default spreadsheet
 #' program.
 #'
 #' @details
@@ -11,16 +11,16 @@
 #' as the letter `L` to 'launch' a spreadsheet.
 #'
 #'
-#' @param ... A dataframe, list of dataframes, or inputs coerceable to one
+#' @param ... A dataframe, list of dataframes, or inputs coercible to one
 #'   or more dataframes.
 #' @param .path Optional path to save a copy of the workbook output. Uses
 #'   [here::here()]. If `.path` is not specified, workbook is saved only momentarily.
-#' @param .open If FALSE, workbook will not open after being written.
-#' @param .quiet If FALSE, echoes function messages.
-#' @param .sheet_titles NULL, a character vector the same length as the number of
-#' spreadsheets, or a purrr-style function/formula to apply to the default input names.
+#' @param .open If `FALSE`, workbook will not open after being written.
+#' @param .quiet If `FALSE`, echoes function messages.
+#' @param .sheet_titles `NULL`, a character vector the same length as the number of
+#' spreadsheets, or a purrr-style function or formula to apply to the default input names.
 #' The default is function: [stringr::str_to_title()].
-#' @param .dataframe_spec NULL (default), or a purrr-style function to apply
+#' @param .dataframe_spec `NULL` (default), or a purrr-style function to apply
 #'   across all dataframes; e.g. `~janitor::clean_names(., case = 'title'))` or
 #'   `janitor::clean_names` to titlecase or snakecase fieldnames.
 #' @param .tabname_spec a list that allows the user to define tab labeling
@@ -196,7 +196,8 @@ scale_width <- .90
     col_widths <- round(purrr::map_dbl(current_df, \(.) min(max(nchar(.),min_width, na.rm = TRUE), max_width))*scale_width)
     dt_cols <- which(purrr::map_lgl(current_df, lubridate::is.Date))
     px_cols <- which(purrr::map_lgl(current_df, lubridate::is.POSIXt))
-    purrr::map(dt_cols, ~openxlsx::addStyle(wb, sheet = sheet_nm, style = date_style, rows = start_row:(nrow(current_df)+start_row+1), cols = .))
+    # purrr::map(dt_cols, ~openxlsx::addStyle(wb, sheet = sheet_nm, style = date_style, rows = start_row:(nrow(current_df)+start_row+1), cols = .))
+    purrr::map(dt_cols, \(.)openxlsx::addStyle(wb, sheet = sheet_nm, style = date_style, rows = start_row:(nrow(current_df)+start_row+1), cols = .))
     openxlsx::addStyle(wb, sheet = sheet_nm, style = fieldname_style, rows = start_row:start_row, cols = 1:ncol(current_df))
     openxlsx::freezePane(wb, sheet = sheet_nm, firstRow = TRUE)
     openxlsx::freezePane(wb, sheet = sheet_nm, firstActiveRow = start_row+1)
@@ -212,7 +213,8 @@ scale_width <- .90
   # return(enlist(names(wb), names(df_list), sheet_names, .sheet_titles))
 
 
-  # save workbook ----------------------------------------------------------------
+  # save workbook --------------------------------------------------------------
+  if(!mk_tempfile){dir.create(path = dirname(.path), showWarnings = FALSE, recursive = TRUE)}
   out <- openxlsx::saveWorkbook(wb, file = .path, overwrite = TRUE, returnValue = TRUE)
 
 
@@ -224,11 +226,11 @@ scale_width <- .90
 
   # open and unlink wb after ~5 min ----------------------------------------------
   if( .open ){ sys_open(.path) }
-  if(mk_tempfile){ later::later(~unlink(.path), 300) }
+  if(mk_tempfile){ later::later(\(.path) unlink(.path), 300) }
 
 
 # prep user-specified return output --------------------------------------------
-  .return = match.arg(.return[[1]], .return, several.ok = FALSE)
+  .return = match.arg(.return[[1]], c('workbook', 'savepath', 'tibbles', 'boolean'), several.ok = FALSE)
     out <- switch(
       EXPR = .return,
       savepath = .path,

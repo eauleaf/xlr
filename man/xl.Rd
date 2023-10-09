@@ -18,21 +18,21 @@ xl(
 )
 }
 \arguments{
-\item{...}{A dataframe, list of dataframes, or inputs coerceable to one
+\item{...}{A dataframe, list of dataframes, or inputs coercible to one
 or more dataframes.}
 
 \item{.path}{Optional path to save a copy of the workbook output. Uses
 \code{\link[here:here]{here::here()}}. If \code{.path} is not specified, workbook is saved only momentarily.}
 
-\item{.open}{If FALSE, workbook will not open after being written.}
+\item{.open}{If \code{FALSE}, workbook will not open after being written.}
 
-\item{.quiet}{If FALSE, echoes function messages.}
+\item{.quiet}{If \code{FALSE}, echoes function messages.}
 
-\item{.sheet_titles}{NULL, a character vector the same length as the number of
-spreadsheets, or a purrr-style function/formula to apply to the default input names.
+\item{.sheet_titles}{\code{NULL}, a character vector the same length as the number of
+spreadsheets, or a purrr-style function or formula to apply to the default input names.
 The default is function: \code{\link[stringr:case]{stringr::str_to_title()}}.}
 
-\item{.dataframe_spec}{NULL (default), or a purrr-style function to apply
+\item{.dataframe_spec}{\code{NULL} (default), or a purrr-style function to apply
 across all dataframes; e.g. \verb{~janitor::clean_names(., case = 'title'))} or
 \code{janitor::clean_names} to titlecase or snakecase fieldnames.}
 
@@ -52,7 +52,7 @@ whether to return the \code{openxlsx} workbook-object, the list of input data ca
 tibbles, or the save path. Any output is returned invisibly.
 }
 \description{
-Provides an output of datasets to view through the user's default spreasheet
+Provides an output of datasets to view through the user's default spreadsheet
 program.
 }
 \details{

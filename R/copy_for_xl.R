@@ -1,7 +1,7 @@
 #' Copies R data to your clipboard
 #'
 #' @description
-#' The format of the copied data is tab-delimeted for pasting into a spreadsheet.
+#' The format of the copied data is tab-delimited for pasting into a spreadsheet.
 #'
 #' There are 2 ways to pass data into the function:
 #' 1) Type it out the same as any other function.

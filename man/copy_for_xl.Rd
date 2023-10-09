@@ -13,7 +13,7 @@ copy_for_xl(. = NULL)
 the data provided coerced to a tibble; clipboard data as side-effect
 }
 \description{
-The format of the copied data is tab-delimeted for pasting into a spreadsheet.
+The format of the copied data is tab-delimited for pasting into a spreadsheet.
 
 There are 2 ways to pass data into the function:
 \enumerate{

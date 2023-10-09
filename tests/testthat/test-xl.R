@@ -1,22 +1,144 @@
 # Tests:
 # https://testthat.r-lib.org/articles/third-edition.html
 # withr::deferred_run()
-#
-# test_that('xl() writes a dataframe',{
-#   expect_true(
-#     xl(dplyr::starwars, .open = F, .path = testthat::test_path('test.xlsx'), .return = 'bool')
-#   )
-# })
 
-#' xl(NA)
-#' xl(a = NA)
-#' xl(character(0))
-#' xl(';')
+
+
+test_that('xl() correctly writes a dplyr::starwars .xlsx file',{
+
+  # xl_test_file <- testthat::test_path('test_dir/starwars_test.xlsx')
+  xl_test_file <- testthat::test_path('starwars_test.xlsx')
+  out <- xl(dplyr::starwars, .open = F, .path = xl_test_file, .return = 'boolean') |> expect_output()
+  withr::defer(unlink(xl_test_file))
+  # withr::defer(unlink(dirname(xl_test_file)))
+  starwars_table <- readxl::read_excel(xl_test_file, col_names = FALSE, .name_repair = 'minimal')
+
+  # write success
+  expect_true(out)
+  expect_true(file.exists(xl_test_file))
+
+  #test that table fieldnames wrote out to line 3
+  expect_equal(
+    starwars_table[3,1:3] |> unlist() |> as.vector(),
+    c("name", "height", "mass")
+  )
+
+  # test that title wrote out to line 1
+  expect_equal(
+    starwars_table[[1]][[1]],
+    "Dplyr::Starwars"
+  )
+
+  # testthat::test_path(unlink('test_dir'))
+
+})
+
+
+
+test_that('xl() writes NA and NULL output xlsx file',{
+
+  xl_test_file <- testthat::test_path('NA_test.xlsx')
+  withr::defer(unlink(xl_test_file))
+  out <- xl(NA, NULL, a = NA, character(0), integer(), .open = F, .path = xl_test_file, .return = 'boolean') |> expect_output()
+  out_table <- readxl::excel_sheets(path = xl_test_file) |>
+    rlang::set_names() |>
+    purrr::map(\(.) readxl::read_excel(path = xl_test_file, sheet = ., col_names = FALSE, .name_repair = 'minimal'))
+
+  # write success
+  expect_true(file.exists(xl_test_file))
+
+  #test that NAs and NULLs write out as expected
+  expect_equal(
+    out_table,
+    list(
+      `NA` = structure(
+        list(
+          c(
+            "Na", NA, "x"
+          )
+        ),
+        class = c(
+          "tbl_df", "tbl", "data.frame"
+        ),
+        row.names = c(
+          NA, -3L
+        ),
+        names = ""
+      ),
+      `NULL` = structure(
+        list(
+          c(
+            "Null", NA, "NULL", "NULL"
+          )
+        ),
+        class = c(
+          "tbl_df", "tbl", "data.frame"
+        ),
+        row.names = c(
+          NA, -4L
+        ),
+        names = ""
+      ),
+      a = structure(
+        list(
+          c(
+            "A", NA, "x"
+          )
+        ),
+        class = c(
+          "tbl_df", "tbl", "data.frame"
+        ),
+        row.names = c(
+          NA, -3L
+        ),
+        names = ""
+      ),
+      `character(0)` = structure(
+        list(
+          c(
+            "Character(0)", NA, "x", NA
+          )
+        ),
+        class = c(
+          "tbl_df", "tbl", "data.frame"
+        ),
+        row.names = c(
+          NA, -4L
+        ),
+        names = ""
+      ),
+      `integer()` = structure(
+        list(
+          c(
+            "Integer()", NA, "x", NA
+          )
+        ),
+        class = c(
+          "tbl_df", "tbl", "data.frame"
+        ),
+        row.names = c(
+          NA, -4L
+        ),
+        names = ""
+      )
+    )
+  )
+
+
+})
+
+
+test_that('xl() errors if no data',{
+  xl() |> expect_error()
+})
+
+
 #' xl(TRUE)
-#' list(c(list(1:5), list(5:1)), letters) |> xl()
-#' xl(c(1:5))
-#' c(1:5) |> xl()
 #' xl(1)
+#' xl(c(1:5))
+#' # flattens lists and treats lists like comma-separated inputs
+#' list(c(list(1:5), list(5:1)), letters) |> xl()
+#' c(1:5) |> xl()
 #' xl(list(a = 1,5))
 #' list(a = 1,b=5, 1:10, letters, as.matrix(warpbreaks[1:10,]) ) |> xl()
 #' c(1,1:5, list(1:10)) |> xl()

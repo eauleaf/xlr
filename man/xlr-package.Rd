@@ -13,6 +13,7 @@ Useful links:
 \itemize{
   \item \url{https://eauleaf.github.io/xlr/}
   \item \url{https://github.com/eauleaf/xlr}
+  \item \url{https://rpubs.com/Eauleaf/xlr}
   \item Report bugs at \url{https://github.com/eauleaf/xlr/issues}
 }
 
