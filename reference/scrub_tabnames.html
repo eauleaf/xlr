@@ -14,7 +14,7 @@ characters permissible as spreadsheet tab names"><meta property="og:image" conte
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9053</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9054</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -152,7 +152,7 @@ names</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `(`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Sheet names should not contain:  `]`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Replacing forbidden character with:  `)`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty names exist. Numbering within each group ... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "--blue--"       "red"            "gr##een-------" "()"            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] "(orange)"       ".1"             "NA"            </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'history'</span>, <span class="st">'Entire History of the Universe'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span><span class="op">)</span></span></span>
@@ -183,7 +183,7 @@ names</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "---()##"                  "-#-#-()"                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3] "~!@#$%^#()-_=+{}|;-,(.) "</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/precip.html" class="external-link">precip</a></span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">scrub_tabnames</span><span class="op">(</span>max_width <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty names exist. Numbering within each group ... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Mobil" "Junea" "Phoen" "Littl" "Los A" "Sacra" "San F" "Denve" "Hartf"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [10] "Wilmi" "Washi" "Jac.1" "Miami" "Atl.1" "Honol" "Boise" "Chica" "Peori"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [19] "India" "Des M" "Wichi" "Louis" "New O" "Por.1" "Balti" "Bosto" "Detro"</span>
@@ -197,7 +197,7 @@ names</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>         to differentiate possible duplicated tabnames plus the characters in `sep`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Setting the tabname character width to 4.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty tab/sheet names exist. Numbering within each group ... </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Duplicate or empty names exist. Numbering within each group ... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "...1" "...2" "...3" "...4" "...5" "...6" "...7" "...8" "...9" "..10"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [11] "..11" "..12" "..13" "..14" "..15"</span>
 <span class="r-in"><span></span></span>

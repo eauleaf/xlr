@@ -55,9 +55,6 @@
     <loc>https://eauleaf.github.io/xlr/reference/dot-to_tibble.html</loc>
   </url>
   <url>
-    <loc>https://eauleaf.github.io/xlr/reference/dot-uniquify_tabnames.html</loc>
-  </url>
-  <url>
     <loc>https://eauleaf.github.io/xlr/reference/dot-vector_2_tibble.html</loc>
   </url>
   <url>
@@ -104,6 +101,9 @@
   </url>
   <url>
     <loc>https://eauleaf.github.io/xlr/reference/sys_open.html</loc>
+  </url>
+  <url>
+    <loc>https://eauleaf.github.io/xlr/reference/uniquify_names.html</loc>
   </url>
   <url>
     <loc>https://eauleaf.github.io/xlr/reference/xl.html</loc>
