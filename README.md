@@ -9,7 +9,7 @@ xlr
 <hr>
 <!-- badges: start -->
 
-[![](https://img.shields.io/badge/devel%20version-0.0.0.9053-blue.svg)](https://github.com/eauleaf/xlr)
+[![](https://img.shields.io/badge/devel%20version-0.0.0.9054-blue.svg)](https://github.com/eauleaf/xlr)
 [![](https://img.shields.io/github/last-commit/eauleaf/xlr.svg)](https://github.com/eauleaf/xlr/commits/main)
 <!-- badges: end -->
 

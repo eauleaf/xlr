@@ -12,8 +12,7 @@ xl(
   .sheet_titles = stringr::str_to_title,
   .dataframe_spec = NULL,
   .tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}"),
-  .workbook_spec = list(asTable = TRUE, orientation = "landscape", zoom = 70, name =
-    NULL),
+  .workbook_spec = list(asTable = TRUE, orientation = "landscape", zoom = 70),
   .return = list("workbook", "savepath", "tibbles", "boolean")
 )
 }
@@ -43,7 +42,7 @@ across all dataframes; e.g. \verb{~janitor::clean_names(., case = 'title'))} or
 arguments: sep = ".", pad = ".", and name_spec = "{inner}"}
 
 \item{.workbook_spec}{a list of arguments to pass to
-\code{\link[openxlsx:buildWorkbook]{openxlsx::buildWorkbook()}}, e.g. \code{list(asTable = TRUE, orientation = 'landscape', zoom = 70, startRow = 7)}}
+\code{\link[openxlsx:buildWorkbook]{openxlsx::buildWorkbook()}}, e.g. \code{list(asTable = TRUE, orientation = 'landscape', zoom = 100, startRow = 7)}}
 
 \item{.return}{return (invisibly) one of 'workbook' (default), 'savepath',
 'tibbles', or 'boolean' for workbook write success/failure}
@@ -69,6 +68,10 @@ as the letter \code{L} to 'launch' a spreadsheet.
 \dontrun{
 xl('hi')
 xl(mtcars, iris)
+xl(iris, mtcars)
+xl(iris, iris)
+xl(iris)
+xl(mtcars, iris, .workbook_spec = list(asTable = FALSE, orientation = 'landscape', name = NULL))
 xl(mtcars, .sheet_titles = NULL)
 iris |> split(f = iris$Species) |> xl(.workbook_spec = list(startRow = c(6,4,2), zoom = 110))
 iris |> split(f = iris$Species) |> xl(.sheet_titles=c('SMALL',NA,'LARGE'))

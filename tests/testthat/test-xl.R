@@ -2,7 +2,9 @@
 # https://testthat.r-lib.org/articles/third-edition.html
 # withr::deferred_run()
 
-
+# test 'asTable' and duplicate colnames
+# xl(entibble(iris, iris))
+#
 
 test_that('xl() correctly writes a dplyr::starwars .xlsx file',{
 
@@ -35,7 +37,9 @@ test_that('xl() writes NA and NULL output xlsx file',{
 
   xl_test_file <- testthat::test_path('NA_test.xlsx')
   withr::defer(unlink(xl_test_file))
-  out <- xl(NA, NULL, a = NA, character(0), integer(), .open = F, .path = xl_test_file, .return = 'boolean') |> expect_output()
+  out <- xl(NA, NULL, a = NA, character(0), integer(),
+            .open = F, .path = xl_test_file, .return = 'boolean',
+            .workbook_spec = list(asTable = TRUE)) |> expect_output()
   out_table <- readxl::excel_sheets(path = xl_test_file) |>
     rlang::set_names() |>
     purrr::map(\(.) readxl::read_excel(path = xl_test_file, sheet = ., col_names = FALSE, .name_repair = 'minimal'))

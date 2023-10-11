@@ -32,9 +32,9 @@
 # dplyr::pull(new_name) |> scrub_tabnames(max_width = 0,truncate_side = 'center')
 
 
-# xlr:::.uniquify_tabnames('supercalifragalisticexpealidocious')
-# xlr:::.uniquify_tabnames(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'), width = 10,  truncate_side = 'center', ellipsis = '~')
-# xlr:::.uniquify_tabnames(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'),truncate_side = 'center', ellipsis = '~', paste_side='left')
+# uniquify_names('supercalifragalisticexpealidocious')
+# uniquify_names(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'), width = 10,  truncate_side = 'center', ellipsis = '~')
+# uniquify_names(c('supercalifragalisticexpealidocious','supercalifragalisticexpealidocious'),truncate_side = 'center', ellipsis = '~', paste_side='left')
 
 
 # # {.fn .fix_forbidden_chars) ----------------------------------------------
@@ -127,17 +127,17 @@
 #
 #
 #
-# # {.fn .uniquify_tabnames} ------------------------------------------------
+# # {.fn uniquify_names} ------------------------------------------------
 #
 # test_that("Tabnames are forced to be unique within repeated groupings.", {
-#   expect_equal(.uniquify_tabnames(NULL), NULL)
-#   expect_equal(.uniquify_tabnames(NA), NA_character_)
+#   expect_equal(uniquify_names(NULL), NULL)
+#   expect_equal(uniquify_names(NA), NA_character_)
 #   expect_equal(
-#     .uniquify_tabnames(c("a", rep("b",10), 'c'), quiet = TRUE),
+#     uniquify_names(c("a", rep("b",10), 'c'), quiet = TRUE),
 #     c("a", "b->.1", "b->.2", "b->.3", "b->.4", "b->.5", "b->.6", "b->.7", "b->.8","b->.9", "b->10", "c")
 #     )
 #   expect_equal(
-#     .uniquify_tabnames(c("test", "test", "another", "another", "nonduplicate"), quiet = T, sep = '.'),
+#     uniquify_names(c("test", "test", "another", "another", "nonduplicate"), quiet = T, sep = '.'),
 #     c("test.1", "test.2", "another.1","another.2", "nonduplicate"))
 #
 # })
@@ -145,57 +145,57 @@
 #
 # test_that("Truncation & recursion messages work", {
 #   expect_message(
-#     .uniquify_tabnames( rep('flying_spaghetti', 3), width = 5)
+#     uniquify_names( rep('flying_spaghetti', 3), width = 5)
 #   )
 #   expect_message(
-#     .uniquify_tabnames(rep(c('ab','ac'), 3), width = 4)
+#     uniquify_names(rep(c('ab','ac'), 3), width = 4)
 #   ) |> expect_message() |> expect_message()
 # })
 #
 #
 # test_that("Long vectors and names trucate correctly.", {
 #   expect_equal(
-#     .uniquify_tabnames( rep('flying_spaghetti', 3), width = 5, quiet = T)
+#     uniquify_names( rep('flying_spaghetti', 3), width = 5, quiet = T)
 #     ,c("fl->1", "fl->2", "fl->3")
 #   )
 #   expect_equal(
-#     .uniquify_tabnames(rep('fly', 3), width = 3, quiet = T)
+#     uniquify_names(rep('fly', 3), width = 3, quiet = T)
 #     ,c("->1", "->2", "->3")
 #   )
 #   expect_equal(
-#     .uniquify_tabnames(rep(c('ab','ac'), 3), width = 4, quiet = T)
+#     uniquify_names(rep(c('ab','ac'), 3), width = 4, quiet = T)
 #     ,c("a->1", "a->2", "a->3", "a->4", "a->5", "a->6")
 #   )
 #   expect_equal(
-#     .uniquify_tabnames(rep(c('ab','ac'), 3), width = 3, sep = '', quiet = T)
+#     uniquify_names(rep(c('ab','ac'), 3), width = 3, sep = '', quiet = T)
 #     ,c("ab1", "ac1", "ab2", "ac2", "ab3", "ac3")
 #   )
 #   expect_equal(
-#     .uniquify_tabnames(rep(c('ab','acdc'), 3), width = 1, sep = '', quiet = T)
+#     uniquify_names(rep(c('ab','acdc'), 3), width = 1, sep = '', quiet = T)
 #     ,paste(1:6)
 #   )
 #   expect_equal(
-#     .uniquify_tabnames(rep(c('ab','acdc'), 2), width = 4, ellipsis = '~', sep = '|', quiet = T)
+#     uniquify_names(rep(c('ab','acdc'), 2), width = 4, ellipsis = '~', sep = '|', quiet = T)
 #     ,c("ab|1", "a~|1", "ab|2", "a~|2")
 #   )
 #   expect_equal(
-#     .uniquify_tabnames(rep(c('ab','acdc'), 2), width = 4, ellipsis = '~~', sep = '|', quiet = T)
+#     uniquify_names(rep(c('ab','acdc'), 2), width = 4, ellipsis = '~~', sep = '|', quiet = T)
 #     ,c("ab|1", "~~|1", "ab|2", "~~|2")
 #   )
 #   expect_equal(
-#     .uniquify_tabnames(rep(c('ab','acdc'), 5), width = 4, ellipsis = '~', sep = '|', truncate_side = 'center', quiet = T)
+#     uniquify_names(rep(c('ab','acdc'), 5), width = 4, ellipsis = '~', sep = '|', truncate_side = 'center', quiet = T)
 #     ,c("ab|1", "a~|1", "ab|2", "a~|2", "ab|3", "a~|3", "ab|4", "a~|4", "ab|5", "a~|5")
 #   )
 #   expect_equal(
-#     .uniquify_tabnames(rep(c('ab','acdc'), 2), width = 5, ellipsis = '~', sep = '|', truncate_side = 'center', quiet = T)
+#     uniquify_names(rep(c('ab','acdc'), 2), width = 5, ellipsis = '~', sep = '|', truncate_side = 'center', quiet = T)
 #     ,c("ab|1", "a~c|1", "ab|2", "a~c|2")
 #   )
 #   expect_equal(
-#     .uniquify_tabnames(rep(NA, 10), width = 5, ellipsis = '~', sep = '|', paste_side = 'left', quiet = T)
+#     uniquify_names(rep(NA, 10), width = 5, ellipsis = '~', sep = '|', paste_side = 'left', quiet = T)
 #     ,c(".1|NA", ".2|NA", ".3|NA", ".4|NA", ".5|NA", ".6|NA", ".7|NA", ".8|NA", ".9|NA", "10|NA")
 #   )
 #   expect_equal(
-#     .uniquify_tabnames('supercalifragalisticexpealidocious', quiet = T, width = 7, truncate_side = 'center', ellipsis = '~')
+#     uniquify_names('supercalifragalisticexpealidocious', quiet = T, width = 7, truncate_side = 'center', ellipsis = '~')
 #     ,"sup~ous"
 #   )
 #

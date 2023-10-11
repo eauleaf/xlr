@@ -43,5 +43,6 @@ enlist(NULL, NA, '[hi?]') |>  purrr::map(xlr:::.fix_forbidden_tabnames)
 }
 \seealso{
 \code{\link[=scrub_tabnames]{scrub_tabnames()}}
+
 \code{\link[=.forbidden_chars_replace]{.forbidden_chars_replace()}}
 }

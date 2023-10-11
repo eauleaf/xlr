@@ -7,7 +7,6 @@ output: github_document
 ---
 
 
-
 ```{r, include = FALSE}
 # ![](vignettes/www/xlr.svg)
 knitr::opts_chunk$set(
