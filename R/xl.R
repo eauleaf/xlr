@@ -66,7 +66,7 @@ xl <- function(...
                ,.sheet_titles = stringr::str_to_title
                ,.dataframe_spec = NULL
                ,.tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}") # arguments passed to scrub tabnames, see [scrub_tabnames] for options; # collapse description for list-embedded tabnames grouped, passed to purrr::list_flatten @importParam
-               ,.workbook_spec = list(asTable = TRUE, orientation = 'landscape', zoom = 70) # @seealso [opensxlsx::buildWorkbook] args as a named list
+               ,.workbook_spec = list(asTable = FALSE, orientation = 'landscape', zoom = 85) # @seealso [opensxlsx::buildWorkbook] args as a named list
                ,.return = list('workbook', 'savepath', 'tibbles', 'boolean')
 ){
 
@@ -150,6 +150,9 @@ xl <- function(...
     withFilter = TRUE
   ) |> purrr::list_assign(rlang::splice(.workbook_spec))
 
+  # (xlsx_ops <- options() |> names() |> stringr::str_extract('(?<=openxlsx\\.).*$') |> na.omit() |>
+  #   as.list() |> purrr::set_names())
+      # purrr::set_names(\(.) stringr::str_sub(.,start = 10)))
 
   # return(.workbook_spec)
 
