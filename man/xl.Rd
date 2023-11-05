@@ -12,8 +12,8 @@ xl(
   .sheet_titles = stringr::str_to_title,
   .dataframe_spec = NULL,
   .tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}"),
-  .workbook_spec = list(asTable = FALSE, orientation = "landscape", zoom = 85),
-  .return = list("workbook", "savepath", "tibbles", "boolean")
+  .workbook_spec = list(asTable = FALSE, zoom = 85, withFilter = TRUE),
+  .return = list("workbook", "savepath", "tibbles", "boolean", "all")
 )
 }
 \arguments{
@@ -45,7 +45,8 @@ arguments: sep = ".", pad = ".", and name_spec = "{inner}"}
 \code{\link[openxlsx:buildWorkbook]{openxlsx::buildWorkbook()}}, e.g. \code{list(asTable = TRUE, orientation = 'landscape', zoom = 100, startRow = 7)}}
 
 \item{.return}{return (invisibly) one of 'workbook' (default), 'savepath',
-'tibbles', or 'boolean' for workbook write success/failure}
+'tibbles', or 'boolean' for workbook write success/failure. If 'all' returns
+all possibilities in a named list.}
 }
 \value{
 The side-effect, a workbook of spreadsheets, is the primary output of this function.
@@ -68,9 +69,7 @@ as the letter \code{L} to 'launch' a spreadsheet.
 \dontrun{
 xl('hi')
 xl(mtcars, iris)
-xl(iris, mtcars)
 xl(iris, iris)
-xl(iris)
 xl(mtcars, iris, .workbook_spec = list(asTable = FALSE, orientation = 'landscape', name = NULL))
 xl(mtcars, .sheet_titles = NULL)
 iris |> split(f = iris$Species) |> xl(.workbook_spec = list(startRow = c(6,4,2), zoom = 110))

@@ -23,6 +23,7 @@ knitr::opts_chunk$set(
 
 <hr>
 
+
 <!-- badges: start -->
 `r badger::badge_devel("eauleaf/xlr", "blue")`
 `r badger::badge_last_commit("eauleaf/xlr")`
@@ -43,7 +44,7 @@ library(xlr)
 
 ```{r example, eval = FALSE}
 # Send R data to workbook
-iris |> split(f = iris$Species) |> xl()
+iris |> splitter(Species) |> xl()
 ```
 
 ## Testing
