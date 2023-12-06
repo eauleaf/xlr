@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="xlr">
 <meta property="og:description" content="xlr">
@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9056</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9057</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,10 +99,10 @@ reader-friendly format and are still the workhorse of the business
 community, but spreadsheets don’t have the data processing power of R,
 so its common for data professionals to work in both spreadsheets and R.
 However, working in both tools can be frustrating. It’s time expensive
-to read data back forth between the two, and most of the time, I just
-want a series of decent-looking tables pushed out to a workbook.
-<strong>xlr</strong> is an effort to reduce the friction that comes from
-needing to work in both spreadsheets and R.</p>
+to read data back forth between the two, and typically, I want to do my
+data processing in R and then send out a series of decent-looking tables
+to a workbook. <strong>xlr</strong> is an effort to reduce the friction
+that comes from needing to work in both spreadsheets and R.</p>
 <p><br></p>
 </div>
 <div class="section level3">
@@ -110,17 +110,12 @@ needing to work in both spreadsheets and R.</p>
 </h3>
 <ul>
 <li>
-<strong><code><a href="../reference/xl.html">xl()</a></code></strong> – quickly output a list of
-datasets as spreadsheets in a workbook</li>
+<strong><code><a href="../reference/xl.html">xl()</a></code></strong> – output a list of datasets as
+named spreadsheets in a workbook</li>
 <li>
-<strong><code><a href="../reference/enlist.html">enlist()</a></code></strong> – make named lists without
-additional nesting</li>
-<li>
-<strong><code><a href="../reference/copy_for_xl.html">copy_for_xl()</a></code></strong> – copy an R dataset to
-clipboard memory, formatted for pasting to a spreadsheet</li>
-<li>
-<strong><code><a href="../reference/paste_from_xl.html">paste_from_xl()</a></code></strong> – copy spreadsheet
-data to clipboard memory, formatted for pasting to R</li>
+<strong><code><a href="../reference/paste_from_xl.html">paste_from_xl()</a></code></strong> – format for R your OS
+file/folder names or spreadsheet data that you copied into your
+clipboard memory</li>
 <li>
 <strong><code><a href="../reference/enscript.html">enscript()</a></code></strong> – produce the code to
 re-create an R object</li>
@@ -128,14 +123,20 @@ re-create an R object</li>
 <strong><code><a href="../reference/repeated.html">repeated()</a></code></strong> – flag all repeated
 observations in a vector</li>
 <li>
-<strong><code><a href="../reference/sys_open.html">sys_open()</a></code></strong> – request the OS to open
+<strong><code><a href="../reference/sys_open.html">sys_open()</a></code></strong> – request your OS to open
 files, folders, or URLs</li>
 <li>
+<strong><code><a href="../reference/enlist.html">enlist()</a></code></strong> – auto-name elements and
+catch lists without additional list nesting</li>
+<li>
+<strong><code><a href="../reference/copy_for_xl.html">copy_for_xl()</a></code></strong> – copy an R dataset to
+clipboard memory and format for pasting to a spreadsheet</li>
+<li>
 <strong><code><a href="../reference/list_iron.html">list_iron()</a></code></strong> – flatten lists of
-embedded lists to a named, single-file list</li>
+embedded lists to a single-file list of named objects</li>
 <li>
 <strong><code><a href="../reference/entibble.html">entibble()</a></code></strong> – create tibbles with
-default behavior useful for spreadsheets</li>
+convenient default behavior for spreadsheet presentation</li>
 </ul>
 <p><br></p>
 </div>
@@ -152,32 +153,31 @@ default behavior useful for spreadsheets</li>
 <h2 id="xl">
 <code>xl()</code><a class="anchor" aria-label="anchor" href="#xl"></a>
 </h2>
-<p><code><a href="../reference/xl.html">xl()</a></code> is the primary function of the package ‘xlr’, and
-many of the other functions in the package were developed to help it.
-The function is somewhat similar to <code><a href="https://rdrr.io/r/utils/View.html" class="external-link">View()</a></code> from the
-<code>utils</code> package in that <code><a href="../reference/xl.html">xl()</a></code> is for quickly
-viewing datasets.</p>
+<p><code><a href="../reference/xl.html">xl()</a></code> is the primary function of the package, and many of
+the other functions are around to help it. The function is somewhat
+similar to <code><a href="https://rdrr.io/r/utils/View.html" class="external-link">View()</a></code> from the <code>utils</code> package in
+that <code><a href="../reference/xl.html">xl()</a></code> is for auto-naming and quickly viewing
+datasets.</p>
 <p>It’s easiest to see what <code><a href="../reference/xl.html">xl()</a></code> does by passing it some
-example data; try sending it some pre-loaded datasets, like:</p>
+example data; try sending it a couple pre-loaded datasets, like:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/xl.html">xl</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">iris</span>, <span class="va">letters</span>, <span class="va">AirPassengers</span>, <span class="va">Titanic</span><span class="op">)</span></span></code></pre></div>
-<p>If you type that code to the R console, you should get a workbook
-that pops open automatically with those datasets presented in
-standardized, formatted sheets. Once you’re done with the workbook, all
-you have to do is close it; your spreadsheets are temporary. Close them,
-and they’re gone.</p>
+<p>If you type the above code to the R console, you should get a
+workbook that pops open with those datasets presented in standardized,
+formatted spreadsheets. Once you’re done with the workbook, just close
+it; your spreadsheets are temporary. Close them, and they’re gone.</p>
 <p>The video below is of <code><a href="../reference/xl.html">xl()</a></code> creating a temporary workbook
-where each data object becomes a labeled spreadsheet in the
-workbook.</p>
+where each data object becomes a labeled spreadsheet in a workbook.</p>
 <div class="figure">
 <video src="www/Screencast-xl.webm" controls=""><a href="www/Screencast-xl.webm"></a></video><p class="caption">xl(iris, mtcars, 1:100, dplyr::starwars)</p>
 </div>
-<p>To use <code><a href="../reference/xl.html">xl()</a></code>, pass a dataframe or lists of dataframes. It
-does not matter if you pass in lists with nested lists where your data
-objects are buried somewhere. <code><a href="../reference/xl.html">xl()</a></code> recursively flattens and
-auto-names the spreadsheets and workbook. In fact, nested lists can be
-useful in the naming of groupings within spreadsheet tabs if you provide
-a sheet-naming specification like
+<p>To use <code><a href="../reference/xl.html">xl()</a></code>, pass a dataframe or a list of dataframes.
+It does not matter if you pass in lists with nested lists where your
+structured data objects are buried somewhere. <code><a href="../reference/xl.html">xl()</a></code>
+recursively flattens the list and auto-names your data objects to become
+spreadsheets in a workbook. In fact, nested lists can be useful in the
+naming of groups within spreadsheet tabs if you provide a sheet-naming
+specification to <code><a href="../reference/xl.html">xl()</a></code> like
 <code>.tabname_spec = list(name_spec = "{outer}|{inner}")</code>.</p>
 <p>Try running the below examples in your console.</p>
 <pre><code><span><span class="va">your_datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span>flowers <span class="op">=</span> <span class="va">iris</span>, <span class="va">mtcars</span>, <span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/USArrests.html" class="external-link">USArrests</a></span><span class="op">)</span></span>
@@ -186,143 +186,50 @@ a sheet-naming specification like
 <span></span>
 <span><span class="fu"><a href="../reference/xl.html">xl</a></span><span class="op">(</span><span class="va">your_datasets</span>, .tabname_spec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name_spec <span class="op">=</span> <span class="st">"{outer}|{inner}"</span><span class="op">)</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span>f <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/xl.html">xl</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/splitter.html">splitter</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/xl.html">xl</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span>f <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/xl.html">xl</a></span><span class="op">(</span><span class="va">your_datasets</span><span class="op">)</span></span></code></pre>
+<span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/splitter.html">splitter</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/xl.html">xl</a></span><span class="op">(</span><span class="va">your_datasets</span><span class="op">)</span></span></code></pre>
 <p><code><a href="../reference/xl.html">xl()</a></code> writes your workbooks in a temp directory and, to
 keep workbooks from building up, uses <code><a href="https://r-lib.github.io/later/reference/later.html" class="external-link">later::later()</a></code> to
-remove the savefile 5 minutes after write time. Temp directories also
-delete themselves when you close R. If, however, you want to save a
-workbook, specify a path or just a save name in the <code><a href="../reference/xl.html">xl()</a></code>
+remove the temp savefile 5 minutes after write time. Temp directories
+also delete themselves when you close R. If, however, you want to save a
+workbook, specify a path or just a save name as the <code><a href="../reference/xl.html">xl()</a></code>
 input parameter <code>.path</code>. Specifying a savename signals to
 <code><a href="../reference/xl.html">xl()</a></code> not to mark the file for cleanup. For example,
 <code>xl(iris, .path = 'flower_data')</code> will save your data under
-<code>flower_data.xlsx</code> within your working directory. (Note that
-parameter <code>.path</code> uses <code><a href="https://here.r-lib.org//reference/here.html" class="external-link">here::here()</a></code>
-internally.)</p>
+<code>flower_data.xlsx</code> within your working directory.
+(<code>.path</code> uses <code><a href="https://here.r-lib.org//reference/here.html" class="external-link">here::here()</a></code> internally.)</p>
 <p><code><a href="../reference/xl.html">xl()</a></code> creates tibbles of all datasets you pass in, and if
 specified by the user parameter <code>.return</code>, optionally returns
 (always invisibly) the <code>openxlsx</code> workbook object (default),
-or the data objects in a list, or the workbook savepath as a string.</p>
+or the data objects in a list, or the workbook savepath as a string, or
+all of them in a list.</p>
 <p><br></p>
-</div>
-<div class="section level2">
-<h2 id="enlist">
-<code>enlist()</code><a class="anchor" aria-label="anchor" href="#enlist"></a>
-</h2>
-<p><code><a href="../reference/enlist.html">enlist()</a></code> is for quick list-naming. This function
-produces named lists, without list-nesting when passed a single bare
-list. That is, unlike <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>, <code><a href="../reference/enlist.html">enlist()</a></code> removes
-its own embedded list layer if the user passes in a single list.</p>
-<p>For instance, compare the structure and naming created by enlist:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span><span class="st">'hello'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 1</span></span>
-<span><span class="co">#&gt;  $ enlist(enlist("hello")): chr "hello"</span></span></code></pre></div>
-<p>To the structure and naming created by list:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">'hello'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 1</span></span>
-<span><span class="co">#&gt;  $ :List of 1</span></span>
-<span><span class="co">#&gt;   ..$ :List of 1</span></span>
-<span><span class="co">#&gt;   .. ..$ : chr "hello"</span></span></code></pre></div>
-<p>The <code><a href="../reference/enlist.html">enlist()</a></code> example is one list deep, whereas the
-`list() three lists deep. However, if you send two list objects into
-enlist, as shown in the example below, enlist has no choice but to wrap
-them in a new list.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">letters</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">letters</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 2</span></span>
-<span><span class="co">#&gt;  $ list(letters):List of 1</span></span>
-<span><span class="co">#&gt;   ..$ : chr [1:26] "a" "b" "c" "d" ...</span></span>
-<span><span class="co">#&gt;  $ list(letters):List of 1</span></span>
-<span><span class="co">#&gt;   ..$ : chr [1:26] "a" "b" "c" "d" ...</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="a-few-additional-notes-about-enlist">A few additional notes about <code>enlist()</code>:<a class="anchor" aria-label="anchor" href="#a-few-additional-notes-about-enlist"></a>
-</h4>
-<ul>
-<li><p>Naming is permissive, you can have duplicate names in a list, so
-be careful about indexing by name since R returns only the first
-equivalently named observation from the list.</p></li>
-<li><p><code><a href="../reference/enlist.html">enlist()</a></code> has input parameter <code>.label</code>,
-that takes a naming function. Internally, <code>.label</code> is passed
-to <code>nm</code> in <code><a href="https://rlang.r-lib.org/reference/set_names.html" class="external-link">rlang::set_names()</a></code> and so takes the
-same inputs. For example:
-<code>enlist('hi','hello', .label = ~paste0(.,'_',1:2))</code>.</p></li>
-<li><p><code><a href="../reference/enlist.html">enlist()</a></code> supports non-standard evaluation,
-e.g. <code>enlist(!!!letters)</code>.</p></li>
-<li><p>Ignores any empty inputs,
-e.g. <code>enlist(,,'hi',,)</code>.</p></li>
-</ul>
-</div>
-<div class="section level4">
-<h4 id="some-clipboard-prep-notes">Some clipboard prep notes:<a class="anchor" aria-label="anchor" href="#some-clipboard-prep-notes"></a>
-</h4>
-<p>The next 3 <code>xlr</code> functions, use the clipboard memory. To
-use the clipboard, install the <code>clipr</code> package and then check
-that the package works by running <code>clipr::dr_clipr().</code> Also,
-if using Linux, like me, make sure to install a clipboard tool via your
-terminal, e.g. <code>sudo apt-get install xclip</code>.</p>
-<p><br></p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="copy_for_xl">
-<code>copy_for_xl()</code><a class="anchor" aria-label="anchor" href="#copy_for_xl"></a>
-</h2>
-<p><code><a href="../reference/copy_for_xl.html">copy_for_xl()</a></code> copies data to your clipboard memory
-that’s formatted for pasting to cells in a spreadsheet. You can pass a
-data object to it, like:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/copy_for_xl.html">copy_for_xl</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="the-copy_for_xl-key-chord">The <code>copy_for_xl()</code> key-chord:<a class="anchor" aria-label="anchor" href="#the-copy_for_xl-key-chord"></a>
-</h4>
-<p>However, a copying method that is way, way better is to use the quick
-keys <code>ctrl + alt + shift + c</code>. To use these quick keys, run
-the function, <code><a href="../reference/set_xlr_key_chords.html">set_xlr_key_chords()</a></code>. (To set up quick keys,
-you only ever have to run this function once in RStudio, but you have to
-close down RStudio and the re-open for the new quick keys to be active.)
-Then:</p>
-<ol style="list-style-type: decimal">
-<li><p>Type <code>mtcars</code> in an RStudio text editor window (not in
-the console window)</p></li>
-<li><p>Use your cursor to highlight the word <code>mtcars</code>,
-and</p></li>
-<li><p>Press <code>ctrl + alt + shift + c</code> all together. (It’s
-just like copying with <code>ctrl + c</code>, but instead use all 3
-control keys, plus the <code>c</code>.)</p></li>
-</ol>
-<p>You should see <code>✔ Table copied to clipboard:</code> written in
-the console. Open a spreadsheet and paste the copied <code>mtcars</code>
-data to it.</p>
-<p>The below video example uses <code><a href="../reference/copy_for_xl.html">copy_for_xl()</a></code>, via the
-console, to copy some starwars data. <video src="www/Screencast-copy_for_xl.webm" controls=""><a href="www/Screencast-copy_for_xl.webm">copy_for_xl(dplyr::starwars)</a></video></p>
-<p><br></p>
-</div>
 </div>
 <div class="section level2">
 <h2 id="paste_from_xl">
 <code>paste_from_xl()</code><a class="anchor" aria-label="anchor" href="#paste_from_xl"></a>
 </h2>
 <p><code><a href="../reference/paste_from_xl.html">paste_from_xl()</a></code> pastes data from your clipboard memory
-to an R tibble object. You can pass spreadsheet data to R by copying
-data from your spreadsheet, and then by typing the following into the
+to a tibble object in R. You can pass spreadsheet data to R by copying
+data from your spreadsheet, then type the following into your
 console:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/paste_from_xl.html">paste_from_xl</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>The function guesses whether you have field names present, but if the
 function guessed wrong, you can specify with the parameter
 <code>has_fieldnames</code>, like below:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/paste_from_xl.html">paste_from_xl</a></span><span class="op">(</span>has_fieldnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="the-paste_from_xl-key-chord">The <code>paste_from_xl()</code> key-chord:<a class="anchor" aria-label="anchor" href="#the-paste_from_xl-key-chord"></a>
 </h4>
-<p>However, a pasting method that is way, way better is to use the quick
-keys <code>ctrl + alt + shift + v</code>. To use this key-chord, run the
-function, <code><a href="../reference/set_xlr_key_chords.html">set_xlr_key_chords()</a></code> if you haven’t already done
-so. Then:</p>
+<p>However, a better method for pasting is to use quick keys
+<code>ctrl + alt + shift+ v</code>. To use this key-chord, run the
+function <code><a href="../reference/set_xlr_key_chords.html">set_xlr_key_chords()</a></code>. (To set up quick keys, you
+only have to run this function once in RStudio, but you have to close
+RStudio and re-open it for the new quick keys to be active.)</p>
+<p>Then:</p>
 <ol style="list-style-type: decimal">
 <li><p>Copy some data from a spreadsheet.</p></li>
 <li><p>Click over to the RStudio console or to an RStudio editor. (The
@@ -374,14 +281,14 @@ within the script, but I hate manually recreating the object.</p>
 <p>If you have an object in a variable, and want that variable’s data to
 be deparsed into a formatted script, pass that variable into
 <code><a href="../reference/enscript.html">enscript()</a></code>, as in:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/enscript.html">enscript</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/enscript.html">enscript()</a></code> copies formatted code to your clipboard that
 will reproduce that variable’s internal R object.</p>
 <p>Below is an example video of <code><a href="../reference/enscript.html">enscript()</a></code>: <video src="www/Screencast-enscript.webm" controls=""><a href="www/Screencast-enscript.webm">enscript(enlist(‘hi’, ‘bye’,
 head(iris,3)))</a></video></p>
 <p>Try running something like:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span>f <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">head</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/enscript.html">enscript</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>You can pass in an expression or a single variable by piping
 ‘enscript()’ to the end of anything, or by using the quick keys.
@@ -422,10 +329,9 @@ console.</p>
 </h2>
 <p><code><a href="../reference/repeated.html">repeated()</a></code> helps filter a dataframe for identical
 observations. It should probably be in <code>dplyr</code>, but it’s in
-<code>xlr</code> because it’s not in <code>dplyr</code> and I use it so
-often with <code><a href="../reference/xl.html">xl()</a></code> to understanding and sharing duplication
-errors. Use it like this:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code>xlr</code> because it’s not in <code>dplyr</code>. I use it to
+understand duplication errors. Use it like this:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="../reference/repeated.html">repeated</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                    mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span></span>
 <span><span class="co">#&gt; Mazda RX4         21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span></span>
@@ -441,7 +347,7 @@ errors. Use it like this:</p>
 with assertion checks, but way easier to remember than
 <code>x %in% x[duplicated(x)]</code>. Use it in <code>and</code> and
 <code>or</code> statements like this:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># AND statements</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="../reference/repeated.html">repeated</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span>, <span class="fu"><a href="../reference/repeated.html">repeated</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># OR statements</span></span>
@@ -463,7 +369,7 @@ the operating system make the decisions about how to open up the
 file.</p>
 <p>Try running <code><a href="../reference/sys_open.html">sys_open()</a></code> without any inputs. It should pop
 open a navigation pane in your working directory.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sys_open.html">sys_open</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>If you aren’t able to open a file with <code><a href="../reference/sys_open.html">sys_open()</a></code>, then,
 using your operating system’s navigation window, right-click on the file
@@ -476,6 +382,100 @@ them from <code><a href="../reference/paste_from_xl.html">paste_from_xl()</a></c
 <video src="www/Screencast-sys_open.webm" controls=""><a href="www/Screencast-sys_open.webm"></a></video><p class="caption">sys_open(paste_from_xl())</p>
 </div>
 <p><br></p>
+</div>
+<div class="section level2">
+<h2 id="enlist">
+<code>enlist()</code><a class="anchor" aria-label="anchor" href="#enlist"></a>
+</h2>
+<p><code><a href="../reference/enlist.html">enlist()</a></code> is for quick list-naming. This function
+produces named lists, without list-nesting when passed a single bare
+list. That is, unlike <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>, <code><a href="../reference/enlist.html">enlist()</a></code> removes
+its own embedded list layer if the user passes in a single list.</p>
+<p>For instance, compare the structure and naming created by enlist:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span><span class="st">'hello'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 1</span></span>
+<span><span class="co">#&gt;  $ enlist(enlist("hello")): chr "hello"</span></span></code></pre></div>
+<p>To the structure and naming created by list:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">'hello'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 1</span></span>
+<span><span class="co">#&gt;  $ :List of 1</span></span>
+<span><span class="co">#&gt;   ..$ :List of 1</span></span>
+<span><span class="co">#&gt;   .. ..$ : chr "hello"</span></span></code></pre></div>
+<p>The <code><a href="../reference/enlist.html">enlist()</a></code> example is one list deep, whereas the
+`list() three lists deep. However, if you send two list objects into
+enlist, as shown in the example below, enlist has no choice but to wrap
+them in a new list.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">letters</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">letters</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 2</span></span>
+<span><span class="co">#&gt;  $ list(letters):List of 1</span></span>
+<span><span class="co">#&gt;   ..$ : chr [1:26] "a" "b" "c" "d" ...</span></span>
+<span><span class="co">#&gt;  $ list(letters):List of 1</span></span>
+<span><span class="co">#&gt;   ..$ : chr [1:26] "a" "b" "c" "d" ...</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="a-few-additional-notes-about-enlist">A few additional notes about <code>enlist()</code>:<a class="anchor" aria-label="anchor" href="#a-few-additional-notes-about-enlist"></a>
+</h4>
+<ul>
+<li><p>Naming is permissive, you can have duplicate names in a list, so
+be careful about indexing by name since R returns only the first
+equivalently named observation from the list.</p></li>
+<li><p><code><a href="../reference/enlist.html">enlist()</a></code> has input parameter <code>.label</code>,
+that takes a naming function. Internally, <code>.label</code> is passed
+to <code>nm</code> in <code><a href="https://rlang.r-lib.org/reference/set_names.html" class="external-link">rlang::set_names()</a></code> and so takes the
+same inputs. For example:
+<code>enlist('hi','hello', .label = ~paste0(.,'_',1:2))</code>.</p></li>
+<li><p><code><a href="../reference/enlist.html">enlist()</a></code> supports non-standard evaluation,
+e.g. <code>enlist(!!!letters)</code>.</p></li>
+<li><p>Ignores empty inputs,
+e.g. <code>enlist(,,'hi',,)</code>.</p></li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="some-clipboard-prep-notes">Some clipboard prep notes:<a class="anchor" aria-label="anchor" href="#some-clipboard-prep-notes"></a>
+</h4>
+<p>The next 3 <code>xlr</code> functions, use the clipboard memory. To
+use the clipboard, install the <code>clipr</code> package and then check
+that the package works by running <code>clipr::dr_clipr().</code> Also,
+if using Linux, like me, make sure to install a clipboard tool via your
+terminal, e.g. <code>sudo apt-get install xclip</code>.</p>
+<p><br></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="copy_for_xl">
+<code>copy_for_xl()</code><a class="anchor" aria-label="anchor" href="#copy_for_xl"></a>
+</h2>
+<p><code><a href="../reference/copy_for_xl.html">copy_for_xl()</a></code> copies data to your clipboard memory
+that’s formatted for pasting to cells in a spreadsheet. You can pass a
+data object to it, like:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/copy_for_xl.html">copy_for_xl</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="the-copy_for_xl-key-chord">The <code>copy_for_xl()</code> key-chord:<a class="anchor" aria-label="anchor" href="#the-copy_for_xl-key-chord"></a>
+</h4>
+<p>However, a better copying method is to use the quick keys
+<code>ctrl + alt + shift + c</code>. If you haven’t already done so, run
+the function, <code><a href="../reference/set_xlr_key_chords.html">set_xlr_key_chords()</a></code> to use these quick
+keys.</p>
+<p>Then:</p>
+<ol style="list-style-type: decimal">
+<li><p>Type <code>mtcars</code> in an RStudio text editor window (not in
+the console window)</p></li>
+<li><p>Use your cursor to highlight the word <code>mtcars</code>,
+and</p></li>
+<li><p>Press <code>ctrl + alt + shift + c</code> all together. (It’s
+just like copying with <code>ctrl + c</code>, but instead use all 3
+control keys, plus the <code>c</code>.)</p></li>
+</ol>
+<p>You should see <code>✔ Table copied to clipboard:</code> written in
+the console. Open a spreadsheet and paste the copied <code>mtcars</code>
+data to it.</p>
+<p>The below video example uses <code><a href="../reference/copy_for_xl.html">copy_for_xl()</a></code>, via the
+console, to copy some starwars data. <video src="www/Screencast-copy_for_xl.webm" controls=""><a href="www/Screencast-copy_for_xl.webm">copy_for_xl(dplyr::starwars)</a></video></p>
+<p><br></p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="list_iron">
