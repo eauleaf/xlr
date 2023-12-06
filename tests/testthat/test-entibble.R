@@ -36,6 +36,12 @@
 #' tail(iris) |> entibble()
 #' mtcars |> entibble(.rowname = 'vehicle')
 
+# list(
+#   `Arctic/Longyearbyen` = "Arctic/Longyearbyen", MST = "MST", GMT = "GMT",
+#   posixrules = character(0)
+# ) |> entibble()
+
+
 
 test_that("NULL and empty values create an empty tibble or empty element within tibble", {
 

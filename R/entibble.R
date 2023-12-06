@@ -10,7 +10,7 @@
 #'
 #'
 #'  @details
-#'  Entibble is designed to work with the function [xl()] to produce a viewable
+#'  Work with the function [xl()] to produce a viewable
 #'  output of R data within spreadsheets. To help `xl()` succeed as often as possible, `entibble()` is
 #'  liberal about names, such as duplicate column names, and makes an effort to produce a flat table
 #'  in place of a nested [tibble::tibble()].

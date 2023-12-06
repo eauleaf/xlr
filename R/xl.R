@@ -52,10 +52,10 @@
 #' xl(iris, iris)
 #' xl(mtcars, iris, .workbook_spec = list(asTable = FALSE, orientation = 'landscape', name = NULL))
 #' xl(mtcars, .sheet_titles = NULL)
-#' iris |> split(f = iris$Species) |> xl(.workbook_spec = list(startRow = c(6,4,2), zoom = 110))
-#' iris |> split(f = iris$Species) |> xl(.sheet_titles=c('SMALL',NA,'LARGE'))
+#' iris |> splitter(Species) |> xl(.workbook_spec = list(startRow = c(6,4,2), zoom = 110))
+#' iris |> splitter(Species) |> xl(.sheet_titles=c('SMALL',NA,'LARGE'))
 #' dplyr::starwars |> xl()
-#' dplyr::starwars |> split(f = dplyr::starwars$eye_color) |> xl(.sheet_titles = toupper)
+#' dplyr::starwars |> splitter(eye_color) |> xl(.sheet_titles = toupper)
 #' }
 #'
 xl <- function(...
@@ -65,8 +65,8 @@ xl <- function(...
                ,.sheet_titles = stringr::str_to_title
                ,.dataframe_spec = NULL
                ,.tabname_spec = list(sep = ".", pad = ".", name_spec = "{inner}") # arguments passed to scrub tabnames, see [scrub_tabnames] for options; # collapse description for list-embedded tabnames grouped, passed to purrr::list_flatten @importParam
-               ,.workbook_spec = list(asTable = FALSE, zoom = 85, withFilter = TRUE) # @seealso [opensxlsx::buildWorkbook] args as a named list
-               # ,.workbook_spec = list(asTable = TRUE, zoom = 70, withFilter = TRUE) # @seealso [opensxlsx::buildWorkbook] args as a named list
+               # ,.workbook_spec = list(asTable = FALSE, zoom = 85, withFilter = TRUE) # @seealso [opensxlsx::buildWorkbook] args as a named list
+               ,.workbook_spec = list(asTable = TRUE, zoom = 70, withFilter = TRUE) # @seealso [opensxlsx::buildWorkbook] args as a named list
                ,.return = list('workbook', 'savepath', 'tibbles', 'boolean', 'all')
 ){
 

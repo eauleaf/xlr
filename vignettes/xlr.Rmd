@@ -42,32 +42,28 @@ The package is somewhere between *dev and beta.*
 ## Overview:
 
 Spreadsheets are a great tool for presenting 2-dimensional data in a
-reader-friendly format and are still the workhorse of the business
-community, but spreadsheets don't have the data processing power of R,
-so its common for data professionals to work in both spreadsheets and R.
-However, working in both tools can be frustrating. It's time expensive
-to read data back forth between the two, and most of the time, I just
-want a series of decent-looking tables pushed out to a workbook. **xlr** is
-an effort to reduce the friction that comes from needing to work in both
+reader-friendly format and are still the workhorse of the business community,
+but spreadsheets don't have the data processing power of R, so its common for
+data professionals to work in both spreadsheets and R. However, working in both
+tools can be frustrating. It's time expensive to read data back forth between
+the two, and typically, I want to do my data processing in R and
+then send out a series of decent-looking tables to a workbook. **xlr** is an
+effort to reduce the friction that comes from needing to work in both
 spreadsheets and R.
 
 <br>
 
 ## Functions:
 
--   **`xl()`** -- quickly output a list of datasets as spreadsheets in a
-    workbook
--   **`enlist()`** -- make named lists without additional nesting
--   **`copy_for_xl()`** -- copy an R dataset to clipboard memory,
-    formatted for pasting to a spreadsheet
--   **`paste_from_xl()`** -- copy spreadsheet data to clipboard memory,
-    formatted for pasting to R
+-   **`xl()`** -- output a list of datasets as named spreadsheets in a workbook
+-   **`paste_from_xl()`** -- format for R your OS file/folder names or spreadsheet data that you copied into your clipboard memory
 -   **`enscript()`** -- produce the code to re-create an R object
 -   **`repeated()`** -- flag all repeated observations in a vector
--   **`sys_open()`** -- request the OS to open files, folders, or URLs
--   **`list_iron()`** -- flatten lists of embedded lists to a named, single-file list
--   **`entibble()`** -- create tibbles with default behavior useful for
-    spreadsheets
+-   **`sys_open()`** -- request your OS to open files, folders, or URLs
+-   **`enlist()`** -- auto-name elements and catch lists without additional list nesting
+-   **`copy_for_xl()`** -- copy an R dataset to clipboard memory and format for pasting to a spreadsheet
+-   **`list_iron()`** -- flatten lists of embedded lists to a single-file list of named objects
+-   **`entibble()`** -- create tibbles with convenient default behavior for spreadsheet presentation
 
 <br>
 
@@ -85,36 +81,32 @@ library(xlr)
 
 # `xl()`
 
-`xl()` is the primary function of the package 'xlr', and many of the
-other functions in the package were developed to help it. The function
+`xl()` is the primary function of the package, and many of the
+other functions are around to help it. The function
 is somewhat similar to `View()` from the `utils` package in that `xl()`
-is for quickly viewing datasets.
+is for auto-naming and quickly viewing datasets.
 
 It's easiest to see what `xl()` does by passing it some example data;
-try sending it some pre-loaded datasets, like:
+try sending it a couple pre-loaded datasets, like:
 
 ```{r xlr-example1, eval = F}
 xl(mtcars, iris, letters, AirPassengers, Titanic)
 ```
 
-If you type that code to the R console, you should get a workbook that
-pops open automatically with those datasets presented in standardized,
-formatted sheets. Once you're done with the workbook, all you have to do
-is close it; your spreadsheets are temporary. Close them, and they're
-gone.
+If you type the above code to the R console, you should get a workbook that
+pops open with those datasets presented in standardized,
+formatted spreadsheets. Once you're done with the workbook, just close it; your spreadsheets are temporary. Close them, and they're gone.
 
 The video below is of `xl()` creating a temporary workbook where each
-data object becomes a labeled spreadsheet in the workbook.
+data object becomes a labeled spreadsheet in a workbook.
 
 ![xl(iris, mtcars, 1:100, dplyr::starwars)](www/Screencast-xl.webm)
 
 
-To use `xl()`, pass a dataframe or lists of dataframes. It does not
-matter if you pass in lists with nested lists where your data objects are
-buried somewhere. `xl()` recursively flattens and auto-names the spreadsheets and 
-workbook. In fact, nested lists can be useful in the naming of
-groupings within spreadsheet tabs if you provide a sheet-naming specification 
-like `.tabname_spec = list(name_spec = "{outer}|{inner}")`.
+To use `xl()`, pass a dataframe or a list of dataframes. It does not
+matter if you pass in lists with nested lists where your structured data objects are
+buried somewhere. `xl()` recursively flattens the list and auto-names your data objects to become spreadsheets in a workbook. In fact, nested lists can be useful in the naming of groups within spreadsheet tabs if you provide a sheet-naming specification 
+to `xl()` like `.tabname_spec = list(name_spec = "{outer}|{inner}")`.
 
 Try running the below examples in your console.
 
@@ -125,124 +117,37 @@ xl(your_datasets)
 
 xl(your_datasets, .tabname_spec = list(name_spec = "{outer}|{inner}")) 
 
-iris |> split(f = iris$Species) |> xl()
+iris |> splitter(Species) |> xl()
 
-iris |> split(f = iris$Species) |> xl(your_datasets)
+iris |> splitter(Species) |> xl(your_datasets)
 
 ```
 
 
 `xl()` writes your workbooks in a temp directory and, to keep workbooks
-from building up, uses `later::later()` to remove the savefile 5 minutes
+from building up, uses `later::later()` to remove the temp savefile 5 minutes
 after write time. Temp directories also delete themselves when you
 close R. If, however, you want to save a workbook, specify a path or
-just a save name in the `xl()` input parameter `.path`. Specifying a
+just a save name as the `xl()` input parameter `.path`. Specifying a
 savename signals to `xl()` not to mark the file for cleanup. For
 example, `xl(iris, .path = 'flower_data')` will save your data under
-`flower_data.xlsx` within your working directory. (Note that parameter `.path`
+`flower_data.xlsx` within your working directory. (`.path`
 uses `here::here()` internally.)
 
 
 `xl()` creates tibbles of all datasets you pass in, and if specified by
 the user parameter `.return`, optionally returns (always invisibly) the
 `openxlsx` workbook object (default), or the data objects in a list, or
-the workbook savepath as a string.
+the workbook savepath as a string, or all of them in a list. 
 
-<br>
-
-# `enlist()`
-
-`enlist()` is for quick list-naming. This function produces named lists,
-without list-nesting when passed a single bare list. That is, unlike
-`list()`, `enlist()` removes its own embedded list layer if the user
-passes in a single list.
-
-For instance, compare the structure and naming created by enlist:
-
-```{r enlist-example1, eval = T}
-enlist(enlist(enlist('hello'))) |> str()
-```
-
-To the structure and naming created by list:
-
-```{r enlist-example2, eval = T}
-list(list(list('hello'))) |> str()
-```
-
-The `enlist()` example is one list deep, whereas the `list()
-three lists deep. However, if you send two list objects into enlist, as
-shown in the example below, enlist has no choice but to wrap them in a
-new list.
-
-```{r enlist-example3, eval = T}
-enlist(list(letters), list(letters)) |> str()
-```
-
-### A few additional notes about `enlist()`:
-
--   Naming is permissive, you can have duplicate names in a list, so be
-    careful about indexing by name since R returns only the first
-    equivalently named observation from the list.
-
--   `enlist()` has input parameter `.label`, that takes a naming
-    function. Internally, `.label` is passed to `nm` in
-    `rlang::set_names()` and so takes the same inputs. For example:
-    `enlist('hi','hello', .label = ~paste0(.,'_',1:2))`.
-
--   `enlist()` supports non-standard evaluation, e.g. `enlist(!!!letters)`.
-
--   Ignores any empty inputs, e.g. `enlist(,,'hi',,)`.
-
-### Some clipboard prep notes:
-
-The next 3 `xlr` functions, use the clipboard memory. To use the
-clipboard, install the `clipr` package and then check that the package
-works by running `clipr::dr_clipr().` Also, if using Linux, like me,
-make sure to install a clipboard tool via your terminal, e.g.
-`sudo apt-get install xclip`.
-
-<br>
-
-# `copy_for_xl()`
-
-`copy_for_xl()` copies data to your clipboard memory that's formatted
-for pasting to cells in a spreadsheet. You can pass a data object to it,
-like:
-
-```{r copy_for_xl-example, eval = F}
-copy_for_xl(mtcars)
-```
-
-### The `copy_for_xl()` key-chord:
-
-However, a copying method that is way, way better is to use the quick
-keys `ctrl + alt + shift + c`. To use these quick keys, run the
-function, `set_xlr_key_chords()`. (To set up quick keys, you only ever
-have to run this function once in RStudio, but you have to close down
-RStudio and the re-open for the new quick keys to be active.) Then:
-
-1)  Type `mtcars` in an RStudio text editor window (not in the console
-    window)
-
-2)  Use your cursor to highlight the word `mtcars`, and
-
-3)  Press `ctrl + alt + shift + c` all together. (It's just like copying
-    with `ctrl + c`, but instead use all 3 control keys, plus the `c`.)
-
-You should see `✔ Table copied to clipboard:` written in the console.
-Open a spreadsheet and paste the copied `mtcars` data to it.
-
-The below video example uses `copy_for_xl()`, via the console, to copy
-some starwars data.
-![copy_for_xl(dplyr::starwars)](www/Screencast-copy_for_xl.webm)
 
 <br>
 
 # `paste_from_xl()`
 
-`paste_from_xl()` pastes data from your clipboard memory to an R tibble
-object. You can pass spreadsheet data to R by copying data from your
-spreadsheet, and then by typing the following into the console:
+`paste_from_xl()` pastes data from your clipboard memory to a tibble
+object in R. You can pass spreadsheet data to R by copying data from your
+spreadsheet, then type the following into your console:
 
 ```{r paste_from_xl-example, eval = F}
 my_data <- paste_from_xl()
@@ -258,9 +163,10 @@ my_data <- paste_from_xl(has_fieldnames = TRUE)
 
 ### The `paste_from_xl()` key-chord:
 
-However, a pasting method that is way, way better is to use the quick
-keys `ctrl + alt + shift + v`. To use this key-chord, run the function,
-`set_xlr_key_chords()` if you haven't already done so. Then:
+However, a better method for pasting is to use quick keys `ctrl + alt + shift+ v`. 
+To use this key-chord, run the function `set_xlr_key_chords()`. (To set up quick keys, you only have to run this function once in RStudio, but you have to close RStudio and re-open it for the new quick keys to be active.)
+
+Then:
 
 1)  Copy some data from a spreadsheet.
 
@@ -363,8 +269,8 @@ quick keys do not interpret anything highlighted in the console.
 # `repeated()`
 
 `repeated()` helps filter a dataframe for identical observations. It should 
-probably be in `dplyr`, but it's in `xlr` because it's not in `dplyr` and I use it 
-so often with `xl()` to understanding and sharing duplication errors. Use it like this:
+probably be in `dplyr`, but it's in `xlr` because it's not in `dplyr`. I use it 
+to understand duplication errors. Use it like this:
 
 ```{r repeated-example, eval = T}
 mtcars |> dplyr::filter(repeated(disp))
@@ -410,6 +316,95 @@ The video below is an example of opening up some PDF files by piping
 them from `paste_from_xl()` to `sys_open()`.
 
 ![sys_open(paste_from_xl())](www/Screencast-sys_open.webm)
+
+<br>
+
+# `enlist()`
+
+`enlist()` is for quick list-naming. This function produces named lists,
+without list-nesting when passed a single bare list. That is, unlike
+`list()`, `enlist()` removes its own embedded list layer if the user
+passes in a single list.
+
+For instance, compare the structure and naming created by enlist:
+
+```{r enlist-example1, eval = T}
+enlist(enlist(enlist('hello'))) |> str()
+```
+
+To the structure and naming created by list:
+
+```{r enlist-example2, eval = T}
+list(list(list('hello'))) |> str()
+```
+
+The `enlist()` example is one list deep, whereas the `list()
+three lists deep. However, if you send two list objects into enlist, as
+shown in the example below, enlist has no choice but to wrap them in a
+new list.
+
+```{r enlist-example3, eval = T}
+enlist(list(letters), list(letters)) |> str()
+```
+
+### A few additional notes about `enlist()`:
+
+-   Naming is permissive, you can have duplicate names in a list, so be
+    careful about indexing by name since R returns only the first
+    equivalently named observation from the list.
+
+-   `enlist()` has input parameter `.label`, that takes a naming
+    function. Internally, `.label` is passed to `nm` in
+    `rlang::set_names()` and so takes the same inputs. For example:
+    `enlist('hi','hello', .label = ~paste0(.,'_',1:2))`.
+
+-   `enlist()` supports non-standard evaluation, e.g. `enlist(!!!letters)`.
+
+-   Ignores empty inputs, e.g. `enlist(,,'hi',,)`.
+
+### Some clipboard prep notes:
+
+The next 3 `xlr` functions, use the clipboard memory. To use the
+clipboard, install the `clipr` package and then check that the package
+works by running `clipr::dr_clipr().` Also, if using Linux, like me,
+make sure to install a clipboard tool via your terminal, e.g.
+`sudo apt-get install xclip`.
+
+<br>
+
+# `copy_for_xl()`
+
+`copy_for_xl()` copies data to your clipboard memory that's formatted
+for pasting to cells in a spreadsheet. You can pass a data object to it,
+like:
+
+```{r copy_for_xl-example, eval = F}
+copy_for_xl(mtcars)
+```
+
+### The `copy_for_xl()` key-chord:
+
+However, a better copying method is to use the quick
+keys `ctrl + alt + shift + c`. If you haven't already done so, run the function,
+`set_xlr_key_chords()` to use these quick keys.
+
+Then:
+
+1)  Type `mtcars` in an RStudio text editor window (not in the console
+    window)
+
+2)  Use your cursor to highlight the word `mtcars`, and
+
+3)  Press `ctrl + alt + shift + c` all together. (It's just like copying
+    with `ctrl + c`, but instead use all 3 control keys, plus the `c`.)
+
+You should see `✔ Table copied to clipboard:` written in the console.
+Open a spreadsheet and paste the copied `mtcars` data to it.
+
+The below video example uses `copy_for_xl()`, via the console, to copy
+some starwars data.
+![copy_for_xl(dplyr::starwars)](www/Screencast-copy_for_xl.webm)
+
 
 <br>
 

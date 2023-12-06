@@ -49,7 +49,7 @@ the second column is a nested list
 }
 \details{
 @details
-Entibble is designed to work with the function \code{\link[=xl]{xl()}} to produce a viewable
+Work with the function \code{\link[=xl]{xl()}} to produce a viewable
 output of R data within spreadsheets. To help \code{xl()} succeed as often as possible, \code{entibble()} is
 liberal about names, such as duplicate column names, and makes an effort to produce a flat table
 in place of a nested \code{\link[tibble:tibble]{tibble::tibble()}}.

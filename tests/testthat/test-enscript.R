@@ -58,8 +58,7 @@ test_that('starwars script (copied to user clipboard) is correct: dplyr::starwar
     structure(
       list(
         name = c(
-          "Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Leia Organa",
-          "Owen Lars"
+          "Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Leia Organa", "Owen Lars"
         ),
         height = c(
           172L, 167L, 96L, 202L, 150L, 178L
@@ -83,8 +82,7 @@ test_that('starwars script (copied to user clipboard) is correct: dplyr::starwar
           "male", "none", "none", "male", "female", "male"
         ),
         gender = c(
-          "masculine", "masculine", "masculine", "masculine", "feminine",
-          "masculine"
+          "masculine", "masculine", "masculine", "masculine", "feminine", "masculine"
         ),
         homeworld = c(
           "Tatooine", "Tatooine", "Naboo", "Tatooine", "Alderaan", "Tatooine"
@@ -94,50 +92,42 @@ test_that('starwars script (copied to user clipboard) is correct: dplyr::starwar
         ),
         films = list(
           c(
-            "The Empire Strikes Back", "Revenge of the Sith",
-            "Return of the Jedi", "A New Hope", "The Force Awakens"
+            "A New Hope", "The Empire Strikes Back", "Return of the Jedi",
+            "Revenge of the Sith", "The Force Awakens"
           ),
           c(
-            "The Empire Strikes Back", "Attack of the Clones",
-            "The Phantom Menace", "Revenge of the Sith", "Return of the Jedi",
-            "A New Hope"
+            "A New Hope", "The Empire Strikes Back", "Return of the Jedi",
+            "The Phantom Menace", "Attack of the Clones", "Revenge of the Sith"
           ),
           c(
-            "The Empire Strikes Back", "Attack of the Clones",
-            "The Phantom Menace", "Revenge of the Sith", "Return of the Jedi",
-            "A New Hope", "The Force Awakens"
+            "A New Hope", "The Empire Strikes Back", "Return of the Jedi",
+            "The Phantom Menace", "Attack of the Clones", "Revenge of the Sith",
+            "The Force Awakens"
           ),
           c(
-            "The Empire Strikes Back", "Revenge of the Sith",
-            "Return of the Jedi", "A New Hope"
+            "A New Hope", "The Empire Strikes Back", "Return of the Jedi",
+            "Revenge of the Sith"
           ),
           c(
-            "The Empire Strikes Back", "Revenge of the Sith",
-            "Return of the Jedi", "A New Hope", "The Force Awakens"
+            "A New Hope", "The Empire Strikes Back", "Return of the Jedi",
+            "Revenge of the Sith", "The Force Awakens"
           ),
           c(
-            "Attack of the Clones", "Revenge of the Sith", "A New Hope"
+            "A New Hope", "Attack of the Clones", "Revenge of the Sith"
           )
         ),
         vehicles = list(
           c(
             "Snowspeeder", "Imperial Speeder Bike"
           ),
-          character(0),
-          character(0),
-          character(0),
-          "Imperial Speeder Bike",
+          character(0), character(0), character(0), "Imperial Speeder Bike",
           character(0)
         ),
         starships = list(
           c(
             "X-wing", "Imperial shuttle"
           ),
-          character(0),
-          character(0),
-          "TIE Advanced x1",
-          character(0),
-          character(0)
+          character(0), character(0), "TIE Advanced x1", character(0), character(0)
         )
       ),
       row.names = c(
