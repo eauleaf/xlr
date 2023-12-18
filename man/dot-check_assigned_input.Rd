@@ -17,6 +17,8 @@ If user specified a syntactically invalid variable name, provides a
 suggested name and asks user to accept or change it.
 }
 \examples{
-\dontrun{ .check_assigned_input(' 1 bad name') }
+\dontrun{
+  .check_assigned_input(' 1 bad name')
+}
 
 }

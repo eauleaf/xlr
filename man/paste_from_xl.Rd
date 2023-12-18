@@ -36,7 +36,7 @@ To set the quick keys, use \code{\link[=set_xlr_key_chords]{set_xlr_key_chords()
 \itemize{
 \item If pasting multiple spreadsheet rows, the data imports as a tibble.
 \item If pasting a single spreadsheet row with multiple columns, the data imports as a vector.
-\item If pasting folder and file paths from an OS navigation window, the data is imports as a vector.
+\item If pasting folder and file paths from an OS navigation window, the data imports as a vector.
 }
 }
 \details{
@@ -46,23 +46,20 @@ Or, set the quick keys manually by following these RStudio instructions:
 \url{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 
 In Windows, path copying and pasting from a navigation window into R requires that a Powershell
-script be callable from the command prompt. (Sometimes organizations don't allow
-employees to use Powershell.)
+script be callable from the command prompt. (Sometimes Powershell might be disabled.)
 }
 \note{
-Clipboard memory is limited; if you're copying a large quantity of data from a
-spreadsheet, try reading in the data instead with \code{\link[readxl:read_excel]{readxl::read_excel()}}.
+If you're copying a very large quantity of data from a spreadsheet,
+try reading in the data instead with \code{\link[readxl:read_excel]{readxl::read_excel()}}.
 }
 \examples{
-\dontrun{
+if(interactive()){
 
-# (All examples require the user to interactively select data.)
-# Copy data from a spreadsheet into working memory with 'ctrl + c' or
-# by right-clicking with the mouse and selecting 'copy', then,
-# to paste the copied spreadsheet data into R, type into the R
-# console:
-
+# Copy data from a spreadsheet into working memory by right-clicking
+# with your mouse and selecting 'copy', or by using 'ctrl + c'.
+# Paste the copied spreadsheet data into R by typing into the R console:
 (my_data <- paste_from_xl())
+
 (my_data <- paste_from_xl(T))
 (my_data <- paste_from_xl(F))
 paste_from_xl()

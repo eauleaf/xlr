@@ -15,11 +15,11 @@
 #'
 #' - If pasting multiple spreadsheet rows, the data imports as a tibble.
 #' - If pasting a single spreadsheet row with multiple columns, the data imports as a vector.
-#' - If pasting folder and file paths from an OS navigation window, the data is imports as a vector.
+#' - If pasting folder and file paths from an OS navigation window, the data imports as a vector.
 #'
 #'
-#' @note Clipboard memory is limited; if you're copying a large quantity of data from a
-#'   spreadsheet, try reading in the data instead with [readxl::read_excel()].
+#' @note If you're copying a very large quantity of data from a spreadsheet,
+#' try reading in the data instead with [readxl::read_excel()].
 #'
 #' @param has_fieldnames TRUE or FALSE indicating whether field names are
 #'   present in the spreadsheet data you copied. If user supplies no value,
@@ -34,8 +34,7 @@
 #' \url{https://support.posit.co/hc/en-us/articles/206382178-Customizing-Keyboard-Shortcuts-in-the-RStudio-IDE}
 #'
 #' In Windows, path copying and pasting from a navigation window into R requires that a Powershell
-#' script be callable from the command prompt. (Sometimes organizations don't allow
-#' employees to use Powershell.)
+#' script be callable from the command prompt. (Sometimes Powershell might be disabled.)
 #'
 #' @returns
 #' ** If user copied a single spreadsheet row or column into clipboard memory,
@@ -45,15 +44,14 @@
 #'
 #' @export
 #'
-#' @examples \dontrun{
+#' @examples
+#' if(interactive()){
 #'
-#' # (All examples require the user to interactively select data.)
-#' # Copy data from a spreadsheet into working memory with 'ctrl + c' or
-#' # by right-clicking with the mouse and selecting 'copy', then,
-#' # to paste the copied spreadsheet data into R, type into the R
-#' # console:
-#'
+#' # Copy data from a spreadsheet into working memory by right-clicking
+#' # with your mouse and selecting 'copy', or by using 'ctrl + c'.
+#' # Paste the copied spreadsheet data into R by typing into the R console:
 #' (my_data <- paste_from_xl())
+#'
 #' (my_data <- paste_from_xl(T))
 #' (my_data <- paste_from_xl(F))
 #' paste_from_xl()
@@ -74,7 +72,7 @@ paste_from_xl <- function( has_fieldnames = NULL ){
   datr <- suppressWarnings(clipr::read_clip())
 
   if ( is.null(datr) && .Platform$OS.type == "windows" ) {
-    # Run Windows powershell to get paths and capture output
+    # Run Windows powershell to capture output paths
     powershell_script='
     [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
     [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
@@ -151,11 +149,13 @@ return(from_xl)
 
 #' Rstudio addin function to call [paste_from_xl()]
 #'
-#' This function responds to key-chord `ctrl+alt+shift+v`.
+#' For key-chord `ctrl+alt+shift+v`.
 #'
 #' @returns void
 #'
 #' @export
+#'
+#' @examples \dontrun{ run_paste_from_xl() }
 #'
 run_paste_from_xl <- function(){
 
@@ -181,9 +181,11 @@ run_paste_from_xl <- function(){
 
 
   # ask user for a variable name --------------------------------------------
-  input_name <- svDialogs::dlg_input(
+  input_name <- rstudioapi::showPrompt(
+    title = "",
     message = "Assign `<-` a variable name to the data?",
-    default = default_input_name)$res
+    default = default_input_name
+    )
 
   # check the variable name
   input_name <- .check_assigned_input(input_name)
@@ -228,22 +230,31 @@ run_paste_from_xl <- function(){
 #'
 #' @return user assigned name as a string
 #'
-#' @examples \dontrun{ .check_assigned_input(' 1 bad name') }
+#' @examples \dontrun{
+#'   .check_assigned_input(' 1 bad name')
+#'}
 #'
 .check_assigned_input <- function(input_name){
   # input_name <- svDialogs::dlg_list(choices = preselect)
-  if( identical(input_name, as.character()) ){
+  # if( identical(input_name, as.character()) ){
+  if( is.null(input_name) ){
     return('')
   } else {
     input_name <- stringr::str_trim(input_name)
     temp_name <- make.names(input_name)
     if(temp_name != input_name){
-      input_name <- svDialogs::dlg_input(
+      input_name <- rstudioapi::showPrompt(
+        title = "",
         message = c("Your assigned name is syntatically invalid. Perhaps this name instead?"),
-        default = temp_name)$res
+        default = temp_name
+      )
+
       input_name <- .check_assigned_input(input_name)
+
     }
+
     return(input_name)
+
   }
 }
 

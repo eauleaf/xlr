@@ -7,7 +7,7 @@
 # expect_equal( entibble(a = 2, b = .env$a), entibble(a = 2, b = .env$a) )
 # })
 #
-# # does not handle calling elements defined within input; should it?
+# # does not handle evaluation inputs within a single environment; should it?
 # # Not sure it's necessary for xl presentation...
 # test_that("mutate() semantics for entibble()", {
 #   expect_equal(
@@ -29,17 +29,12 @@
 #   )
 # })
 
+
 #' check test examples
 #'
-#' # ignores unused rownames
 #' matrix(c(1, 2, 3, 11, 12, 13), nrow = 2, ncol = 3, byrow = TRUE, dimnames = list(c('row1', 'row2'), c('C.1', 'C.2', 'C.3'))) |> entibble()
-#' tail(iris) |> entibble()
-#' mtcars |> entibble(.rowname = 'vehicle')
-
-# list(
-#   `Arctic/Longyearbyen` = "Arctic/Longyearbyen", MST = "MST", GMT = "GMT",
-#   posixrules = character(0)
-# ) |> entibble()
+#' tail(iris, 2) |> entibble()
+#' mtcars |> head(2) |> entibble(.rowname = 'vehicle')
 
 
 
@@ -348,4 +343,51 @@ test_that('.name_repair works', {
   )
 })
 
+
+test_that("NULL and empty values, paired with data, create a ragged list, but NA or '' values do not", {
+
+  expect_equal(
+    entibble(list(
+      `Arctic/Longyearbyen` = "Arctic/Longyearbyen",
+      posixrules = character(0)
+    )),
+    structure(
+      list(rowname = c("Arctic/Longyearbyen", "posixrules"),
+           `list(ragged_elements)` = list(
+             structure(
+               list(`Arctic/Longyearbyen` = "Arctic/Longyearbyen"),
+               class = c("tbl_df", "tbl", "data.frame"),
+               row.names = c(NA, -1L)
+             ),
+             structure(
+               list(posixrules = character(0)),
+               class = c("tbl_df", "tbl", "data.frame"),
+               row.names = integer(0)))
+      ),
+      class = c("tbl_df", "tbl", "data.frame"),
+      row.names = c(NA, -2L)
+    )
+  )
+
+  expect_equal(
+    entibble(list(
+      `Arctic/Longyearbyen` = "Arctic/Longyearbyen",
+      posixrules = NA
+    )), structure(
+      list(`Arctic/Longyearbyen` = "Arctic/Longyearbyen", posixrules = NA),
+      class = c("tbl_df", "tbl","data.frame"), row.names = c(NA, -1L)
+    )
+  )
+
+  expect_equal(
+    entibble(list(
+      `Arctic/Longyearbyen` = "Arctic/Longyearbyen",
+      posixrules = ""
+    )), structure(
+      list(`Arctic/Longyearbyen` = "Arctic/Longyearbyen", posixrules = ""),
+      class = c("tbl_df", "tbl","data.frame"), row.names = c(NA, -1L)
+    )
+  )
+
+})
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/entibble.R
 \name{entibble}
 \alias{entibble}
-\title{Convert data objects to a tibble with defaults optimized for spreadsheet presentation}
+\title{Convert data objects to a tibble with defaults optimized for spreadsheet (2D) presentation}
 \usage{
 entibble(
   ...,
@@ -15,7 +15,7 @@ entibble(
 \item{...}{object or expression to convert to a tibble}
 
 \item{.rowname}{string; to name the column containing rownames. If rownames are not
-present in the data, \code{.rowname} is ignored.}
+present in the dataframe, \code{.rowname} is ignored.}
 
 \item{.name_repair}{Treatment of problematic column names:
 \itemize{
@@ -42,17 +42,16 @@ Default behaviors:
 \item Always includes rownames in tibble, if available
 \item Does not repeat input elements to obtain common lengths
 \item Arranges lists with uniform arrays into columns of a single tibble
-\item A list of ragged elements becomes a two column tibble where the first column is names and
+\item A list of ragged elements becomes a two column tibble where the first column contains names and
 the second column is a nested list
 \item Is unconcerned with duplicate column names unless specified by user with .name_repair
 }
 }
 \details{
 @details
-Work with the function \code{\link[=xl]{xl()}} to produce a viewable
-output of R data within spreadsheets. To help \code{xl()} succeed as often as possible, \code{entibble()} is
-liberal about names, such as duplicate column names, and makes an effort to produce a flat table
-in place of a nested \code{\link[tibble:tibble]{tibble::tibble()}}.
+Built to work with the function \code{\link[=xl]{xl()}} to produce 2D output for spreadsheets.
+\code{entibble()} is liberal about names, such as duplicate column names, and tries to produce
+flat 2D data in place of nested data.
 }
 \examples{
 letters |> entibble()
@@ -73,13 +72,17 @@ entibble(example_data, !!!letters)
 entibble(x = 1:3, y = 11:13)
 entibble(x = 1:3, y = 10:14)
 
-# be somewhat careful about conforming row inputs; it is different from `tibble()`
+# be somewhat careful about conforming-row inputs; it is different from `tibble()`
 enlist(head(iris), tail(mtcars)) |> entibble()
 as.matrix(list(1:10,11:20)) |> entibble()
 
 # if you want to ensure separate lists, call [purrr::map()] or [list_iron()]
 enlist(head(iris), tail(mtcars)) |> purrr::map(entibble)
 enlist(head(iris), tail(mtcars)) |> list_iron(.f = entibble)
+
+# makes multi-dimensional tables 2D:
+Titanic |> dim()
+Titanic |> entibble()
 
 }
 \seealso{

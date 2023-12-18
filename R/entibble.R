@@ -1,24 +1,23 @@
-#' Convert data objects to a tibble with defaults optimized for spreadsheet presentation
+#' Convert data objects to a tibble with defaults optimized for spreadsheet (2D) presentation
 #'
 #' Default behaviors:
 #'  * Always includes rownames in tibble, if available
 #'  * Does not repeat input elements to obtain common lengths
 #'  * Arranges lists with uniform arrays into columns of a single tibble
-#'  * A list of ragged elements becomes a two column tibble where the first column is names and
+#'  * A list of ragged elements becomes a two column tibble where the first column contains names and
 #'  the second column is a nested list
 #'  * Is unconcerned with duplicate column names unless specified by user with .name_repair
 #'
 #'
 #'  @details
-#'  Work with the function [xl()] to produce a viewable
-#'  output of R data within spreadsheets. To help `xl()` succeed as often as possible, `entibble()` is
-#'  liberal about names, such as duplicate column names, and makes an effort to produce a flat table
-#'  in place of a nested [tibble::tibble()].
+#'  Built to work with the function [xl()] to produce 2D output for spreadsheets.
+#'  `entibble()` is liberal about names, such as duplicate column names, and tries to produce
+#'  flat 2D data in place of nested data.
 #'
 #' @inheritParams tibble::tibble
 #' @param ... object or expression to convert to a tibble
 #' @param .rowname string; to name the column containing rownames. If rownames are not
-#' present in the data, `.rowname` is ignored.
+#' present in the dataframe, `.rowname` is ignored.
 #'
 #' @seealso [tibble::tibble()]
 #'
@@ -44,13 +43,17 @@
 #' entibble(x = 1:3, y = 11:13)
 #' entibble(x = 1:3, y = 10:14)
 #'
-#' # be somewhat careful about conforming row inputs; it is different from `tibble()`
+#' # be somewhat careful about conforming-row inputs; it is different from `tibble()`
 #' enlist(head(iris), tail(mtcars)) |> entibble()
 #' as.matrix(list(1:10,11:20)) |> entibble()
 #'
 #' # if you want to ensure separate lists, call [purrr::map()] or [list_iron()]
 #' enlist(head(iris), tail(mtcars)) |> purrr::map(entibble)
 #' enlist(head(iris), tail(mtcars)) |> list_iron(.f = entibble)
+#'
+#' # makes multi-dimensional tables 2D:
+#' Titanic |> dim()
+#' Titanic |> entibble()
 #'
 entibble <- function(
     ...,
@@ -67,7 +70,7 @@ entibble <- function(
 
     checkmate::assert_string(.rowname, null.ok = FALSE, na.ok = FALSE)
 
-    out <- in_exprs |> purrr::imap(.f = \(.x,.y).to_tibble(.x, .rowname = .rowname, .vec_name = .y))
+    out <- in_exprs |> purrr::imap(.f = \(.x,.y) .to_tibble(.x, .rowname = .rowname, .vec_name = .y))
     row_counts <- out |> purrr::map_int(nrow) |> unique()
     is_ragged <- length(row_counts)!=1
 
@@ -188,7 +191,7 @@ entibble <- function(
 
 
 
-#' Transform a named vector, factor, or list to a one or 2 column tibble
+#' Transform a named vector, factor, or list to a 1 or 2 column tibble
 #'
 #' Function called in [.to_tibble()].
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/entibble.R
 \name{.vector_2_tibble}
 \alias{.vector_2_tibble}
-\title{Transform a named vector, factor, or list to a one or 2 column tibble}
+\title{Transform a named vector, factor, or list to a 1 or 2 column tibble}
 \usage{
 .vector_2_tibble(.in_vec, .rowname = "rowname", .vec_name = "")
 }

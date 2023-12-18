@@ -10,5 +10,9 @@ run_paste_from_xl()
 void
 }
 \description{
-This function responds to key-chord \code{ctrl+alt+shift+v}.
+For key-chord \code{ctrl+alt+shift+v}.
+}
+\examples{
+\dontrun{ run_paste_from_xl() }
+
 }
