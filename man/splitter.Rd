@@ -2,7 +2,7 @@
 % Please edit documentation in R/splitter.R
 \name{splitter}
 \alias{splitter}
-\title{Splits a dataframe into a list of dataframes with auto-naming}
+\title{Splits, with auto-naming, a dataframe into a list of dataframes}
 \usage{
 splitter(.data, ..., .sep = "|")
 }
@@ -17,7 +17,7 @@ splitter(.data, ..., .sep = "|")
 named list of dataframes
 }
 \description{
-Similar to \code{dplyr::group_split()} or \code{base::split()}, but:
+Similar to \code{\link[dplyr:group_split]{dplyr::group_split()}} or \code{\link[base:split]{base::split()}}, but:
 }
 \details{
 \itemize{
@@ -25,11 +25,25 @@ Similar to \code{dplyr::group_split()} or \code{base::split()}, but:
 \item auto-names the list of output dataframes
 \item splits based on column names, column numbers, or any selection features from \code{\link[dplyr:select]{dplyr::select()}}
 \item if user specifies no columns to split by, \code{splitter()} will split on groupings from \code{\link[dplyr:group_by]{dplyr::group_by()}}
-\item does not create dataframe groups, but preserves dataframe groups in output
+\item does not create dataframe groups, but preserves dataframe groups in outputs
 }
 }
 \examples{
-iris |> splitter(Species)
-iris |> splitter(5)
-mtcars |> splitter(mpg)
+# splits by column names
+mtcars |> splitter(cyl)
+mtcars |> splitter('cyl')
+mtcars |> splitter(gear, cyl)
+
+# or a column number
+mtcars |> splitter(2)
+mtcars |> splitter(2, 10)
+
+# splits by `dplyr` grouped variables if no split info is passed as an argument
+mtcars |> dplyr::group_by(cyl) |> splitter()
+
+# if there are already groups, but a split argument is passed in,
+#  splitter ignores the `dplyr` groupings as a split variable and
+#  preserves the `dplyr` groups in the result
+mtcars |> dplyr::group_by(cyl) |> splitter(gear)
+
 }

@@ -277,14 +277,3 @@ run_xl <- function(){
 }
 
 
-### quick manual tests
-# dplyr::starwars |> split(f = dplyr::starwars$eye_color) |> xl(.sheet_titles = ~stringr::str_to_title(paste(., 'eye color')))
-# dplyr::starwars |> split(f = dplyr::starwars$eye_color) |> xl(.dataframe_spec = ~janitor::clean_names(., case = 'title'))
-# dplyr::starwars |> xl(.open = F)
-# dplyr::starwars |> xl(.path = 'boogabooga')
-# file.remove(here::here('boogabooga.xlsx'))
-# xl(
-#   date_formats = entibble(
-#     date = lubridate::ymd(20221231),
-#     datetime = lubridate::ymd_hms(20221231081001))
-#)

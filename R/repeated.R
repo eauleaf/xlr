@@ -11,7 +11,7 @@
 #' to identify and review all repeated observations in a dataframe. The function
 #' is an alias for `x %in% x[duplicated(x)]`.
 #'
-#' Filtering a dataframe '.data' by the repeated values in column 'x', as in
+#' Filtering a dataframe by the repeated values in column 'x', as in
 #' `dplyr::filter(.data, repeated(x))`, performs the same task as grouping by a
 #' variable and selecting counts greater than 1, as in `dplyr::group_by(.data,
 #' x)  |> dplyr::filter(dplyr::n()>1)`, but is quicker and easier to remember.
@@ -23,7 +23,7 @@
 #'   special value, meaning that all values can be compared, and
 #'   may be the only value accepted for methods other than the default; values
 #'   are coerced internally to be the same type as x.
-#' @param ... currently unused
+#' @param ... passed to [duplicated()]
 #'
 #' @return a logical vector the same length as the input
 #' @export
@@ -49,6 +49,6 @@ repeated <- function(x, incomparables = FALSE, ...) {
 
   checkmate::qassert(x, c("v",0))
   checkmate::qassert(incomparables, c("v",0))
-  x %in% x[duplicated(x, incomparables = incomparables)]
+  x %in% x[duplicated(x, incomparables = incomparables, ...)]
 
 }

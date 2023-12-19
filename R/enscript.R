@@ -24,8 +24,6 @@
 #'
 #' @param . The data object or expression to transform into script
 #' @param to_clipboard default TRUE; whether to copy the resulting script to the clipboard
-#' @param quiet TRUE or FALSE indicating whether to write the scripted
-#'   expression to the console.
 #'
 #' @return The formatted deparsed expression, invisibly if to_clipboard = FALSE.
 #' The primary output is the object's internal expression written to clipboard memory
@@ -43,7 +41,7 @@
 #' dplyr::starwars |> head() |> enscript()
 #'
 #' (flowers = tail(iris,10))
-#' enscript(flowers, quiet = T)
+#' enscript(flowers)
 #'
 #' (days_to_go <- seq.Date(Sys.Date(), by = 1, length.out = 7))
 #' days_to_go |> enscript()
@@ -61,7 +59,7 @@
 #' # returns the deparsed script as plain text
 #' enscript(letters, to_clipboard = FALSE)
 #'
-enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
+enscript <- function(. = NULL, to_clipboard = TRUE){ # , quiet = FALSE ) {
 
   # from console --------------------------------------------------------------
   .quo <- rlang::enquo(.)
@@ -70,7 +68,7 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 
 
   checkmate::assert_flag(to_clipboard)
-  checkmate::assert_flag(quiet)
+  # checkmate::assert_flag(quiet)
   # safe_width <- purrr::safely(.f = rstudioapi::readRStudioPreference( 'margin_column' ,getOption('deparse.cutoff')), otherwise = 65)
   # width <- safe_width
   width <- max(4, getOption('deparse.cutoff'), na.rm = TRUE)
@@ -107,18 +105,6 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 
   } else {
 
-    # make syntactically valid names
-
-    # encodeString()
-
-    # deparsed_expr <- rlang::quo_squash(.) |>
-    #   purrr::map(~deparse(., backtick = TRUE)) |>
-    #   purrr::map(~.format_script(., snip_width = width))
-    # # return(deparsed_expr)
-
-    # deparsed_expr <- glue::glue_collapse(c(assignment, paste(deparsed_expr))) |> stringr::str_squish()
-    # to_console <- deparsed_expr
-
     deparsed_expr <- glue::glue_collapse(c(assignment, deparsed_expr[[1]])) |>
       stringr::str_squish()
     to_console <- stringr::str_wrap(deparsed_expr, width = cli::console_width())
@@ -131,10 +117,10 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 
     if( clipr::clipr_available() ){
       clipr::write_clip(deparsed_expr)
-      if(!quiet){
+      # if(!quiet){
         cli::cat_line()
         cli::cli_alert_success("{script_type} copied to clipboard:")
-      }
+      # }
     } else {
       cli::cli_alert_warning(
         'Cannot copy expression to clipboard; package {.pkg clipr} is unavailable.'
@@ -143,7 +129,7 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
 
 
     # cat to console ------------------------------------------------------
-    if(!quiet){
+    # if(!quiet){
 
       cli::cat_rule()
       cli::cat_line("\n\n")
@@ -151,7 +137,7 @@ enscript <- function(. = NULL, to_clipboard = TRUE, quiet = FALSE ) {
       cli::cat_line("\n\n")
       cli::cat_rule()
 
-    }
+    # }
 
     return( invisible( stringr::str_split_1(deparsed_expr, '\\n') ) )
 

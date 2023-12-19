@@ -1,8 +1,8 @@
 #' Create a savepath from user expression or user specs
 #'
-#' To be used in a function that takes dots
+#' For use in a function that takes dots
 #'
-#' @param ... an expression (not used if .path is specified)
+#' @param ... an expression (unused if .path is specified)
 #' @param .path a full save path or file name string with out without suffix
 #' @param .file_suffix a file type, e.g. '.xlsx' or '.pdf'
 #' @param .tmp_prefix if producing a temp file, prefix before date and time name components, e.g. 'xlr'

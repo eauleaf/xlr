@@ -4,15 +4,12 @@
 \alias{enscript}
 \title{Writes the script to reproduce the input}
 \usage{
-enscript(. = NULL, to_clipboard = TRUE, quiet = FALSE)
+enscript(. = NULL, to_clipboard = TRUE)
 }
 \arguments{
 \item{.}{The data object or expression to transform into script}
 
 \item{to_clipboard}{default TRUE; whether to copy the resulting script to the clipboard}
-
-\item{quiet}{TRUE or FALSE indicating whether to write the scripted
-expression to the console.}
 }
 \value{
 The formatted deparsed expression, invisibly if to_clipboard = FALSE.
@@ -52,7 +49,7 @@ rep("🎊🌈",3) |> enscript()
 dplyr::starwars |> head() |> enscript()
 
 (flowers = tail(iris,10))
-enscript(flowers, quiet = T)
+enscript(flowers)
 
 (days_to_go <- seq.Date(Sys.Date(), by = 1, length.out = 7))
 days_to_go |> enscript()

@@ -6,6 +6,33 @@
 # xl(entibble(iris, iris))
 #
 
+### quick manual tests
+# dplyr::starwars |> splitter(eye_color) |> xl(.sheet_titles = ~stringr::str_to_title(paste(., 'eye color')))
+# dplyr::starwars |> splitter(eye_color) |> xl(.dataframe_spec = ~janitor::clean_names(., case = 'title'))
+# dplyr::starwars |> xl(.open = F)
+# dplyr::starwars |> xl(.path = 'boogabooga')
+# file.remove(here::here('boogabooga.xlsx'))
+# xl(
+#   date_formats = entibble(
+#     date = lubridate::ymd(20221231),
+#     datetime = lubridate::ymd_hms(20221231081001))
+#)
+
+#' xl(TRUE)
+#' xl(1)
+#' xl(c(1:5))
+#' # flattens lists and treats lists like comma-separated inputs
+#' list(c(list(1:5), list(5:1)), letters) |> xl()
+#' xl(list(a = 1,5))
+#' c(1,1:5, list(1:10)) |> xl()
+#' a <- tibble::tibble(iris); xl(a)
+#' rlang::set_names(as.list(letters), LETTERS) |> xl()
+#' xl(!!!letters)
+#' a_dataframe <- tibble::tibble(iris); xl(a_dataframe)
+
+
+
+
 test_that('xl() correctly writes a dplyr::starwars .xlsx file',{
 
   xl_test_file <- testthat::test_path('starwars_test.xlsx')
@@ -220,22 +247,4 @@ test_that('NSE works',{
 
 })
 
-
-#' xl(TRUE)
-#' xl(1)
-#' xl(c(1:5))
-#' # flattens lists and treats lists like comma-separated inputs
-#' list(c(list(1:5), list(5:1)), letters) |> xl()
-#' xl(list(a = 1,5))
-#' c(1,1:5, list(1:10)) |> xl()
-#' a <- tibble::tibble(iris); xl(a)
-#' rlang::set_names(as.list(letters), LETTERS) |> xl()
-#' xl(!!!letters)
-#' a_dataframe <- tibble::tibble(iris); xl(a_dataframe)
-
-
-### manual tests
-# dplyr::starwars |> split(f = dplyr::starwars$eye_color) |> xl(.sheet_titles = ~stringr::str_to_title(paste(., 'eye color')))
-# dplyr::starwars |> split(f = dplyr::starwars$eye_color) |> xl(.dataframe_spec = ~janitor::clean_names(., case = 'title'))
-# dplyr::starwars |> xl(.path = 'boogabooga')
 

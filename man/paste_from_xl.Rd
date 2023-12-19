@@ -60,8 +60,6 @@ if(interactive()){
 # Paste the copied spreadsheet data into R by typing into the R console:
 (my_data <- paste_from_xl())
 
-(my_data <- paste_from_xl(T))
-(my_data <- paste_from_xl(F))
 paste_from_xl()
 
 

@@ -7,7 +7,7 @@
 expr_savepath(..., .path = NULL, .file_suffix = ".xlsx", .tmp_prefix = "xlr-")
 }
 \arguments{
-\item{...}{an expression (not used if .path is specified)}
+\item{...}{an expression (unused if .path is specified)}
 
 \item{.path}{a full save path or file name string with out without suffix}
 
@@ -19,7 +19,7 @@ expr_savepath(..., .path = NULL, .file_suffix = ".xlsx", .tmp_prefix = "xlr-")
 the complete path string
 }
 \description{
-To be used in a function that takes dots
+For use in a function that takes dots
 }
 \examples{
 expr_savepath(.path = 'hi')

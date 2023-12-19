@@ -231,7 +231,7 @@ Below is an example video of `enscript()`:
 
 Try running something like:
 ```{r enscript-example2, eval = F}
-iris |> split(f = iris$Species) |> purrr::map(head, 2) |> enscript()
+iris |> splitter(Species) |> purrr::map(head, 2) |> enscript()
 ```
 
 You can pass in an expression or a single variable by piping 'enscript()' to the end of 

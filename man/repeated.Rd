@@ -14,7 +14,7 @@ special value, meaning that all values can be compared, and
 may be the only value accepted for methods other than the default; values
 are coerced internally to be the same type as x.}
 
-\item{...}{currently unused}
+\item{...}{passed to \code{\link[=duplicated]{duplicated()}}}
 }
 \value{
 a logical vector the same length as the input
@@ -31,7 +31,7 @@ A convenience function to use with dplyr::filter() to make it easy
 to identify and review all repeated observations in a dataframe. The function
 is an alias for \code{x \%in\% x[duplicated(x)]}.
 
-Filtering a dataframe '.data' by the repeated values in column 'x', as in
+Filtering a dataframe by the repeated values in column 'x', as in
 \code{dplyr::filter(.data, repeated(x))}, performs the same task as grouping by a
 variable and selecting counts greater than 1, as in \code{dplyr::group_by(.data, x)  |> dplyr::filter(dplyr::n()>1)}, but is quicker and easier to remember.
 

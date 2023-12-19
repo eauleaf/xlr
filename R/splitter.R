@@ -1,12 +1,12 @@
-#' Splits a dataframe into a list of dataframes with auto-naming
+#' Splits, with auto-naming, a dataframe into a list of dataframes
 #'
-#' Similar to `dplyr::group_split()` or `base::split()`, but:
+#' Similar to [dplyr::group_split()] or [base::split()], but:
 #'
 #' * takes only dataframes
 #' * auto-names the list of output dataframes
 #' * splits based on column names, column numbers, or any selection features from [dplyr::select()]
 #' * if user specifies no columns to split by, `splitter()` will split on groupings from [dplyr::group_by()]
-#' * does not create dataframe groups, but preserves dataframe groups in output
+#' * does not create dataframe groups, but preserves dataframe groups in outputs
 #'
 #'
 #' @param .data a dataframe
@@ -17,9 +17,23 @@
 #' @export
 #'
 #' @examples
-#' iris |> splitter(Species)
-#' iris |> splitter(5)
-#' mtcars |> splitter(mpg)
+#' # splits by column names
+#' mtcars |> splitter(cyl)
+#' mtcars |> splitter('cyl')
+#' mtcars |> splitter(gear, cyl)
+#'
+#' # or a column number
+#' mtcars |> splitter(2)
+#' mtcars |> splitter(2, 10)
+#'
+#' # splits by `dplyr` grouped variables if no split info is passed as an argument
+#' mtcars |> dplyr::group_by(cyl) |> splitter()
+#'
+#' # if there are already groups, but a split argument is passed in,
+#' #  splitter ignores the `dplyr` groupings as a split variable and
+#' #  preserves the `dplyr` groups in the result
+#' mtcars |> dplyr::group_by(cyl) |> splitter(gear)
+#'
 splitter <- function(.data, ..., .sep = '|'){
 
   checkmate::assert_data_frame(.data)
@@ -49,3 +63,4 @@ splitter <- function(.data, ..., .sep = '|'){
   return(out)
 
 }
+

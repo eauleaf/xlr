@@ -39,6 +39,14 @@ test_that("double-quotes removed from names", {
     enlist('a') |> names()
     ,'a'
   )
+
+  expect_equal(
+    names(xlr:::.remove_doublequotes(as.list(tibble::tibble(!!!letters)))),
+    letters
+  )
+
 })
+
+
 
 
