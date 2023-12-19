@@ -16,7 +16,7 @@ Treats NaN, Inf, and NA like any other value. repeated(c(NULL, NULL, NULL, NaN, 
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9052</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9053</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,7 +77,7 @@ are coerced internally to be the same type as x.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>currently unused</p></dd>
+<dd><p>passed to <code><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -91,7 +91,7 @@ are coerced internally to be the same type as x.</p></dd>
     <p>A convenience function to use with dplyr::filter() to make it easy
 to identify and review all repeated observations in a dataframe. The function
 is an alias for <code>x %in% x[duplicated(x)]</code>.</p>
-<p>Filtering a dataframe '.data' by the repeated values in column 'x', as in
+<p>Filtering a dataframe by the repeated values in column 'x', as in
 <code>dplyr::filter(.data, repeated(x))</code>, performs the same task as grouping by a
 variable and selecting counts greater than 1, as in <code>dplyr::group_by(.data, x)  |&gt; dplyr::filter(dplyr::n()&gt;1)</code>, but is quicker and easier to remember.</p>
 <p>(Ideally <code>repeated()</code> would be written in c++ and included in dplyr.)</p>

@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9052</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9053</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -289,7 +289,7 @@ will reproduce that variable’s internal R object.</p>
 head(iris,3)))</a></video></p>
 <p>Try running something like:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span>f <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">head</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/enscript.html">enscript</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">iris</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/splitter.html">splitter</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">head</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/enscript.html">enscript</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>You can pass in an expression or a single variable by piping
 ‘enscript()’ to the end of anything, or by using the quick keys.
 Enscript(), and its key-chord, is extremely useful for creating unit

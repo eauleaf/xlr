@@ -16,7 +16,7 @@ the inconvenience of reformatting console output data as input code."><meta prop
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9052</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9053</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@ the inconvenience of reformatting console output data as input code.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">enscript</span><span class="op">(</span>. <span class="op">=</span> <span class="cn">NULL</span>, to_clipboard <span class="op">=</span> <span class="cn">TRUE</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">enscript</span><span class="op">(</span>. <span class="op">=</span> <span class="cn">NULL</span>, to_clipboard <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -71,11 +71,6 @@ the inconvenience of reformatting console output data as input code.</p>
 
 <dt>to_clipboard</dt>
 <dd><p>default TRUE; whether to copy the resulting script to the clipboard</p></dd>
-
-
-<dt>quiet</dt>
-<dd><p>TRUE or FALSE indicating whether to write the scripted
-expression to the console.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -114,7 +109,7 @@ a letter.</p>
 <span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="va"><a href="https://dplyr.tidyverse.org/reference/starwars.html" class="external-link">starwars</a></span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">enscript</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">(</span><span class="va">flowers</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">iris</span>,<span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">enscript</span><span class="op">(</span><span class="va">flowers</span>, quiet <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">enscript</span><span class="op">(</span><span class="va">flowers</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">(</span><span class="va">days_to_go</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.Date.html" class="external-link">seq.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, by <span class="op">=</span> <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">7</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">days_to_go</span> <span class="op">|&gt;</span> <span class="fu">enscript</span><span class="op">(</span><span class="op">)</span></span></span>
