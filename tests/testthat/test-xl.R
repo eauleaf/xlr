@@ -32,6 +32,44 @@
 
 
 
+store_options <- getOption('xlr.xl')
+
+test_that("reset and new args set in the options list", {
+  expect_equal(
+    set_xl_args(.quiet = TRUE, .tabname_spec = list(zoom = 65), reset = TRUE),
+    getOption('xlr.xl')
+  )
+})
+
+test_that("new args accumulate", {
+  expect_equal(
+    set_xl_args(.workbook_spec = list(asTable = FALSE, zoom = 85, withFilter = TRUE)),
+    list(.quiet = TRUE,.tabname_spec = list(zoom = 65),.workbook_spec = list(
+           asTable = FALSE, zoom = 85, withFilter = TRUE))
+    )
+})
+
+test_that("reset clears on its own", {
+  expect_equal(set_xl_args(reset = T), NULL)
+})
+
+test_that("empty args returns error", {
+  expect_error(set_xl_args())
+})
+
+test_that("misnamed args returns an error", {
+  expect_error(set_xl_args(green = T, 'blue', 'red'))
+})
+
+test_that("original settings are restored", {
+  set_xl_args(store_options, reset = T)
+  expect_equal(
+    getOption('xlr.xl'),
+    store_options
+  )
+})
+
+
 
 test_that('xl() correctly writes a dplyr::starwars .xlsx file',{
 
@@ -246,5 +284,8 @@ test_that('NSE works',{
     length() |> expect_equal(26)
 
 })
+
+
+
 
 

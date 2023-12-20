@@ -10,8 +10,11 @@
 #'
 #'
 #' @param .data a dataframe
-#' @param ... specified columns to split by
-#' @param .sep character by which to
+#' @param ... specified columns to split by;
+#'   <[`tidy-select`][dplyr_tidy_select]> Variable names can be used as if they
+#'   were positions in the data frame, so expressions like `x:y` can be used to
+#'   select a range of variables.
+#' @param .sep character that separates concatenated list names
 #'
 #' @return named list of dataframes
 #' @export
@@ -21,6 +24,7 @@
 #' mtcars |> splitter(cyl)
 #' mtcars |> splitter('cyl')
 #' mtcars |> splitter(gear, cyl)
+#' mtcars |> splitter(am:carb, .sep = ' - ')
 #'
 #' # or a column number
 #' mtcars |> splitter(2)
@@ -30,9 +34,13 @@
 #' mtcars |> dplyr::group_by(cyl) |> splitter()
 #'
 #' # if there are already groups, but a split argument is passed in,
-#' #  splitter ignores the `dplyr` groupings as a split variable and
+#' #  splitter ignores the `dplyr` groupings as a split variable but
 #' #  preserves the `dplyr` groups in the result
 #' mtcars |> dplyr::group_by(cyl) |> splitter(gear)
+#'
+#' # splitter only takes column names, to split by
+#' #  an  expression, use `dplyr::group_by()`
+#' mtcars |> dplyr::group_by(cyl==4) |> splitter()
 #'
 splitter <- function(.data, ..., .sep = '|'){
 

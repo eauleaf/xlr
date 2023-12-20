@@ -50,11 +50,16 @@
 #' candy <- list('lollipops','gum')
 #' enlist(candy, !!!candy)
 #'
+#' # fix this:
+#' set_xl_args(.quiet = FALSE, reset = TRUE)
+#' set_xl_args(.sheet_titles = toupper)
+#'
 enlist <- function(..., .label =  NULL){
   .quos <- rlang::quos(...)
   .quos <- .quos[names(rlang::exprs_auto_name(.quos)) != "<empty>"]
   orig_quo_names <- names(.quos)
   .quos <- .quos |> rlang::exprs_auto_name()
+  # return(.quos)
   one_expr <- length(.quos) == 1
   # if a single list expression; dis-embed and auto-name
   # if(one_expr && stringr::str_detect(names(.quos), '^list\\(|base::list\\(')){

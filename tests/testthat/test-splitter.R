@@ -113,10 +113,11 @@ test_that("throws error if no vars to split on", {
   expect_error( splitter(mtcars, .sep = ' <> ')  )
 })
 
-test_that("throws error if nothing passed in", {
+test_that("throws error if nothing passed in or bad var name", {
   expect_error( splitter(NULL) )
   expect_error( splitter() )
   expect_error( mtcars |> splitter(NA) )
+  expect_error( mtcars |> splitter(cycl) )
 })
 
 test_that("splits by `dplyr` grouping expression", {

@@ -3,7 +3,6 @@
 #' - Sets key-chord "ctrl + alt + shift + v" in RStudio to auto-run [paste_from_xl()].
 #' - Sets key-chord "ctrl + alt + shift + c" in RStudio to auto-run [copy_for_xl()].
 #' - Sets key-chord "ctrl + alt + shift + n" in RStudio to auto-run [enscript()].
-#' - Sets key-chord "ctrl + alt + shift + l" in RStudio to auto-run [xl()].
 #'
 #' @details
 #' To enable the quick keys after running `set_xlr_key_chords()`, you must close
@@ -31,7 +30,7 @@ set_xlr_key_chords <- function(){
     )}
 
   rstudio.prefs::use_rstudio_keyboard_shortcut(
-    "Ctrl+Alt+Shift+L" = "xlr::run_xl",
+    # "Ctrl+Alt+Shift+L" = "xlr::run_xl",
     "Ctrl+Alt+Shift+V" = "xlr::run_paste_from_xl",
     "Ctrl+Alt+Shift+C" = "xlr::run_copy_for_xl",
     "Ctrl+Alt+Shift+N" = "xlr::run_enscript"
@@ -43,3 +42,5 @@ set_xlr_key_chords <- function(){
 }
 
 
+# NOT USED
+# #' - Sets key-chord "ctrl + alt + shift + l" in RStudio to auto-run [xl()].

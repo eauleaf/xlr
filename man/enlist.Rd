@@ -59,4 +59,8 @@ list(letters, b = enlist(a = letters, 'blue')) |> enlist()
 candy <- list('lollipops','gum')
 enlist(candy, !!!candy)
 
+# fix this:
+set_xl_args(.quiet = FALSE, reset = TRUE)
+set_xl_args(.sheet_titles = toupper)
+
 }

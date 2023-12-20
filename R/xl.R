@@ -73,7 +73,8 @@ xl <- function(...
   # writeData(wb, sheet = "Data", x = data, colNames = FALSE, withFilter = FALSE, tableStyle = "none")
 
 # do some input checks ---------------------------------------------------------
-  .tabname_spec <- list(sep = ".", pad = ".", name_spec = "{inner}") |> purrr::list_assign(rlang::splice(.tabname_spec))
+  .tabname_spec <- list(sep = ".", pad = ".", name_spec = "{inner}") |>
+    purrr::list_assign(rlang::splice(.tabname_spec))
   checkmate::assert(
     checkmate::check_list(.tabname_spec, any.missing = FALSE, len = 3),
     checkmate::check_names(.tabname_spec, must.include = c('sep', 'pad', 'name_spec'))
@@ -234,46 +235,128 @@ scale_width <- .94
 
 
 
-#' Addin function to call [xl()]
+#' Set persistent default arguments for function `xlr::xl()`
 #'
-#' Requires RStudio
+#' Reconciles the parameters with the arguments from `xl()` and
+#' stores the new defaults session in [options()]
 #'
-#' @return void
+#' @param ... parameters and arguments from `xl()`
+#' @param reset remove the global `xl()` option arguments currently set
+#'
+#' @seealso [xlr::xl()]
+#'
+#' @return current default args (invisibly)
 #' @export
 #'
+#' @examples
+#' (store_options <- getOption('xlr.xl'))
 #'
-#' @examples \dontrun{
-#' # Highlight each item below and press key-chord `ctrl + alt + shift + l`.
-#' # To implement the quick-keys. Run {.fn set_xlr_key_chords}.
+#' set_xl_args(.quiet = TRUE, .tabname_spec = list(zoom = 65))
+#' getOption('xlr.xl')
+#' set_xl_args(.workbook_spec = list(asTable = FALSE, zoom = 85, withFilter = TRUE))
+#' set_xl_args(reset = TRUE)
+#' getOption('xlr.xl')
+#' set_xl_args(.quiet = FALSE, reset = TRUE)
+#' set_xl_args(.sheet_titles = toupper)
 #'
-#' mtcars
-#' (1:5 * 10)
-#' rep("🎊🌈",3)
-#' dplyr::starwars |> head()
-#' letters
-#'}
+#' # restore original options
+#' set_xl_args(store_options, reset = TRUE)
 #'
-run_xl <- function(){
+set_xl_args <- function(..., reset = FALSE){
 
-  if( !rstudioapi::isAvailable() ){
-    cli::cli_abort(
-      'RStudio is not available.
-      {.fn run_enscript} is for interactive use in RStudio.'
-    )
+  args_to_set <- list(...)
+  no_args <- length(args_to_set)==0
+
+  if(reset){
+    cli::cli_alert_info("Removing existing `xl()` default arguments:")
+    cli::cat_line()
+    print(getOption('xlr.xl'))
+    cli::cat_line()
+    options(xlr.xl = NULL)
+    if( no_args ){return(invisible(NULL))}
   }
 
-  last_editor <- rstudioapi::documentId(allowConsole = FALSE)
-  text_expr <- suppressWarnings(stringr::str_trim(rstudioapi::selectionGet(id = last_editor)$value))
-
-  if( identical(text_expr, character(0)) || text_expr == '' ){
-    cli::cli_bullets(c(
-      "x" = '{.strong Nothing selected to {.fn xl} }',
-      "i" = "Highlight an expression in your text editor, then press `ctrl+alt+shift+L`."
-    ))
-  } else {
-    rstudioapi::sendToConsole(code = paste(text_expr, '|> xlr::xl()'))
+  if( no_args ){
+    cli::cli_abort('No arguments to set in options(xlr.xl).')
   }
+
+  function_args <- formals(xlr::xl)[-1]
+  bad_args <- setdiff(names(args_to_set), names(function_args))
+  if( length(bad_args) > 0 ){
+    cli::cli_abort(c(
+      'Incorrect or missing xl() parameter names: {.var {bad_args}}.',
+      ' No options set.'))
+  }
+
+  # print("enlist(getOption('xlr.xl'))")
+  # print(enlist(getOption('xlr.xl')))
+  # print('args_to_set')
+  # print(args_to_set)
+
+  option_args <- enlist(getOption('xlr.xl')) |>
+    utils::modifyList(args_to_set, keep.null = TRUE) |>
+    purrr::discard_at('getOption("xlr.xl")')
+
+  # print('option_args')
+  # print(option_args)
+
+  if(length(option_args)==0){option_args <- NULL}
+
+  options( xlr.xl = option_args )
+  cli::cli_alert_info("Options set:")
+  cli::cat_line()
+  print(option_args)
+  cli::cat_line()
+
+  return(invisible(option_args))
 
 }
+
+
+
+# NOT USED
+#' #' Addin function to call [xl()]
+#' #'
+#' #' Requires RStudio
+#' #'
+#' #' @return void
+#' #' @export
+#' #'
+#' #'
+#' #' @examples \dontrun{
+#' #' # Highlight each item below and press key-chord `ctrl + alt + shift + l`.
+#' #' # To implement the quick-keys. Run {.fn set_xlr_key_chords}.
+#' #'
+#' #' mtcars
+#' #' (1:5 * 10)
+#' #' rep("🎊🌈",3)
+#' #' dplyr::starwars |> head()
+#' #' letters
+#' #'}
+#' #'
+#' run_xl <- function(){
+#'
+#'   if( !rstudioapi::isAvailable() ){
+#'     cli::cli_abort(
+#'       'RStudio is not available.
+#'       {.fn run_enscript} is for interactive use in RStudio.'
+#'     )
+#'   }
+#'
+#'   last_editor <- rstudioapi::documentId(allowConsole = FALSE)
+#'   text_expr <- suppressWarnings(stringr::str_trim(rstudioapi::selectionGet(id = last_editor)$value))
+#'
+#'   if( identical(text_expr, character(0)) || text_expr == '' ){
+#'     cli::cli_bullets(c(
+#'       "x" = '{.strong Nothing selected to {.fn xl} }',
+#'       "i" = "Highlight an expression in your text editor, then press `ctrl+alt+shift+L`."
+#'     ))
+#'   } else {
+#'     rstudioapi::sendToConsole(code = paste(text_expr, '|> xlr::xl()'))
+#'   }
+#'
+#' }
+
+
 
 

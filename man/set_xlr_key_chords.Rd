@@ -11,7 +11,6 @@ set_xlr_key_chords()
 \item Sets key-chord "ctrl + alt + shift + v" in RStudio to auto-run \code{\link[=paste_from_xl]{paste_from_xl()}}.
 \item Sets key-chord "ctrl + alt + shift + c" in RStudio to auto-run \code{\link[=copy_for_xl]{copy_for_xl()}}.
 \item Sets key-chord "ctrl + alt + shift + n" in RStudio to auto-run \code{\link[=enscript]{enscript()}}.
-\item Sets key-chord "ctrl + alt + shift + l" in RStudio to auto-run \code{\link[=xl]{xl()}}.
 }
 }
 \details{

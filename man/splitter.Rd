@@ -9,9 +9,12 @@ splitter(.data, ..., .sep = "|")
 \arguments{
 \item{.data}{a dataframe}
 
-\item{...}{specified columns to split by}
+\item{...}{specified columns to split by;
+<\code{\link[=dplyr_tidy_select]{tidy-select}}> Variable names can be used as if they
+were positions in the data frame, so expressions like \code{x:y} can be used to
+select a range of variables.}
 
-\item{.sep}{character by which to}
+\item{.sep}{character that separates concatenated list names}
 }
 \value{
 named list of dataframes
@@ -33,6 +36,7 @@ Similar to \code{\link[dplyr:group_split]{dplyr::group_split()}} or \code{\link[
 mtcars |> splitter(cyl)
 mtcars |> splitter('cyl')
 mtcars |> splitter(gear, cyl)
+mtcars |> splitter(am:carb, .sep = ' - ')
 
 # or a column number
 mtcars |> splitter(2)
@@ -42,8 +46,12 @@ mtcars |> splitter(2, 10)
 mtcars |> dplyr::group_by(cyl) |> splitter()
 
 # if there are already groups, but a split argument is passed in,
-#  splitter ignores the `dplyr` groupings as a split variable and
+#  splitter ignores the `dplyr` groupings as a split variable but
 #  preserves the `dplyr` groups in the result
 mtcars |> dplyr::group_by(cyl) |> splitter(gear)
+
+# splitter only takes column names, to split by
+#  an  expression, use `dplyr::group_by()`
+mtcars |> dplyr::group_by(cyl==4) |> splitter()
 
 }
