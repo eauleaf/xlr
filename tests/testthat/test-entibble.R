@@ -1,40 +1,30 @@
-# does not handle .data, .env, and internal mutate() semantics; should it?
-#
-# test_that(".data pronoun; Use .data, .env to refer explicitly to columns", {
-#   expect_identical(entibble(a = 1, b = .data$a), entibble(a = 1, b = 1))
-# a <- 1
-# expect_equal( entibble(a = 2, b = .data$a), entibble(a = 2, b = .data$a) )
-# expect_equal( entibble(a = 2, b = .env$a), entibble(a = 2, b = .env$a) )
-# })
-#
-# # does not handle evaluation inputs within a single environment; should it?
-# # Not sure it's necessary for xl presentation...
-# test_that("mutate() semantics for entibble()", {
-#   expect_equal(
-#     entibble(a = 1:2, b = 1, c = b / sum(b)),
-#     entibble(a = 1:2, b = c(1, 1), c = c(0.5, 0.5))
-#   )
-#
-#   expect_equal(
-#     entibble(b = 1, c = b / sum(b), a = 1:2),
-#     entibble(b = c(1, 1), c = c(1, 1), a = 1:2)
-#   )
-# })
-#
-# test_that("auto-splicing anonymous tibbles (#581)", {
-#   df <- entibble(a = 1, b = 2)
-#   expect_identical(
-#     entibble(df, c = b),
-#     tibble::add_column(df, c = 2)
-#   )
-# })
-
-
-#' check test examples
-#'
-#' matrix(c(1, 2, 3, 11, 12, 13), nrow = 2, ncol = 3, byrow = TRUE, dimnames = list(c('row1', 'row2'), c('C.1', 'C.2', 'C.3'))) |> entibble()
-#' tail(iris, 2) |> entibble()
-#' mtcars |> head(2) |> entibble(.rowname = 'vehicle')
+test_that("check test examples", {
+  expect_equal(
+    matrix(c(1, 2, 3, 11, 12, 13), nrow = 2, ncol = 3, byrow = TRUE, dimnames = list(c('row1', 'row2'), c('C.1', 'C.2', 'C.3'))) |> entibble(),
+    structure(list(
+      rowname = c("row1", "row2"),
+      C.1 = c(1, 11), C.2 = c(2, 12), C.3 = c(3,13)),
+      row.names = c(NA, -2L), class = c("tbl_df", "tbl", "data.frame"))
+  )
+  expect_equal(
+    entibble(tail(iris, 2)),
+    structure(
+      list(rowname = c("149", "150"),
+           Sepal.Length = c(6.2, 5.9), Sepal.Width = c(3.4, 3),
+           Petal.Length = c(5.4, 5.1), Petal.Width = c(2.3, 1.8),
+           Species = c("virginica", "virginica")),
+      row.names = c(NA, -2L), class = c("tbl_df", "tbl", "data.frame"))
+  )
+  expect_equal(
+    mtcars |> head(2) |> entibble(.rowname = 'vehicle'),
+    structure(
+      list(vehicle = c("Mazda RX4", "Mazda RX4 Wag"), mpg = c(21, 21),
+           cyl = c(6,6), disp = c(160, 160), hp = c(110, 110), drat = c(3.9, 3.9),
+           wt = c(2.62, 2.875), qsec = c(16.46, 17.02), vs = c(0, 0), am = c(1, 1),
+           gear = c(4, 4), carb = c(4, 4)), row.names = c(NA, -2L),
+      class = c("tbl_df", "tbl", "data.frame"))
+  )
+})
 
 
 
@@ -391,3 +381,35 @@ test_that("NULL and empty values, paired with data, create a ragged list, but NA
 
 })
 
+
+# does not handle .data, .env, and internal mutate() semantics; should it?
+# # Not sure it's necessary for xl presentation...
+#
+# test_that(".data pronoun; Use .data, .env to refer explicitly to columns", {
+#   expect_identical(entibble(a = 1, b = .data$a), entibble(a = 1, b = 1))
+# a <- 1
+# expect_equal( entibble(a = 2, b = .data$a), entibble(a = 2, b = .data$a) )
+# expect_equal( entibble(a = 2, b = .env$a), entibble(a = 2, b = .env$a) )
+# })
+#
+# # does not handle evaluation inputs within a single environment; should it?
+# # Not sure it's necessary for xl presentation...
+# test_that("mutate() semantics for entibble()", {
+#   expect_equal(
+#     entibble(a = 1:2, b = 1, c = b / sum(b)),
+#     entibble(a = 1:2, b = c(1, 1), c = c(0.5, 0.5))
+#   )
+#
+#   expect_equal(
+#     entibble(b = 1, c = b / sum(b), a = 1:2),
+#     entibble(b = c(1, 1), c = c(1, 1), a = 1:2)
+#   )
+# })
+#
+# test_that("auto-splicing anonymous tibbles (#581)", {
+#   df <- entibble(a = 1, b = 2)
+#   expect_identical(
+#     entibble(df, c = b),
+#     tibble::add_column(df, c = 2)
+#   )
+# })

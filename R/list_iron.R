@@ -1,6 +1,6 @@
 #' Iron embedded lists out of a list of objects
 #'
-#' Recursively dis-embed objects in lists of lists to a single, linear list of list objects.
+#' Recursively dis-embed objects in lists of lists to a single, linear list of list elements.
 #'
 #' - If object is not in a list, `list_iron` places the object in a list.
 #' - Removes all empty embedded lists.
