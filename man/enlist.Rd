@@ -22,13 +22,14 @@ avoid adding list structure.
 \details{
 \itemize{
 \item Creates a list where each input list element is force-named by the assigned name or input expression, .e.g  \code{enlist(mtcars)}.
-\item If no list exists, \code{enlist} places its arguments into a list, e.g. \code{enlist(c('hi', 'hello'))}.
-\item If passed a single bare list, \code{enlist} does not add an additional list layer.
+\item If no list exists, \code{enlist} places its arguments in a list, e.g. \code{enlist(c('hi', 'hello'))}.
+\item If passed a bare list, \code{enlist} does not add an additional list layer, e.g. \code{enlist(list())}.
 That is, enlist() doesn't stack lists for structure's sake alone, e.g. \code{enlist(enlist(letters))}.
-In this dis-embedding case, a user provided name passed with \code{=}, like \code{enlist(some_name = list('hi'))}, may be discarded.
-\item Handles dots, splicing, and injection, e.g. enlist(!!!letters).
-\item Ignores input argument separator commas, e.g. enlist(,,'hi',,,).
-\item Naming the output can be performed by function through the parameter \code{.label}, e.g. enlist('me', .label = ~paste0('name_',.))
+In this dis-embedding case, a user provided name passed with \code{=}, like \code{enlist(some_name = list('hi'))},
+may be discarded if there is no place for it after dis-embedding, e.g. \code{enlist(some_name = list('hi', 'bye'))}.
+\item Handles dots, splicing, and injection, e.g. \code{enlist(!!!letters)}.
+\item Ignores input argument separator commas, e.g. \code{enlist(,,'hi',,,'world')}.
+\item Naming the output can be performed by function through the parameter \code{.label}, e.g. \code{enlist('me', .label = ~paste0('name_',.))}
 }
 }
 \examples{
@@ -58,9 +59,5 @@ list(letters, b = enlist(a = letters, 'blue')) |> enlist()
 # Handles non-standard evaluation:
 candy <- list('lollipops','gum')
 enlist(candy, !!!candy)
-
-# fix this:
-set_xl_args(.quiet = FALSE, reset = TRUE)
-set_xl_args(.sheet_titles = toupper)
 
 }

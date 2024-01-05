@@ -6,13 +6,14 @@
 #'
 #' @details
 #' - Creates a list where each input list element is force-named by the assigned name or input expression, .e.g  `enlist(mtcars)`.
-#' - If no list exists, `enlist` places its arguments into a list, e.g. `enlist(c('hi', 'hello'))`.
-#' - If passed a single bare list, `enlist` does not add an additional list layer.
-#' That is, enlist() doesn't stack lists for structure's sake alone, e.g. `enlist(enlist(letters))`.
-#' In this dis-embedding case, a user provided name passed with ` = `, like `enlist(some_name = list('hi'))`, may be discarded.
-#' - Handles dots, splicing, and injection, e.g. enlist(!!!letters).
-#' - Ignores input argument separator commas, e.g. enlist(,,'hi',,,).
-#' - Naming the output can be performed by function through the parameter `.label`, e.g. enlist('me', .label = ~paste0('name_',.))
+#' - If no list exists, places its arguments in a list, e.g. `enlist(c('hi', 'hello'))`.
+#' - If passed a bare list, discards its own layer, or alternatively does not add an additional list layer, e.g. `enlist(list())`.
+#' That is to say, `enlist()` doesn't stack lists for structure's sake alone, e.g. `enlist(enlist(letters))`.
+#' In this dis-embedding case, a user provided name, like `enlist(some_name = list('hi'))`,
+#' is discarded if there is no place for it after dis-embedding, e.g. `enlist(some_name = list('hi', 'bye'))`.
+#' - Handles dots, splicing, and injection, e.g. `enlist(!!!letters)`.
+#' - Ignores input argument separator commas, e.g. `enlist(,,'hi',,,'world')`.
+#' - Naming the output can be performed by function through the parameter `.label`, e.g. `enlist('me', .label = ~paste0('name_',.))`
 #'
 #' @param ... data objects; if unnamed, enlist() forces names by input expression
 #' @param .label a function or character vector to rename list elements, e.g. .label = ~substr(.,1,5).
@@ -50,39 +51,38 @@
 #' candy <- list('lollipops','gum')
 #' enlist(candy, !!!candy)
 #'
-#' # fix this:
-#' set_xl_args(.quiet = FALSE, reset = TRUE)
-#' set_xl_args(.sheet_titles = toupper)
-#'
 enlist <- function(..., .label =  NULL){
   .quos <- rlang::quos(...)
   .quos <- .quos[names(rlang::exprs_auto_name(.quos)) != "<empty>"]
   orig_quo_names <- names(.quos)
   .quos <- .quos |> rlang::exprs_auto_name()
+  just_one_expr <- length(.quos) == 1
   # return(.quos)
-  one_expr <- length(.quos) == 1
-  # if a single list expression; dis-embed and auto-name
-  # if(one_expr && stringr::str_detect(names(.quos), '^list\\(|base::list\\(')){
-  if( one_expr &&
-      stringr::str_detect(rlang::expr_deparse(rlang::quo_get_expr(.quos[[1]])), '^list\\(|base::list\\(')[1]
-      ){
-    rewritten_expr <- .quos[[1]] |> rlang::quo_get_expr() |> rlang::expr_deparse() |>
-      stringr::str_replace('^list\\(|base::list\\(', replacement = 'enlist(')
-    .quos[[1]] <- rlang::quo_set_expr(.quos[[1]], rlang::parse_expr(rewritten_expr))
-  }
+
+
+  # # if a single list expression; dis-embed and auto-name
+  # if( just_one_expr &&
+  #     stringr::str_detect(rlang::expr_deparse(rlang::quo_get_expr(.quos[[1]])), '^list\\(|base::list\\(')[1]
+  # ){
+  #   rewritten_expr <- .quos[[1]] |> rlang::quo_get_expr() |> rlang::expr_deparse() |>
+  #     stringr::str_replace('^list\\(|base::list\\(', replacement = 'enlist(')
+  #   .quos[[1]] <- rlang::quo_set_expr(.quos[[1]], rlang::parse_expr(rewritten_expr))
+  # }
 
   evaled_list <- .quos |>  purrr::map(rlang::eval_tidy)
 
 
-  # dis-embed list if user passed just a single expression that evals to a bare list
-  if( one_expr && rlang::is_bare_list(evaled_list[[1]]) ){
+  # if user passed a single list expression, dis-embed list and name if length 1 & no name exists
+  if( just_one_expr && rlang::is_bare_list(evaled_list[[1]]) ){
     evaled_list <- evaled_list[[1]]
-    # evaled_list <- evaled_list |> rlang::set_names(nm = glue::glue(orig_quo_names, names(evaled_list),.sep = '-'))
-    # keep embedded list names if they exist, otherwise overwrite with outer-list name
-    if( length(evaled_list) <= 1 && !identical(orig_quo_names,NULL) ){
+    if( length(evaled_list)<=1 && (is.null(names(evaled_list))||identical(names(evaled_list),"")) ){
       evaled_list <- evaled_list |> rlang::set_names(nm = names(.quos))
     }
-    # if( identical(names(evaled_list),NULL) ){
+
+    # # order for naming should be names(evaled_list) if exists, then orig_quo_names
+    # # keep embedded list names if they exist, otherwise overwrite with outer-list name
+    # if( length(evaled_list) <= 1 && !identical(orig_quo_names,"")){
+    #   # evaled_list <- evaled_list |> rlang::set_names(nm = orig_quo_names)
     #   evaled_list <- evaled_list |> rlang::set_names(nm = names(.quos))
     # }
   }
