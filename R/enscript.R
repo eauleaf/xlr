@@ -258,6 +258,7 @@ run_enscript <- function(){
     ))
   } else {
     rstudioapi::sendToConsole(code = paste(text_expr, '|> xlr::enscript()'))
+    rstudioapi::executeCommand('activateSource')
   }
 
 
