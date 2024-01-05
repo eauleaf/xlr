@@ -12,7 +12,7 @@ stores the new defaults session in options()"><meta property="og:image" content=
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9054</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9055</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@ stores the new defaults session in options()"><meta property="og:image" content=
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Set persistent default arguments for function <code>xlr::xl()</code></h1>
-      <small class="dont-index">Source: <a href="https://github.com/eauleaf/xlr/blob/HEAD/R/xl.R" class="external-link"><code>R/xl.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/eauleaf/xlr/blob/HEAD/R/set_xl_args.R" class="external-link"><code>R/set_xl_args.R</code></a></small>
       <div class="d-none name"><code>set_xl_args.Rd</code></div>
     </div>
 
@@ -81,17 +81,13 @@ stores the new defaults session in <code><a href="https://rdrr.io/r/base/options
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="op">(</span><span class="va">store_options</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">'xlr.xl'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $.sheet_titles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     if (!is.character(x)) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         x &lt;- as.character(x)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     .Internal(toupper(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55674e328738&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">set_xl_args</span><span class="op">(</span>reset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Removing existing `xl()` default arguments:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">set_xl_args</span><span class="op">(</span>.quiet <span class="op">=</span> <span class="cn">TRUE</span>, .tabname_spec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>zoom <span class="op">=</span> <span class="fl">65</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Options set:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -136,7 +132,27 @@ stores the new defaults session in <code><a href="https://rdrr.io/r/base/options
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">set_xl_args</span><span class="op">(</span>reset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">'xlr.xl'</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $.quiet</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $.tabname_spec</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $.tabname_spec$zoom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $.workbook_spec</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $.workbook_spec$asTable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $.workbook_spec$zoom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $.workbook_spec$withFilter</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu">set_xl_args</span><span class="op">(</span>.quiet <span class="op">=</span> <span class="cn">FALSE</span>, reset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Removing existing `xl()` default arguments:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $.quiet</span>
@@ -159,13 +175,6 @@ stores the new defaults session in <code><a href="https://rdrr.io/r/base/options
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">'xlr.xl'</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-in"><span><span class="fu">set_xl_args</span><span class="op">(</span>.quiet <span class="op">=</span> <span class="cn">FALSE</span>, reset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Removing existing `xl()` default arguments:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Options set:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $.quiet</span>
@@ -175,6 +184,9 @@ stores the new defaults session in <code><a href="https://rdrr.io/r/base/options
 <span class="r-in"><span><span class="fu">set_xl_args</span><span class="op">(</span>.sheet_titles <span class="op">=</span> <span class="va">toupper</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Options set:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $.quiet</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $.sheet_titles</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
@@ -182,7 +194,7 @@ stores the new defaults session in <code><a href="https://rdrr.io/r/base/options
 <span class="r-out co"><span class="r-pr">#&gt;</span>         x &lt;- as.character(x)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     .Internal(toupper(x))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55674e328738&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55bd7ce9b0d0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -191,6 +203,9 @@ stores the new defaults session in <code><a href="https://rdrr.io/r/base/options
 <span class="r-in"><span><span class="fu">set_xl_args</span><span class="op">(</span><span class="va">store_options</span>, reset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Removing existing `xl()` default arguments:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $.quiet</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $.sheet_titles</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
@@ -198,7 +213,7 @@ stores the new defaults session in <code><a href="https://rdrr.io/r/base/options
 <span class="r-out co"><span class="r-pr">#&gt;</span>         x &lt;- as.character(x)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     .Internal(toupper(x))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55674e328738&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55bd7ce9b0d0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

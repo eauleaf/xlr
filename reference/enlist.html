@@ -12,7 +12,7 @@ avoid adding list structure."><meta property="og:image" content="https://eauleaf
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9054</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9055</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,13 +78,14 @@ avoid adding list structure.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     
 <ul><li><p>Creates a list where each input list element is force-named by the assigned name or input expression, .e.g  <code>enlist(mtcars)</code>.</p></li>
-<li><p>If no list exists, <code>enlist</code> places its arguments into a list, e.g. <code>enlist(c('hi', 'hello'))</code>.</p></li>
-<li><p>If passed a single bare list, <code>enlist</code> does not add an additional list layer.
+<li><p>If no list exists, <code>enlist</code> places its arguments in a list, e.g. <code>enlist(c('hi', 'hello'))</code>.</p></li>
+<li><p>If passed a bare list, <code>enlist</code> does not add an additional list layer, e.g. <code>enlist(list())</code>.
 That is, enlist() doesn't stack lists for structure's sake alone, e.g. <code>enlist(enlist(letters))</code>.
-In this dis-embedding case, a user provided name passed with <code>=</code>, like <code>enlist(some_name = list('hi'))</code>, may be discarded.</p></li>
-<li><p>Handles dots, splicing, and injection, e.g. enlist(!!!letters).</p></li>
-<li><p>Ignores input argument separator commas, e.g. enlist(,,'hi',,,).</p></li>
-<li><p>Naming the output can be performed by function through the parameter <code>.label</code>, e.g. enlist('me', .label = ~paste0('name_',.))</p></li>
+In this dis-embedding case, a user provided name passed with <code>=</code>, like <code>enlist(some_name = list('hi'))</code>,
+may be discarded if there is no place for it after dis-embedding, e.g. <code>enlist(some_name = list('hi', 'bye'))</code>.</p></li>
+<li><p>Handles dots, splicing, and injection, e.g. <code>enlist(!!!letters)</code>.</p></li>
+<li><p>Ignores input argument separator commas, e.g. <code>enlist(,,'hi',,,'world')</code>.</p></li>
+<li><p>Naming the output can be performed by function through the parameter <code>.label</code>, e.g. <code>enlist('me', .label = ~paste0('name_',.))</code></p></li>
 </ul></div>
 
     <div class="section level2">
@@ -173,7 +174,7 @@ In this dis-embedding case, a user provided name passed with <code>=</code>, lik
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># List embedding:</span></span></span>
 <span class="r-in"><span><span class="fu">enlist</span><span class="op">(</span><span class="fu">enlist</span><span class="op">(</span><span class="fu">enlist</span><span class="op">(</span><span class="va">letters</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co"># 1 list deep</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`enlist(enlist(letters))`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $letters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [20] "t" "u" "v" "w" "x" "y" "z"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -188,7 +189,7 @@ In this dis-embedding case, a user provided name passed with <code>=</code>, lik
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">letters</span>, b <span class="op">=</span> <span class="fu">enlist</span><span class="op">(</span>a <span class="op">=</span> <span class="va">letters</span>, <span class="st">'blue'</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">enlist</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $letters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [20] "t" "u" "v" "w" "x" "y" "z"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -218,33 +219,6 @@ In this dis-embedding case, a user provided name passed with <code>=</code>, lik
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $gum</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "gum"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># fix this:</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="set_xl_args.html">set_xl_args</a></span><span class="op">(</span>.quiet <span class="op">=</span> <span class="cn">FALSE</span>, reset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Removing existing `xl()` default arguments:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Options set:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $.quiet</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu"><a href="set_xl_args.html">set_xl_args</a></span><span class="op">(</span>.sheet_titles <span class="op">=</span> <span class="va">toupper</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Options set:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $.sheet_titles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     if (!is.character(x)) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         x &lt;- as.character(x)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     .Internal(toupper(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55674e328738&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:base&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

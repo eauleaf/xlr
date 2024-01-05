@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">xlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9054</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9055</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -395,7 +395,7 @@ its own embedded list layer if the user passes in a single list.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/enlist.html">enlist</a></span><span class="op">(</span><span class="st">'hello'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 1</span></span>
-<span><span class="co">#&gt;  $ enlist(enlist("hello")): chr "hello"</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ hello: chr "hello"</span></span></code></pre></div>
 <p>To the structure and naming created by list:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">'hello'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -594,9 +594,9 @@ inputs</li>
 <span><span class="co"># inputs if the listed objects have compatible row dimensions</span></span>
 <span><span class="fu"><a href="../reference/entibble.html">entibble</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">alpha</span>, <span class="va">letters</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
-<span><span class="co">#&gt;   rowname alpha letters</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Y       y     y      </span></span>
+<span><span class="co">#&gt;   rowname `1`   `2`  </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Y       y     y    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Z       z     z</span></span>
 <span></span>
 <span><span class="co"># compare the above to `tibble()`</span></span>
